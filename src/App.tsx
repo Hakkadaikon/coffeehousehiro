@@ -224,42 +224,56 @@ export default function App() {
           </div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="space-y-24">
-            
+
             {/* Coffee */}
             <motion.div variants={fadeIn} className="relative">
               <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-espresso/20 pb-6 mb-10 gap-4">
-                <h3 className="font-serif text-2xl tracking-widest">スペシャルティコーヒー</h3>
-                <span className="text-sm tracking-[0.1em] text-roast/60 font-serif">ブレンド / シングルオリジン</span>
+                <div>
+                  <h3 className="font-serif text-2xl tracking-widest">ブレンド・シングルオリジン</h3>
+                  <p className="text-[11px] text-roast/50 font-sans tracking-widest mt-2">粉・豆　／　浅煎り・中煎り・中深煎り</p>
+                </div>
+                <span className="text-sm tracking-[0.1em] text-roast/50 font-sans">1 アイテム分</span>
               </div>
-              
+
               <div className="space-y-6 font-serif text-lg text-roast lg:px-8">
                 <div className="flex items-baseline justify-between group">
-                  <div className="flex items-center gap-4">
-                    <span className="tracking-widest">100g</span>
-                    <span className="text-[11px] text-roast/50 font-sans tracking-widest">（粉・豆）</span>
-                  </div>
+                  <span className="tracking-widest">100g</span>
                   <div className="flex-grow border-b border-dotted border-espresso/20 mx-4 md:mx-8 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                   <span className="tracking-widest">¥450<span className="text-sm ml-1">〜</span></span>
                 </div>
                 <div className="flex items-baseline justify-between group">
-                  <div className="flex items-center gap-4">
-                    <span className="tracking-widest">200g</span>
-                    <span className="text-[11px] text-roast/50 font-sans tracking-widest">（粉・豆）</span>
-                  </div>
+                  <span className="tracking-widest">200g</span>
                   <div className="flex-grow border-b border-dotted border-espresso/20 mx-4 md:mx-8 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                   <span className="tracking-widest">¥850<span className="text-sm ml-1">〜</span></span>
                 </div>
               </div>
-              <p className="text-[11px] text-roast/50 mt-8 lg:px-8 tracking-widest">※ 焙煎度：浅煎り・中煎り・中深煎り からお選びいただけます。</p>
+            </motion.div>
+
+            {/* Drip Bag */}
+            <motion.div variants={fadeIn} className="relative">
+              <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-espresso/20 pb-6 mb-10 gap-4">
+                <div>
+                  <h3 className="font-serif text-2xl tracking-widest">ドリップバッグ</h3>
+                </div>
+                <span className="text-sm tracking-[0.1em] text-roast/50 font-sans">0.5 アイテム分</span>
+              </div>
+
+              <div className="space-y-6 font-serif text-lg text-roast lg:px-8">
+                <div className="flex items-baseline justify-between group">
+                  <span className="tracking-widest">5バッグセット</span>
+                  <div className="flex-grow border-b border-dotted border-espresso/20 mx-4 md:mx-8 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                  <span className="tracking-widest">¥570</span>
+                </div>
+              </div>
             </motion.div>
 
             {/* Peanuts */}
             <motion.div variants={fadeIn} className="relative">
               <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-espresso/20 pb-6 mb-10 gap-4">
                 <h3 className="font-serif text-2xl tracking-widest">自家焙煎 素焼きピーナッツ</h3>
-                <span className="text-sm tracking-[0.1em] text-roast/60 font-serif">コーヒーのお供に</span>
+                <span className="text-sm tracking-[0.1em] text-roast/50 font-sans">1 アイテム分</span>
               </div>
-              
+
               <div className="space-y-6 font-serif text-lg text-roast lg:px-8">
                 <div className="flex items-baseline justify-between group">
                   <span className="tracking-widest">200g</span>
@@ -272,9 +286,9 @@ export default function App() {
           </motion.div>
 
           <motion.div variants={fadeIn} className="mt-24 pt-12 border-t border-espresso/10 text-center">
-             <p className="text-[13px] font-sans tracking-widest text-roast/80">
-               送料：2袋ごとに <span className="font-serif text-lg mx-1 text-espresso">¥200</span> 頂戴いたします。
-             </p>
+            <p className="text-[13px] font-sans tracking-widest text-roast/80">
+              送料：2アイテム分ごとに <span className="font-serif text-lg mx-1 text-espresso">¥200</span> 頂戴いたします。
+            </p>
           </motion.div>
         </div>
       </section>
