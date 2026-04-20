@@ -17,68 +17,64 @@ const SLIDESHOW_IMAGES = [
 
 function Slideshow() {
   const n = SLIDESHOW_IMAGES.length;
-  // offset: 各スライドの現在位置 (単位: スライド幅)。0 = 画面内、正 = 右、負 = 左
-  const [offsets, setOffsets] = useState<number[]>(() => SLIDESHOW_IMAGES.map((_, i) => i));
+  const [current, setCurrent] = useState(0);
+  const [animating, setAnimating] = useState(false);
 
-  const shift = useCallback((dir: 1 | -1) => {
-    setOffsets(prev => prev.map(o => {
-      const next = o - dir;
-      // -n+1 〜 n-1 の範囲に巻き戻す（-n になったら +n、n になったら -n）
-      if (next <= -n) return next + n;
-      if (next >= n) return next - n;
-      return next;
-    }));
-  }, [n]);
+  // スライドiのオフセット（単位:スライド幅）を計算する。
+  // currentからの相対位置を -n/2 〜 n/2 の範囲に収め、常に最短経路側に配置する。
+  const getOffset = (i: number) => {
+    let diff = i - current;
+    // 最短経路に巻き戻す
+    if (diff > n / 2) diff -= n;
+    if (diff < -n / 2) diff += n;
+    return diff;
+  };
 
+  const go = (next: number) => {
+    if (animating) return;
+    setAnimating(true);
+    setCurrent(next);
+    setTimeout(() => setAnimating(false), 600);
+  };
 
-  // 現在画面に表示されているスライドのインデックス
-  const current = offsets.indexOf(0);
-
-  const goTo = useCallback((targetIdx: number) => {
-    const steps = offsets[targetIdx];
-    if (steps === 0) return;
-    const dir = steps > 0 ? 1 : -1;
-    const count = Math.abs(steps) <= n / 2 ? Math.abs(steps) : n - Math.abs(steps);
-    const actualDir = Math.abs(steps) <= n / 2 ? dir : -dir as 1 | -1;
-    // count回分まとめてシフト
-    setOffsets(prev => prev.map(o => {
-      let next = o - actualDir * count;
-      if (next <= -n) next += n;
-      if (next >= n) next -= n;
-      return next;
-    }));
-  }, [offsets, n]);
+  const prev = () => go((current - 1 + n) % n);
+  const next = () => go((current + 1) % n);
 
   return (
     <div className="relative w-full select-none bg-espresso overflow-hidden" style={{ height: '60vw', maxHeight: '75vh' }}>
       {/* Slides */}
-      {SLIDESHOW_IMAGES.map((src, idx) => (
-        <div
-          key={idx}
-          className="absolute inset-0 flex items-center justify-center"
-          style={{
-            transform: `translateX(${offsets[idx] * 100}%)`,
-            transition: 'transform 600ms cubic-bezier(0.25, 0.1, 0.25, 1)',
-          }}
-        >
-          <img
-            src={src}
-            alt={`Gallery ${idx + 1}`}
-            className="max-w-full max-h-full object-contain"
-          />
-        </div>
-      ))}
+      {SLIDESHOW_IMAGES.map((src, idx) => {
+        const offset = getOffset(idx);
+        return (
+          <div
+            key={idx}
+            className="absolute inset-0 flex items-center justify-center"
+            style={{
+              transform: `translateX(${offset * 100}%)`,
+              transition: 'transform 600ms cubic-bezier(0.25, 0.1, 0.25, 1)',
+              // 画面から遠いスライド（隣でない）はアニメーションせず即座に裏に回す
+              ...(Math.abs(offset) > 1 && { transition: 'none' }),
+            }}
+          >
+            <img
+              src={src}
+              alt={`Gallery ${idx + 1}`}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+        );
+      })}
 
       {/* Arrows */}
       <button
-        onClick={() => shift(-1)}
+        onClick={prev}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-espresso/60 hover:bg-espresso/90 text-paper p-2 transition-colors z-10"
         aria-label="前の画像"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button
-        onClick={() => shift(1)}
+        onClick={next}
         className="absolute right-4 top-1/2 -translate-y-1/2 bg-espresso/60 hover:bg-espresso/90 text-paper p-2 transition-colors z-10"
         aria-label="次の画像"
       >
@@ -90,7 +86,7 @@ function Slideshow() {
         {SLIDESHOW_IMAGES.map((_, idx) => (
           <button
             key={idx}
-            onClick={() => goTo(idx)}
+            onClick={() => go(idx)}
             className={`w-2 h-2 rounded-full transition-colors ${idx === current ? 'bg-paper' : 'bg-paper/40'}`}
             aria-label={`画像 ${idx + 1}`}
           />
