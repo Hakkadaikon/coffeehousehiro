@@ -1,5 +1,104 @@
 import { motion } from 'motion/react';
-import { Coffee, Mail, MapPin, Instagram, ChevronRight } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Mail, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const SLIDESHOW_IMAGES = [
+  '/images/IMAGE_1.jpeg',
+  '/images/IMAGE_2.jpeg',
+  '/images/IMAGE_3.jpeg',
+  '/images/IMAGE_4.jpeg',
+  '/images/IMAGE_5.jpeg',
+  '/images/IMAGE_6.jpeg',
+  '/images/IMAGE_7.jpeg',
+  '/images/IMAGE_8.jpeg',
+  '/images/IMAGE_9.jpeg',
+  '/images/IMAGE_10.jpeg',
+];
+
+function Slideshow() {
+  const n = SLIDESHOW_IMAGES.length;
+  // offset: 各スライドの現在位置 (単位: スライド幅)。0 = 画面内、正 = 右、負 = 左
+  const [offsets, setOffsets] = useState<number[]>(() => SLIDESHOW_IMAGES.map((_, i) => i));
+
+  const shift = useCallback((dir: 1 | -1) => {
+    setOffsets(prev => prev.map(o => {
+      const next = o - dir;
+      // -n+1 〜 n-1 の範囲に巻き戻す（-n になったら +n、n になったら -n）
+      if (next <= -n) return next + n;
+      if (next >= n) return next - n;
+      return next;
+    }));
+  }, [n]);
+
+
+  // 現在画面に表示されているスライドのインデックス
+  const current = offsets.indexOf(0);
+
+  const goTo = useCallback((targetIdx: number) => {
+    const steps = offsets[targetIdx];
+    if (steps === 0) return;
+    const dir = steps > 0 ? 1 : -1;
+    const count = Math.abs(steps) <= n / 2 ? Math.abs(steps) : n - Math.abs(steps);
+    const actualDir = Math.abs(steps) <= n / 2 ? dir : -dir as 1 | -1;
+    // count回分まとめてシフト
+    setOffsets(prev => prev.map(o => {
+      let next = o - actualDir * count;
+      if (next <= -n) next += n;
+      if (next >= n) next -= n;
+      return next;
+    }));
+  }, [offsets, n]);
+
+  return (
+    <div className="relative w-full select-none bg-espresso overflow-hidden" style={{ height: '60vw', maxHeight: '75vh' }}>
+      {/* Slides */}
+      {SLIDESHOW_IMAGES.map((src, idx) => (
+        <div
+          key={idx}
+          className="absolute inset-0 flex items-center justify-center"
+          style={{
+            transform: `translateX(${offsets[idx] * 100}%)`,
+            transition: 'transform 600ms cubic-bezier(0.25, 0.1, 0.25, 1)',
+          }}
+        >
+          <img
+            src={src}
+            alt={`Gallery ${idx + 1}`}
+            className="max-w-full max-h-full object-contain"
+          />
+        </div>
+      ))}
+
+      {/* Arrows */}
+      <button
+        onClick={() => shift(-1)}
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-espresso/60 hover:bg-espresso/90 text-paper p-2 transition-colors z-10"
+        aria-label="前の画像"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      <button
+        onClick={() => shift(1)}
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-espresso/60 hover:bg-espresso/90 text-paper p-2 transition-colors z-10"
+        aria-label="次の画像"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        {SLIDESHOW_IMAGES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goTo(idx)}
+            className={`w-2 h-2 rounded-full transition-colors ${idx === current ? 'bg-paper' : 'bg-paper/40'}`}
+            aria-label={`画像 ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const fadeIn = {
@@ -107,6 +206,13 @@ export default function App() {
             </div>
           </motion.div>
         </div>
+      </section>
+
+      {/* Gallery Slideshow */}
+      <section className="bg-paper">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeIn}>
+          <Slideshow />
+        </motion.div>
       </section>
 
       {/* Menu - Minimalist Classic Cafe Style */}
