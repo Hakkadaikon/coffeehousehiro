@@ -1,20 +1,36 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# coffee house ヒロ ランディングページ (LP)
 
-# Run and deploy your AI Studio app
+岡山県倉敷市の週末限定ロースター「coffee house ヒロ」のための公式ランディングページです。
+React と Vite を使用して構築された、高速でモダンな静的シングルページアプリケーション（SPA）です。
 
-This contains everything you need to run your app locally.
+## ホスティング（公開）方法
 
-View your app in AI Studio: https://ai.studio/apps/c6b35c30-65b4-4b2f-b5fa-f0cf5c77b5d6
+このプロジェクトは静的なWebサイトとして動作するため、Vercel、Netlify、Cloudflare Pages などのモダンなホスティングサービスや、一般的なレンタルサーバーで簡単に公開することができます。
 
-## Run Locally
+### 1. おすすめのホスティングサービス（Vercel, Netlify, Cloudflare Pagesなど）
 
-**Prerequisites:**  Node.js
+ソースコードを GitHub にプッシュし、ホスティングサービスと連携するのが最も簡単な方法です。
 
+* **フレームワークプリセット**: `Vite` または `React`
+* **ビルドコマンド (Build Command)**: `npm run build`
+* **公開ディレクトリ (Output Directory / Publish directory)**: `dist`
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 2. レンタルサーバー（エックスサーバー、さくらのレンタルサーバ等）を使用する場合
+
+1. ローカル環境（お手元のパソコン）で以下のコマンドを実行し、ファイルをビルドします。
+   ```bash
+   npm install
+   npm run build
+   ```
+2. ビルドが完了すると、プロジェクト内に `dist` というフォルダが生成されます。
+3. FTPソフト（FileZillaなど）を使用し、`dist` フォルダの **中身すべて** を、ご契約中のサーバーの公開枠（`public_html` など）にアップロードしてください。
+
+## 環境変数についてのご注意
+
+* **`GEMINI_API_KEY` は不要です:**
+  このLPはAIによる動的生成機能等を使用しない純粋な静的Webサイトとして作られています。そのため、`.env` 等での `GEMINI_API_KEY` の登録や設定は一切必要ありません。
+
+## アセット（画像）の変更手順
+
+本番公開前にロゴなどの画像を差し替える場合、プロジェクト内の `public` フォルダ内にある画像ファイルを差し替えてください。
+* ロゴ画像: `public/logo.png`
