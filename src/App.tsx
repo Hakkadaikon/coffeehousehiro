@@ -186,7 +186,7 @@ export default function App() {
 								スペシャルティコーヒーの舞台へ
 							</p>
 						</div>
-						<div className="flex-shrink-0 md:self-center">
+						<div className="flex-shrink-0 md:self-center flex justify-center">
 							<img
 								src="/images/logo.jpg"
 								alt="コーヒーhouseヒロ"
