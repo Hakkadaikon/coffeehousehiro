@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { hydrateRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-// biome-ignore lint/style/noNonNullAssertion: root element is guaranteed to exist in index.html
-createRoot(document.getElementById("root")!).render(
+hydrateRoot(
+	// biome-ignore lint/style/noNonNullAssertion: root element is guaranteed to exist in index.html
+	document.getElementById("root")!,
 	<StrictMode>
 		<App />
 	</StrictMode>,
