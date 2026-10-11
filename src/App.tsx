@@ -1,5 +1,7 @@
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./menu.ts";
+import { formatPrices } from "./order.ts";
 
 const PHOTOS = [
 	{ src: "/images/IMAGE_1.jpeg", w: 1080, h: 1080, alt: "コーヒーhouseヒロの赤い小屋の外観" },
@@ -22,59 +24,6 @@ const LINE_URL = "https://lin.ee/Zp3za2N";
 const INSTAGRAM_URL = "https://www.instagram.com/coffee_house_hiro/";
 // 先頭が大タイル。モバイルでは先頭 5 枚だけ表示する
 const IG_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);
-const MENU_START_DATE = "2026年10月1日";
-
-const MENU: { title: string; note: string; unit: string; items: [string, string, string][] }[] = [
-	{
-		title: "シングル",
-		note: "豆・粉　／　浅煎り・中煎り・中深煎り・おまかせ",
-		unit: "100g / 200g",
-		items: [
-			["タンザニア", "キリマンジャロ AA", "¥450 / ¥850"],
-			["エチオピア", "モカ、イルガチェフェ G1", "¥500 / ¥1,000"],
-			["エチオピア", "モカ、ゲラ農園 G1", "¥450 / ¥850"],
-			["グァテマラ", "", "¥450 / ¥850"],
-			["ブラジル", "", "¥450 / ¥850"],
-			["インドネシア", "マンデリン", "¥450 / ¥850"],
-			["ケニア", "", "¥500 / ¥1,000"],
-			["コロンビア", "", "¥450 / ¥850"],
-			["ブルンジ", "", "¥450 / ¥850"],
-		],
-	},
-	{
-		title: "ブレンド",
-		note: "豆・粉　／　浅煎り・中煎り・中深煎り・おまかせ",
-		unit: "100g / 200g",
-		items: [
-			["タンザニア", "キリマンジャロ", "¥450 / ¥850"],
-			["エチオピア", "モカ", "¥450 / ¥850"],
-			["ブラジル", "", "¥450 / ¥850"],
-			["インドネシア", "", "¥450 / ¥850"],
-			["おまかせ", "", "¥450 / ¥850"],
-		],
-	},
-	{
-		title: "スペシャル",
-		note: "なくなり次第終了",
-		unit: "",
-		items: [
-			["エクアドル", "ガラパゴス諸島　100g / 200g", "¥800 / ¥1,600"],
-			["ネパール", "ヒマラヤンスペシャル、アナエロビックナチュラル　100g / 200g", "¥850 / ¥1,700"],
-			["パナマ", "ゲイシャ、エル・パロマール農園、浅煎りのみ　20g / 100g", "¥500 / ¥2,200"],
-		],
-	},
-	{
-		title: "ドリップバッグ",
-		note: "",
-		unit: "0.5 アイテム分",
-		items: [
-			["シングル 5枚セット", "上記シングルから", "¥570"],
-			["スペシャル 5枚セット", "", "時価・要相談"],
-			["おまかせ 5枚セット", "", "¥570"],
-		],
-	},
-];
-
 export default function App() {
 	const fadeIn = {
 		hidden: { opacity: 0, y: 20 },
@@ -346,7 +295,7 @@ export default function App() {
 								<motion.div
 									key={cat.title}
 									variants={fadeIn}
-									className={`relative ${cat.title === "スペシャル" ? "bg-paper border border-caramel/30 p-6 md:p-10 shadow-sm" : ""}`}
+									className={`relative ${cat.limited ? "bg-paper border border-caramel/30 p-6 md:p-10 shadow-sm" : ""}`}
 								>
 									<div className="border-b border-espresso/20 pb-5 mb-8">
 										<span className="block font-serif text-caramel text-sm md:text-lg tracking-widest mb-2">
@@ -354,37 +303,39 @@ export default function App() {
 										</span>
 										<h3 className="font-serif text-xl md:text-[32px] tracking-widest mb-1">
 											{cat.title}
-											{cat.title === "スペシャル" && (
+											{cat.limited && (
 												<span className="ml-3 text-[11px] md:text-[13px] font-sans bg-caramel text-paper px-2 py-0.5 align-middle tracking-wider">
 													LIMITED
 												</span>
 											)}
 										</h3>
 										<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4">
-											{cat.note && (
+											{categoryNote(cat) && (
 												<p className="text-xs md:text-base text-roast/70 font-sans tracking-wider">
-													{cat.note}
+													{categoryNote(cat)}
 												</p>
 											)}
 											<span className="text-xs md:text-base tracking-wider text-roast/75 font-sans shrink-0">
-												{cat.unit}
+												{categoryUnit(cat)}
 											</span>
 										</div>
 									</div>
 
 									<div className="space-y-5 md:space-y-7 font-serif text-lg md:text-2xl text-roast lg:px-6">
-										{cat.items.map(([name, sub, price]) => (
-											<div key={name + sub} className="group">
+										{cat.items.map((item) => (
+											<div key={item.name + item.sub} className="group">
 												<div className="flex items-baseline justify-between">
-													<span className="shrink-0 tracking-wider md:tracking-widest">{name}</span>
+													<span className="shrink-0 tracking-wider md:tracking-widest">
+														{item.name}
+													</span>
 													<div className="flex-grow min-w-4 border-b border-dotted border-espresso/25 mx-2 md:mx-10"></div>
 													<span className="tracking-wide md:tracking-widest text-base md:text-2xl font-medium tabular-nums whitespace-nowrap">
-														{price}
+														{formatPrices(item.prices)}
 													</span>
 												</div>
-												{sub && (
+												{itemSub(item) && (
 													<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
-														{sub}
+														{itemSub(item)}
 													</p>
 												)}
 											</div>
