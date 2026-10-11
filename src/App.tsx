@@ -1,6 +1,7 @@
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./menu.ts";
+import OrderBuilder from "./OrderBuilder.tsx";
 import { formatPrices } from "./order.ts";
 
 const PHOTOS = [
@@ -357,6 +358,14 @@ export default function App() {
 								</span>
 								<span className="inline-block">頂戴いたします。</span>
 							</p>
+							<p className="text-center mt-6">
+								<a
+									href="#order-form"
+									className="text-sm md:text-base text-caramel underline underline-offset-4 tracking-wider"
+								>
+									このメニューから注文文を作る →
+								</a>
+							</p>
 						</motion.div>
 					</div>
 				</section>
@@ -407,11 +416,13 @@ export default function App() {
 							))}
 						</div>
 
-						<div className="bg-[#241A16] p-6 md:p-16 text-center relative overflow-hidden">
+						<OrderBuilder />
+
+						<div className="mt-20 bg-[#241A16] p-6 md:p-16 text-center relative overflow-hidden">
 							<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
 							<MessageCircle className="w-6 h-6 text-[#06C755] mx-auto mb-6" />
 							<p className="font-sans text-sm md:text-lg tracking-widest text-paper/70 mb-8">
-								ご注文・お問い合わせは LINE が便利です
+								商品のご相談・お問い合わせは LINE へ
 							</p>
 							<a
 								href={LINE_URL}
@@ -420,7 +431,7 @@ export default function App() {
 								className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-xl font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
 							>
 								<MessageCircle className="w-5 h-5" />
-								LINEで注文・問い合わせ
+								LINEで相談・問い合わせ
 							</a>
 							<div className="mt-12 pt-8 border-t border-paper/10">
 								<p className="text-xs md:text-base text-paper/65 tracking-widest mb-3">
