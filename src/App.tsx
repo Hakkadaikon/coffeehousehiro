@@ -363,28 +363,6 @@ export default function App() {
 								</div>
 							</motion.div>
 						))}
-
-						{/* Peanuts */}
-						<motion.div variants={fadeIn} className="relative">
-							<div className="border-b border-espresso/20 pb-5 mb-8">
-								<h3 className="font-serif text-xl md:text-2xl tracking-widest mb-1">
-									自家焙煎 素焼きピーナッツ
-								</h3>
-								<div className="flex items-center justify-end mt-2">
-									<span className="text-xs tracking-wider text-roast/40 font-sans">
-										1 アイテム分
-									</span>
-								</div>
-							</div>
-
-							<div className="space-y-5 font-serif text-lg text-roast lg:px-6">
-								<div className="flex items-baseline justify-between group">
-									<span className="tracking-widest">200g</span>
-									<div className="flex-grow border-b border-dotted border-espresso/20 mx-6 md:mx-10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-									<span className="tracking-widest font-medium">¥100</span>
-								</div>
-							</div>
-						</motion.div>
 					</motion.div>
 
 					{/* 送料: 目立つよう強調 */}
