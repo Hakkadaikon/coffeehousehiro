@@ -9,7 +9,7 @@ import sys
 
 from playwright.async_api import async_playwright
 
-SECTIONS = {"hero": "section >> nth=0", "about": "#about", "menu": "#menu", "order": "#order", "access": "#access"}
+SECTIONS = {"hero": "section >> nth=0", "about": "#about", "instagram": "#instagram", "menu": "#menu", "order": "#order", "access": "#access"}
 VIEWPORTS = {"desktop": {"width": 1440, "height": 900}, "mobile": {"width": 390, "height": 844}}
 
 

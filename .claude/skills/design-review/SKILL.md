@@ -22,7 +22,7 @@ python3 -m venv "$SCRATCH/v"
 "$SCRATCH/v/bin/python" .claude/skills/design-review/shot.py "$SCRATCH/shots/r1"
 ```
 
-`shot.py`は、PC(1440px)とスマホ(390px)で、ヒーロー・`#about`・`#menu`・`#order`・`#access`を1枚ずつ撮る。各セクションは`whileInView`で表示されるので、撮る前にページ全体をスクロールしている。
+`shot.py`は、PC(1440px)とスマホ(390px)で、ヒーロー・`#about`・`#instagram`・`#menu`・`#order`・`#access`を1枚ずつ撮る。各セクションは`whileInView`で表示されるので、撮る前にページ全体をスクロールしている。
 
 HMRの再読み込みが重なると`Execution context was destroyed`で失敗する。そのときは撮り直す。
 
