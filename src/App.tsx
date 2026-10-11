@@ -242,13 +242,11 @@ export default function App() {
 							</a>
 						</div>
 						<div className="flex-shrink-0 md:self-center flex justify-center">
-							<div className="bg-paper p-4 md:p-6 -rotate-2 shadow-2xl shadow-black/50">
-								<img
-									src="/images/logo.jpg"
-									alt="コーヒーhouseヒロ"
-									className="h-[clamp(180px,26vw,380px)] w-auto object-contain mix-blend-multiply"
-								/>
-							</div>
+							<img
+								src="/images/logo.webp"
+								alt="コーヒーhouseヒロ"
+								className="w-[clamp(240px,34vw,480px)] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+							/>
 						</div>
 					</motion.div>
 				</div>
