@@ -15,6 +15,59 @@ const SLIDESHOW_IMAGES = [
 	"/images/IMAGE_10.jpeg",
 ];
 
+const MENU_START_DATE = "2026年10月1日";
+
+const MENU: { title: string; note: string; unit: string; items: [string, string, string][] }[] = [
+	{
+		title: "シングル",
+		note: "豆・粉　／　浅煎り・中煎り・中深煎り・おまかせ",
+		unit: "100g / 200g",
+		items: [
+			["タンザニア", "キリマンジャロ AA", "¥450 / ¥850"],
+			["エチオピア", "モカ、イルガチェフェ G1", "¥500 / ¥1,000"],
+			["エチオピア", "モカ、ゲラ農園 G1", "¥450 / ¥850"],
+			["グァテマラ", "", "¥450 / ¥850"],
+			["ブラジル", "", "¥450 / ¥850"],
+			["インドネシア", "マンデリン", "¥450 / ¥850"],
+			["ケニア", "", "¥500 / ¥1,000"],
+			["コロンビア", "", "¥450 / ¥850"],
+			["ブルンジ", "", "¥450 / ¥850"],
+		],
+	},
+	{
+		title: "ブレンド",
+		note: "豆・粉　／　浅煎り・中煎り・中深煎り・おまかせ",
+		unit: "100g / 200g",
+		items: [
+			["タンザニア", "キリマンジャロ", "¥450 / ¥850"],
+			["エチオピア", "モカ", "¥450 / ¥850"],
+			["ブラジル", "", "¥450 / ¥850"],
+			["インドネシア", "", "¥450 / ¥850"],
+			["おまかせ", "", "¥450 / ¥850"],
+		],
+	},
+	{
+		title: "スペシャル",
+		note: "なくなり次第終了",
+		unit: "",
+		items: [
+			["エクアドル", "ガラパゴス諸島　100g / 200g", "¥800 / ¥1,600"],
+			["ネパール", "ヒマラヤンスペシャル、アナエロビックナチュラル　100g / 200g", "¥850 / ¥1,700"],
+			["パナマ", "ゲイシャ、エル・パロマール農園、浅煎りのみ　20g / 100g", "¥500 / ¥2,200"],
+		],
+	},
+	{
+		title: "ドリップバッグ",
+		note: "",
+		unit: "0.5 アイテム分",
+		items: [
+			["シングル 5枚セット", "上記シングルから", "¥570"],
+			["スペシャル 5枚セット", "", "時価・要相談"],
+			["おまかせ 5枚セット", "", "¥570"],
+		],
+	},
+];
+
 function Slideshow() {
 	const n = SLIDESHOW_IMAGES.length;
 	const [current, setCurrent] = useState(0);
@@ -267,6 +320,9 @@ export default function App() {
 					<div className="text-center mb-16 md:mb-20">
 						<h2 className="font-serif text-4xl tracking-widest mb-3">商品一覧</h2>
 						<p className="text-xs tracking-[0.2em] text-espresso/50 uppercase">Menu</p>
+						<p className="text-xs tracking-widest text-roast/60 mt-4">
+							{MENU_START_DATE}より価格・メニューを改定しました
+						</p>
 					</div>
 
 					<motion.div
@@ -276,63 +332,36 @@ export default function App() {
 						variants={staggerContainer}
 						className="space-y-16"
 					>
-						{/* Coffee */}
-						<motion.div variants={fadeIn} className="relative">
-							{/* 見出しエリア: 上下余白を明確に */}
-							<div className="border-b border-espresso/20 pb-5 mb-8">
-								<h3 className="font-serif text-xl md:text-2xl tracking-widest mb-1">
-									ブレンド・シングルオリジン
-								</h3>
-								<div className="flex items-center justify-between mt-2">
-									<p className="text-[11px] text-roast/50 font-sans tracking-wider">
-										粉・豆　／　浅煎り・中煎り・中深煎り
-									</p>
-									<span className="text-xs tracking-wider text-roast/40 font-sans">
-										1 アイテム分
-									</span>
+						{MENU.map((cat) => (
+							<motion.div key={cat.title} variants={fadeIn} className="relative">
+								<div className="border-b border-espresso/20 pb-5 mb-8">
+									<h3 className="font-serif text-xl md:text-2xl tracking-widest mb-1">
+										{cat.title}
+									</h3>
+									<div className="flex items-center justify-between mt-2 gap-4">
+										<p className="text-[11px] text-roast/50 font-sans tracking-wider">{cat.note}</p>
+										<span className="text-xs tracking-wider text-roast/40 font-sans shrink-0">
+											{cat.unit}
+										</span>
+									</div>
 								</div>
-							</div>
 
-							<div className="space-y-5 font-serif text-lg text-roast lg:px-6">
-								<div className="flex items-baseline justify-between group">
-									<span className="tracking-widest">100g</span>
-									<div className="flex-grow border-b border-dotted border-espresso/20 mx-6 md:mx-10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-									{/* 価格: 強調 */}
-									<span className="tracking-widest font-medium">
-										¥450<span className="text-sm font-normal ml-1 text-roast/60">〜</span>
-									</span>
+								<div className="space-y-5 font-serif text-lg text-roast lg:px-6">
+									{cat.items.map(([name, sub, price]) => (
+										<div key={name + sub} className="group">
+											<div className="flex items-baseline justify-between">
+												<span className="tracking-widest">{name}</span>
+												<div className="flex-grow border-b border-dotted border-espresso/20 mx-4 md:mx-10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+												<span className="tracking-widest font-medium whitespace-nowrap">
+													{price}
+												</span>
+											</div>
+											{sub && <p className="text-xs text-roast/50 tracking-wider mt-1">{sub}</p>}
+										</div>
+									))}
 								</div>
-								<div className="flex items-baseline justify-between group">
-									<span className="tracking-widest">200g</span>
-									<div className="flex-grow border-b border-dotted border-espresso/20 mx-6 md:mx-10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-									<span className="tracking-widest font-medium">
-										¥850<span className="text-sm font-normal ml-1 text-roast/60">〜</span>
-									</span>
-								</div>
-							</div>
-						</motion.div>
-
-						{/* Drip Bag */}
-						<motion.div variants={fadeIn} className="relative">
-							<div className="border-b border-espresso/20 pb-5 mb-8">
-								<h3 className="font-serif text-xl md:text-2xl tracking-widest mb-1">
-									ドリップバッグ
-								</h3>
-								<div className="flex items-center justify-end mt-2">
-									<span className="text-xs tracking-wider text-roast/40 font-sans">
-										0.5 アイテム分
-									</span>
-								</div>
-							</div>
-
-							<div className="space-y-5 font-serif text-lg text-roast lg:px-6">
-								<div className="flex items-baseline justify-between group">
-									<span className="tracking-widest">5バッグセット</span>
-									<div className="flex-grow border-b border-dotted border-espresso/20 mx-6 md:mx-10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-									<span className="tracking-widest font-medium">¥570</span>
-								</div>
-							</div>
-						</motion.div>
+							</motion.div>
+						))}
 
 						{/* Peanuts */}
 						<motion.div variants={fadeIn} className="relative">
@@ -360,8 +389,8 @@ export default function App() {
 					{/* 送料: 目立つよう強調 */}
 					<motion.div variants={fadeIn} className="mt-16 pt-10 border-t border-espresso/15">
 						<p className="text-sm font-sans tracking-widest text-roast/70 text-center">
-							送料：2アイテム分ごとに{" "}
-							<span className="font-serif text-xl mx-1 text-espresso font-medium">¥200</span>{" "}
+							送料：全国一律、2アイテム分ごとに{" "}
+							<span className="font-serif text-xl mx-1 text-espresso font-medium">¥270</span>{" "}
 							頂戴いたします。
 						</p>
 					</motion.div>
