@@ -189,7 +189,7 @@ export default function OrderBuilder() {
 				if (!item) return [];
 				const size = item.sizes[c.size];
 				const label =
-					item.kind === "bean" ? `${item.label}/${c.grind}/${c.roast}/${size}` : `${item.label}`;
+					item.kind === "bean" ? `${item.label}　${size}・${c.grind}・${c.roast}` : item.label;
 				return [{ kind: item.kind, yen: item.prices[c.size], qty: c.qty, label, item: c }];
 			}),
 		[cart],
