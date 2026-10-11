@@ -249,7 +249,8 @@ export default function App() {
 								Instagram
 							</p>
 							<h2 className="font-serif text-3xl md:text-[44px] tracking-widest leading-snug mb-6">
-								最新情報はインスタで
+								<span className="inline-block">営業日とお知らせは、</span>
+								<span className="inline-block">Instagramで</span>
 							</h2>
 							<p className="text-sm md:text-lg text-paper/75 tracking-wide leading-[1.9] text-pretty">
 								<span className="inline-block">営業日カレンダー、新しく入った豆、</span>
