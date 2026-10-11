@@ -97,7 +97,7 @@ export const categoryNote = (c: MenuCategory) =>
 
 /** カテゴリ見出しの右に出す単位 */
 export const categoryUnit = (c: MenuCategory) =>
-	c.kind === "drip" ? "0.5 アイテム分" : c.sizes.join(" / ");
+	c.kind === "drip" ? "0.5アイテム分" : c.sizes.join(" / ");
 
 /** 品目の補足行。カテゴリと違うサイズや焙煎度の制限もここに出す */
 export const itemSub = (item: MenuItem) =>
@@ -110,7 +110,7 @@ export const catalog = (): CatalogItem[] =>
 		c.items.map((item) => ({
 			id: `${c.title}/${item.name}/${item.sub}`,
 			kind: c.kind,
-			label: `${c.title === "ドリップバッグ" ? "ドリップバッグ " : `${c.title} `}${item.name}${item.sub ? `(${item.sub})` : ""}`,
+			label: `${c.title === "ドリップバッグ" ? "ドリップバッグ " : `${c.title} `}${item.name}${item.sub ? `（${item.sub}）` : ""}`,
 			prices: item.prices,
 			sizes: item.sizes ?? c.sizes,
 			roasts: c.kind === "bean" ? (item.roasts ?? [...ROASTS]) : [],

@@ -225,7 +225,7 @@ export default function OrderBuilder() {
 		);
 
 	const clearSaved = async () => {
-		if (!window.confirm("この端末に保存した注文内容とお届け先を消去します。よろしいですか？"))
+		if (!window.confirm("この端末に保存したご注文内容とお届け先を消去します。よろしいですか？"))
 			return;
 		setConsent(false);
 		setCart([]);
@@ -262,13 +262,12 @@ export default function OrderBuilder() {
 				かんたん注文フォーム
 			</h3>
 			<p className="text-sm md:text-base text-roast/80 mb-6 text-pretty">
-				メニューから選ぶだけで、LINE に送る注文文ができあがります。
+				メニューから選ぶだけで、LINEで送る注文メッセージができあがります。
 			</p>
 
 			<div className="border-l-2 border-caramel bg-paper-dim px-4 py-3 text-xs md:text-sm text-roast/85 leading-relaxed mb-8">
 				<p className="text-pretty">
-					入力内容は当サイトのサーバーには送信されません。「この端末に保存する」を選んだ場合のみ、この端末のブラウザ(IndexedDB)に保存します。最後に保存してから30日を過ぎた内容は、次にこのページを開いたときに消去します。電話番号は保存しません。「コピーしてLINEを開く」を押すと注文文をコピーして
-					LINE を開きます。貼り付けて送信するとお店に届きます。
+					入力内容は、当サイトのサーバーには送信しません。「この端末に保存する」を選んだときだけ、この端末のブラウザ（IndexedDB）に保存します。最後に保存してから30日を過ぎた内容は、次にこのページを開いたときに消去します。電話番号は保存しません。
 				</p>
 				<label className="mt-3 flex items-center gap-2 cursor-pointer">
 					<input
@@ -354,7 +353,7 @@ export default function OrderBuilder() {
 					</button>
 					<p aria-live="polite" className="text-sm text-caramel mb-8 min-h-5 md:hidden">
 						{added && lines.length > 0
-							? `カートに追加しました(計 ${lines.length} 点・${yen(total(lines))})`
+							? `カートに追加しました（計${lines.length}点・${yen(total(lines))}）`
 							: ""}
 					</p>
 
@@ -376,7 +375,7 @@ export default function OrderBuilder() {
 						maxLength: LIMITS.address,
 						required: true,
 					})}
-					{field("phone", "電話番号(任意・保存されません)", {
+					{field("phone", "電話番号（任意・保存しません）", {
 						type: "tel",
 						autoComplete: "tel",
 						maxLength: LIMITS.phone,
@@ -394,7 +393,7 @@ export default function OrderBuilder() {
 					<h4 className={headingCls}>カート</h4>
 					{lines.length === 0 ? (
 						<p className="text-sm text-roast/70 py-3 border-b border-espresso/10">
-							まだ商品が選ばれていません
+							カートに商品はまだありません
 						</p>
 					) : (
 						<ul>
@@ -443,26 +442,26 @@ export default function OrderBuilder() {
 						</div>
 					</dl>
 					<p className="text-xs md:text-sm text-roast/70 mt-2">
-						送料は全国一律、2 アイテム分ごとに ¥270 です。
+						送料は全国一律、2アイテム分ごとに¥270です。
 					</p>
 					{hasQuote && (
 						<p className="text-xs md:text-sm text-roast/70 mt-1">
-							※時価の商品は合計に含まれません。金額は LINE でご案内します。
+							※時価の商品は合計に含まれません。金額はLINEでご案内します。
 						</p>
 					)}
 
-					<h4 className={`${headingCls} mt-10`}>3. 注文文を確認して送る</h4>
+					<h4 className={`${headingCls} mt-10`}>3. 注文メッセージを確認して送る</h4>
 					<textarea
 						ref={previewRef}
 						readOnly
 						value={lines.length ? text : ""}
-						placeholder="商品を選ぶと、ここに注文文ができあがります。"
-						aria-label="注文文のプレビュー"
+						placeholder="商品をカートに追加すると、ここに注文メッセージが表示されます。"
+						aria-label="注文メッセージのプレビュー"
 						className="w-full h-72 whitespace-pre-wrap font-sans text-sm leading-relaxed bg-white/70 border border-espresso/15 p-4 resize-none"
 					/>
 					{!canSend && (
 						<p className="text-xs md:text-sm text-roast/70 mt-2">
-							商品をカートに入れ、お名前・郵便番号・ご住所・お支払い方法を入力すると送れます。
+							商品をカートに追加し、お名前・郵便番号・ご住所・お支払い方法を入力すると送信できます。
 						</p>
 					)}
 					<a
@@ -478,8 +477,7 @@ export default function OrderBuilder() {
 						コピーしてLINEを開く
 					</a>
 					<p className="text-xs md:text-sm text-roast/70 mt-2 text-pretty">
-						注文文をコピーして、LINE
-						のトーク画面を開きます。入力欄に貼り付けて送信すると注文が届きます。
+						注文メッセージをコピーして、LINEのトーク画面を開きます。入力欄に貼り付けて送信すると、ご注文がお店に届きます。
 					</p>
 					<button
 						type="button"
@@ -487,7 +485,7 @@ export default function OrderBuilder() {
 						disabled={lines.length === 0}
 						className="mt-3 w-full h-12 border border-espresso/30 hover:border-espresso transition-colors disabled:opacity-40"
 					>
-						文章をコピーだけする
+						注文メッセージをコピーする
 					</button>
 					<p aria-live="polite" className="text-xs md:text-sm text-caramel mt-1 h-4">
 						{copied ? "コピーしました" : ""}

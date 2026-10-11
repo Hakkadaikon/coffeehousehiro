@@ -173,10 +173,10 @@ export default function App() {
 											Qualification
 										</p>
 										<p className="font-serif text-sm md:text-lg tracking-widest leading-relaxed">
-											J.C.Q.A. 認定コーヒーインストラクター 2級
+											J.C.Q.A.認定コーヒーインストラクター2級
 										</p>
 										<p className="font-sans text-xs md:text-base text-roast/75 tracking-wider leading-relaxed">
-											たしかな知識と技術で、最高の1杯をお届けします。
+											たしかな知識と技術で、最高の一杯をお届けします。
 										</p>
 									</div>
 								</div>
@@ -212,7 +212,7 @@ export default function App() {
 							href={INSTAGRAM_URL}
 							target="_blank"
 							rel="noopener noreferrer"
-							aria-label="Instagram @coffee_house_hiro の投稿を見る（新しいタブ）"
+							aria-label="Instagramで@coffee_house_hiroの投稿を見る（新しいタブで開きます）"
 							className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2"
 						>
 							{IG_TILES.map((img, i) => (
@@ -254,10 +254,10 @@ export default function App() {
 								className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:px-10 md:py-5 border border-paper/40 hover:border-paper hover:bg-paper hover:text-espresso text-paper tracking-wider md:text-lg transition-colors"
 							>
 								<Instagram className="w-5 h-5" />
-								Instagram をフォローする
+								Instagramをフォローする
 							</a>
 							<p className="mt-5 text-xs md:text-sm text-paper/60 tracking-wider">
-								ご注文・お問い合わせは{" "}
+								ご注文・お問い合わせは
 								<a
 									href={LINE_URL}
 									target="_blank"
@@ -265,7 +265,7 @@ export default function App() {
 									className="text-[#06C755] underline underline-offset-4"
 								>
 									LINE
-								</a>{" "}
+								</a>
 								から
 							</p>
 						</div>
@@ -279,9 +279,9 @@ export default function App() {
 							<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">商品一覧</h2>
 							<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/60 uppercase">Menu</p>
 							<p className="text-xs md:text-base tracking-widest text-roast/75 mt-4">
-								コーヒー豆・ドリップバッグを全国へ通販・発送します。
+								コーヒー豆・ドリップバッグを全国へ通販でお届けします。
 								<br />
-								{MENU_START_DATE}より価格・メニューを改定しました
+								{MENU_START_DATE}より価格・メニューを改定しました。
 							</p>
 						</div>
 
@@ -349,21 +349,21 @@ export default function App() {
 						{/* 送料: 目立つよう強調 */}
 						<motion.div variants={fadeIn} className="mt-16 pt-10 border-t border-espresso/15">
 							<p className="text-sm md:text-lg font-sans tracking-widest text-roast/80 text-center">
-								<span className="inline-block">送料：全国一律、</span>
+								<span className="inline-block">送料は全国一律、</span>
 								<span className="inline-block">
 									2アイテム分ごとに
 									<span className="font-serif text-2xl md:text-[32px] mx-1 text-caramel font-medium">
 										¥270
 									</span>
 								</span>
-								<span className="inline-block">頂戴いたします。</span>
+								<span className="inline-block">を頂戴いたします。</span>
 							</p>
 							<p className="text-center mt-6">
 								<a
 									href="#order-form"
 									className="text-sm md:text-base text-caramel underline underline-offset-4 tracking-wider"
 								>
-									このメニューから注文文を作る →
+									このメニューから注文メッセージを作る →
 								</a>
 							</p>
 						</motion.div>
@@ -388,7 +388,7 @@ export default function App() {
 								{
 									num: "I",
 									title: "LINEにて承ります",
-									desc: "ご希望の商品名・数量（コーヒーの場合は状態や焙煎度）をお知らせください。LINE をご利用でない方はメールでも承ります。",
+									desc: "ご希望の商品名と数量をお知らせください。コーヒー豆は、豆か粉か、焙煎度もあわせてお知らせください。LINEをご利用でない方はメールでも承ります。",
 								},
 								{
 									num: "II",
@@ -398,7 +398,7 @@ export default function App() {
 								{
 									num: "III",
 									title: "焙煎と発送",
-									desc: "ご入金確認後の週末に、丁寧に焙煎を行い新鮮な状態でご指定先へ発送いたします。",
+									desc: "ご入金を確認した後の週末に丁寧に焙煎し、新鮮なうちにお届け先へ発送いたします。",
 								},
 							].map((step) => (
 								<div key={step.num} className="relative z-10 md:px-4">
@@ -422,7 +422,7 @@ export default function App() {
 							<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
 							<MessageCircle className="w-6 h-6 text-[#06C755] mx-auto mb-6" />
 							<p className="font-sans text-sm md:text-lg tracking-widest text-paper/70 mb-8">
-								商品のご相談・お問い合わせは LINE へ
+								商品のご相談・お問い合わせはLINEへ
 							</p>
 							<a
 								href={LINE_URL}
@@ -431,11 +431,11 @@ export default function App() {
 								className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-xl font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
 							>
 								<MessageCircle className="w-5 h-5" />
-								LINEで相談・問い合わせ
+								LINEでご相談・お問い合わせ
 							</a>
 							<div className="mt-12 pt-8 border-t border-paper/10">
 								<p className="text-xs md:text-base text-paper/65 tracking-widest mb-3">
-									LINE をご利用でない方はメールにて
+									LINEをご利用でない方は、メールでも承ります
 								</p>
 								<a
 									href="mailto:coffeehousehiro@gmail.com"
@@ -478,7 +478,7 @@ export default function App() {
 								className="flex items-center gap-3 mt-3 text-[#06C755]/80 hover:text-[#06C755] transition-colors tracking-widest text-[13px] md:text-base"
 							>
 								<MessageCircle className="w-4 h-4" />
-								<span>LINE 公式アカウント</span>
+								<span>LINE公式アカウント</span>
 							</a>
 						</div>
 
@@ -504,9 +504,9 @@ export default function App() {
 									Visit Details
 								</h3>
 								<p className="text-[13px] md:text-[17px] tracking-wide text-paper/80 leading-[1.9] text-pretty">
-									1組4名様までの完全予約制となっております。
+									ご来店は1組4名様までの完全予約制です。
 									<br />
-									ご来店をご希望の際は、Instagram等のメッセージより事前にご連絡ください。赤い小屋にて、実際にコーヒーをお召し上がりいただけます。
+									ご来店を希望される場合は、事前にInstagramなどのメッセージでご連絡ください。赤い小屋で、実際にコーヒーをお召し上がりいただけます。
 								</p>
 							</div>
 						</div>
