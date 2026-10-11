@@ -66,15 +66,15 @@ export const buildMessage = (lines: Line[], f: Form) => {
 			return `・${l.label} ×${l.qty} … ${s === null ? "時価・要相談" : yen(s)}`;
 		}),
 		`■小計 ${yen(itemsTotal(lines))}`,
-		`■送料 ${yen(shippingFee(lines))}(${units(lines)}アイテム分)`,
+		`■送料 ${yen(shippingFee(lines))}（${units(lines)}アイテム分）`,
 		`■合計 ${yen(total(lines))}${hasQuote ? " ※時価の商品は別途ご相談" : ""}`,
 		`■お名前 ${f.name}`,
 		`■お届け先 〒${f.postal} ${f.address}`,
 		...(f.phone ? [`■お電話 ${f.phone}`] : []),
 		`■お支払い ${f.payment}`,
-		"※表示金額は概算です。在庫・送料を確認のうえ、お店から確定金額をご連絡します。",
-		`(メニュー改定日: ${MENU_START_DATE})`,
-		"よろしくお願いします。",
+		"※金額はサイト上の概算です。在庫・送料をご確認のうえ、確定金額をご連絡ください。",
+		`（メニュー改定日：${MENU_START_DATE}）`,
+		"よろしくお願いいたします。",
 	].join("\n");
 };
 
