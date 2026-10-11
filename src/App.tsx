@@ -1,14 +1,12 @@
-import { ChevronLeft, ChevronRight, Instagram, Mail, MessageCircle } from "lucide-react";
+import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
-import { useCallback, useState } from "react";
 
-const SLIDESHOW_IMAGES = [
+const PHOTOS = [
 	{ src: "/images/IMAGE_1.jpeg", w: 1080, h: 1080, alt: "コーヒーhouseヒロの赤い小屋の外観" },
 	{ src: "/images/IMAGE_2.jpeg", w: 1080, h: 810, alt: "4席のテーブルとカウンターがある店内" },
 	{ src: "/images/IMAGE_3.jpeg", w: 1080, h: 810, alt: "手回し焙煎機と電気ケトル" },
 	{ src: "/images/IMAGE_4.jpeg", w: 1080, h: 810, alt: "照明のある予約制の店内スペース" },
 	{ src: "/images/IMAGE_5.jpeg", w: 1080, h: 644, alt: "焙煎豆の保存瓶" },
-	{ src: "/images/IMAGE_6.jpeg", w: 1080, h: 1433, alt: "自家焙煎の素焼きピーナッツ" },
 	{ src: "/images/IMAGE_7.jpeg", w: 1080, h: 810, alt: "焙煎機のドラムの中で煎られるコーヒー豆" },
 	{
 		src: "/images/IMAGE_8.jpeg",
@@ -21,6 +19,9 @@ const SLIDESHOW_IMAGES = [
 ];
 
 const LINE_URL = "https://lin.ee/Zp3za2N";
+const INSTAGRAM_URL = "https://www.instagram.com/coffee_house_hiro/";
+// 先頭が大タイル。モバイルでは先頭 5 枚だけ表示する
+const IG_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);
 const MENU_START_DATE = "2026年10月1日";
 
 const MENU: { title: string; note: string; unit: string; items: [string, string, string][] }[] = [
@@ -73,99 +74,6 @@ const MENU: { title: string; note: string; unit: string; items: [string, string,
 		],
 	},
 ];
-
-function Slideshow() {
-	const n = SLIDESHOW_IMAGES.length;
-	const [current, setCurrent] = useState(0);
-	const [animating, setAnimating] = useState(false);
-
-	const getOffset = (i: number) => {
-		let diff = i - current;
-		if (diff > n / 2) diff -= n;
-		if (diff < -n / 2) diff += n;
-		return diff;
-	};
-
-	const go = useCallback(
-		(next: number) => {
-			if (animating) return;
-			setAnimating(true);
-			setCurrent(next);
-			setTimeout(() => setAnimating(false), 600);
-		},
-		[animating],
-	);
-
-	const prev = () => go((current - 1 + n) % n);
-	const next = () => go((current + 1) % n);
-
-	return (
-		<div
-			className="relative w-full select-none overflow-hidden bg-[#0e0b0a]"
-			style={{ height: "60vw", maxHeight: "80vh" }}
-		>
-			{SLIDESHOW_IMAGES.map((img, idx) => {
-				const offset = getOffset(idx);
-				return (
-					<div
-						key={img.src}
-						className="absolute inset-0 flex items-center justify-center"
-						style={{
-							transform: `translateX(${offset * 100}%)`,
-							transition:
-								Math.abs(offset) > 1 ? "none" : "transform 600ms cubic-bezier(0.25, 0.1, 0.25, 1)",
-						}}
-					>
-						<img
-							src={img.src}
-							alt={img.alt}
-							width={img.w}
-							height={img.h}
-							loading="lazy"
-							decoding="async"
-							className="h-full w-auto"
-						/>
-					</div>
-				);
-			})}
-
-			{/* 両端グラデーション（矢印の視認性向上） */}
-			<div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-espresso/30 to-transparent pointer-events-none z-10" />
-			<div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-espresso/30 to-transparent pointer-events-none z-10" />
-
-			{/* Arrows */}
-			<button
-				type="button"
-				onClick={prev}
-				className="absolute left-4 top-1/2 -translate-y-1/2 bg-espresso/50 hover:bg-espresso/80 text-paper p-3 transition-colors z-20"
-				aria-label="前の画像"
-			>
-				<ChevronLeft className="w-5 h-5" />
-			</button>
-			<button
-				type="button"
-				onClick={next}
-				className="absolute right-4 top-1/2 -translate-y-1/2 bg-espresso/50 hover:bg-espresso/80 text-paper p-3 transition-colors z-20"
-				aria-label="次の画像"
-			>
-				<ChevronRight className="w-5 h-5" />
-			</button>
-
-			{/* Dots */}
-			<div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-				{SLIDESHOW_IMAGES.map((img, idx) => (
-					<button
-						type="button"
-						key={img.src}
-						onClick={() => go(idx)}
-						className={`w-2 h-2 rounded-full transition-colors ${idx === current ? "bg-paper" : "bg-paper/40"}`}
-						aria-label={`画像 ${idx + 1}`}
-					/>
-				))}
-			</div>
-		</div>
-	);
-}
 
 export default function App() {
 	const fadeIn = {
@@ -327,15 +235,89 @@ export default function App() {
 					</div>
 				</section>
 
-				{/* Gallery Slideshow: セクション余白を削除してフル幅に */}
-				<section aria-label="ギャラリー">
+				{/* Instagram */}
+				<section id="instagram" className="py-24 md:py-32 px-6 md:px-12 bg-espresso text-paper">
 					<motion.div
 						initial="hidden"
 						whileInView="visible"
 						viewport={{ once: true, margin: "-100px" }}
 						variants={fadeIn}
+						className="max-w-5xl lg:max-w-6xl mx-auto"
 					>
-						<Slideshow />
+						<div className="text-center mb-12 md:mb-16">
+							<p className="text-xs md:text-sm tracking-[0.3em] text-caramel uppercase mb-4">
+								Instagram
+							</p>
+							<h2 className="font-serif text-3xl md:text-[44px] tracking-widest leading-snug mb-6">
+								最新情報はインスタで
+							</h2>
+							<p className="text-sm md:text-lg text-paper/75 tracking-wide leading-[1.9] text-pretty">
+								<span className="inline-block">営業日カレンダー、新しく入った豆、</span>
+								<span className="inline-block">限定コーヒーのお知らせを発信しています。</span>
+							</p>
+						</div>
+
+						<a
+							href={INSTAGRAM_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Instagram @coffee_house_hiro の投稿を見る（新しいタブ）"
+							className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2"
+						>
+							{IG_TILES.map((img, i) => (
+								<div
+									key={img.src}
+									className={`group/tile relative overflow-hidden bg-roast ${
+										i === 0
+											? "col-span-2 aspect-square md:row-span-2 md:aspect-auto"
+											: "aspect-square"
+									} ${i >= 5 ? "hidden md:block" : ""}`}
+								>
+									<img
+										src={img.src}
+										alt={img.alt}
+										width={img.w}
+										height={img.h}
+										loading="lazy"
+										decoding="async"
+										className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/tile:scale-105"
+									/>
+									<div className="absolute inset-0 bg-espresso/0 group-hover/tile:bg-espresso/45 transition-colors duration-500 flex items-center justify-center">
+										<Instagram className="w-7 h-7 text-paper opacity-0 group-hover/tile:opacity-100 transition-opacity duration-500" />
+									</div>
+									{i === 0 && (
+										<div className="absolute inset-x-0 bottom-0 p-4 md:p-6 bg-gradient-to-t from-espresso/85 to-transparent flex items-center gap-3">
+											<Instagram className="w-5 h-5 md:w-6 md:h-6" />
+											<span className="tracking-widest text-sm md:text-lg">@coffee_house_hiro</span>
+										</div>
+									)}
+								</div>
+							))}
+						</a>
+
+						<div className="mt-12 md:mt-16 text-center">
+							<a
+								href={INSTAGRAM_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:px-10 md:py-5 border border-paper/40 hover:border-paper hover:bg-paper hover:text-espresso text-paper tracking-wider md:text-lg transition-colors"
+							>
+								<Instagram className="w-5 h-5" />
+								Instagram をフォローする
+							</a>
+							<p className="mt-5 text-xs md:text-sm text-paper/60 tracking-wider">
+								ご注文・お問い合わせは{" "}
+								<a
+									href={LINE_URL}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-[#06C755] underline underline-offset-4"
+								>
+									LINE
+								</a>{" "}
+								から
+							</p>
+						</div>
 					</motion.div>
 				</section>
 
@@ -518,7 +500,7 @@ export default function App() {
 							</address>
 
 							<a
-								href="https://www.instagram.com/coffee_house_hiro"
+								href={INSTAGRAM_URL}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="inline-flex items-center gap-3 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base"
