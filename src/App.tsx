@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Instagram, Mail } from "lucide-react";
+import { ChevronLeft, ChevronRight, Instagram, Mail, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useCallback, useState } from "react";
 
@@ -15,6 +15,7 @@ const SLIDESHOW_IMAGES = [
 	"/images/IMAGE_10.jpeg",
 ];
 
+const LINE_URL = "https://lin.ee/Zp3za2N";
 const MENU_START_DATE = "2026年10月1日";
 
 const MENU: { title: string; note: string; unit: string; items: [string, string, string][] }[] = [
@@ -410,7 +411,7 @@ export default function App() {
 						{[
 							{
 								num: "I",
-								title: "メールにて承ります",
+								title: "LINE・メールにて承ります",
 								desc: "ご希望の商品名・数量（コーヒーの場合は状態や焙煎度）をお知らせください。",
 							},
 							{
@@ -451,6 +452,15 @@ export default function App() {
 						>
 							coffeehousehiro@gmail.com
 						</a>
+						<a
+							href={LINE_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-2 mt-8 px-6 py-3 border border-paper/20 text-paper/80 hover:text-caramel hover:border-caramel transition-colors tracking-widest text-sm"
+						>
+							<MessageCircle className="w-4 h-4" />
+							LINEで注文・問い合わせ
+						</a>
 					</div>
 				</div>
 			</section>
@@ -484,6 +494,15 @@ export default function App() {
 							>
 								<Instagram className="w-4 h-4" />
 								<span>@coffee_house_hiro</span>
+							</a>
+							<a
+								href={LINE_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="flex items-center gap-3 mt-3 text-paper/40 hover:text-paper transition-colors tracking-widest text-[13px]"
+							>
+								<MessageCircle className="w-4 h-4" />
+								<span>LINE 公式アカウント</span>
 							</a>
 						</div>
 
