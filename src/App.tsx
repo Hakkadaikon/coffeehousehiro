@@ -264,10 +264,9 @@ export default function App() {
 						viewport={{ once: true, margin: "-100px" }}
 						variants={fadeIn}
 					>
-						<h2 className="font-serif text-3xl md:text-4xl mb-16 md:mb-20 text-center tracking-widest leading-loose">
-							こだわりの一杯を、
-							<br className="md:hidden" />
-							手作りの赤い小屋から。
+						<h2 className="font-serif text-2xl sm:text-3xl md:text-4xl mb-16 md:mb-20 text-center tracking-wider md:tracking-widest leading-loose">
+							<span className="inline-block">こだわりの一杯を、</span>
+							<span className="inline-block">手作りの赤い小屋から。</span>
 						</h2>
 
 						{/* 画像とテキストの高さを揃える: items-start + 画像をauto高さに */}
@@ -290,7 +289,7 @@ export default function App() {
 									ブラックコーヒーとアイスコーヒーを専門に扱っており、豆本来の個性を引き出す焙煎を丹念に行っています。
 								</p>
 								<div className="pt-6 border-t border-espresso/10 space-y-3">
-									<p className="text-[10px] tracking-widest uppercase text-espresso/40 font-sans">
+									<p className="text-xs tracking-widest uppercase text-caramel font-sans">
 										Qualification
 									</p>
 									<p className="font-serif text-sm tracking-widest leading-relaxed">
@@ -336,15 +335,29 @@ export default function App() {
 						variants={staggerContainer}
 						className="space-y-16"
 					>
-						{MENU.map((cat) => (
-							<motion.div key={cat.title} variants={fadeIn} className="relative">
+						{MENU.map((cat, i) => (
+							<motion.div
+								key={cat.title}
+								variants={fadeIn}
+								className={`relative ${cat.title === "スペシャル" ? "bg-paper border border-caramel/30 p-6 md:p-10 shadow-sm" : ""}`}
+							>
 								<div className="border-b border-espresso/20 pb-5 mb-8">
+									<span className="block font-serif text-caramel text-sm tracking-widest mb-2">
+										0{i + 1}
+									</span>
 									<h3 className="font-serif text-xl md:text-2xl tracking-widest mb-1">
 										{cat.title}
+										{cat.title === "スペシャル" && (
+											<span className="ml-3 text-[11px] font-sans bg-caramel text-paper px-2 py-0.5 align-middle tracking-wider">
+												LIMITED
+											</span>
+										)}
 									</h3>
-									<div className="flex items-center justify-between mt-2 gap-4">
-										<p className="text-[11px] text-roast/50 font-sans tracking-wider">{cat.note}</p>
-										<span className="text-xs tracking-wider text-roast/40 font-sans shrink-0">
+									<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4">
+										{cat.note && (
+											<p className="text-xs text-roast/70 font-sans tracking-wider">{cat.note}</p>
+										)}
+										<span className="text-xs tracking-wider text-roast/60 font-sans shrink-0">
 											{cat.unit}
 										</span>
 									</div>
@@ -354,13 +367,15 @@ export default function App() {
 									{cat.items.map(([name, sub, price]) => (
 										<div key={name + sub} className="group">
 											<div className="flex items-baseline justify-between">
-												<span className="tracking-widest">{name}</span>
-												<div className="flex-grow border-b border-dotted border-espresso/20 mx-4 md:mx-10 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-												<span className="tracking-widest font-medium whitespace-nowrap">
+												<span className="shrink-0 tracking-wider md:tracking-widest">{name}</span>
+												<div className="flex-grow min-w-4 border-b border-dotted border-espresso/25 mx-2 md:mx-10"></div>
+												<span className="tracking-wide md:tracking-widest text-base md:text-lg font-medium tabular-nums whitespace-nowrap">
 													{price}
 												</span>
 											</div>
-											{sub && <p className="text-xs text-roast/50 tracking-wider mt-1">{sub}</p>}
+											{sub && (
+												<p className="text-[13px] text-roast/70 tracking-wider mt-1">{sub}</p>
+											)}
 										</div>
 									))}
 								</div>
@@ -370,10 +385,13 @@ export default function App() {
 
 					{/* 送料: 目立つよう強調 */}
 					<motion.div variants={fadeIn} className="mt-16 pt-10 border-t border-espresso/15">
-						<p className="text-sm font-sans tracking-widest text-roast/70 text-center">
-							送料：全国一律、2アイテム分ごとに{" "}
-							<span className="font-serif text-xl mx-1 text-espresso font-medium">¥270</span>{" "}
-							頂戴いたします。
+						<p className="text-sm font-sans tracking-widest text-roast/80 text-center">
+							<span className="inline-block">送料：全国一律、</span>
+							<span className="inline-block">
+								2アイテム分ごとに
+								<span className="font-serif text-2xl mx-1 text-caramel font-medium">¥270</span>
+							</span>
+							<span className="inline-block">頂戴いたします。</span>
 						</p>
 					</motion.div>
 				</div>
