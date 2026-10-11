@@ -389,8 +389,8 @@ export default function App() {
 						{[
 							{
 								num: "I",
-								title: "LINE・メールにて承ります",
-								desc: "ご希望の商品名・数量（コーヒーの場合は状態や焙煎度）をお知らせください。",
+								title: "LINEにて承ります",
+								desc: "ご希望の商品名・数量（コーヒーの場合は状態や焙煎度）をお知らせください。LINE をご利用でない方はメールでも承ります。",
 							},
 							{
 								num: "II",
@@ -420,25 +420,31 @@ export default function App() {
 
 					<div className="bg-[#241A16] p-10 md:p-16 text-center relative overflow-hidden">
 						<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
-						<Mail className="w-5 h-5 text-paper/30 mx-auto mb-6" />
+						<MessageCircle className="w-6 h-6 text-[#06C755] mx-auto mb-6" />
 						<p className="font-sans text-[10px] tracking-[0.3em] text-paper/40 mb-8 uppercase">
-							ご注文専用・お問い合わせ
+							ご注文・お問い合わせは LINE が便利です
 						</p>
-						<a
-							href="mailto:coffeehousehiro@gmail.com"
-							className="font-serif text-xl md:text-2xl text-paper hover:text-caramel transition-colors tracking-widest block break-all"
-						>
-							coffeehousehiro@gmail.com
-						</a>
 						<a
 							href={LINE_URL}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex items-center gap-2 mt-8 px-6 py-3 border border-paper/20 text-paper/80 hover:text-caramel hover:border-caramel transition-colors tracking-widest text-sm"
+							className="inline-flex items-center gap-3 px-10 py-4 bg-[#06C755] hover:bg-[#05b14c] text-white font-medium tracking-widest text-base md:text-lg transition-colors"
 						>
-							<MessageCircle className="w-4 h-4" />
+							<MessageCircle className="w-5 h-5" />
 							LINEで注文・問い合わせ
 						</a>
+						<div className="mt-12 pt-8 border-t border-paper/10">
+							<p className="text-[11px] text-paper/40 tracking-widest mb-3">
+								LINE をご利用でない方はメールにて
+							</p>
+							<a
+								href="mailto:coffeehousehiro@gmail.com"
+								className="inline-flex items-center gap-2 font-serif text-sm text-paper/60 hover:text-caramel transition-colors tracking-widest break-all"
+							>
+								<Mail className="w-4 h-4" />
+								coffeehousehiro@gmail.com
+							</a>
+						</div>
 					</div>
 				</div>
 			</section>
