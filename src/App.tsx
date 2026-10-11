@@ -426,36 +426,34 @@ export default function App() {
 						].map((step) => (
 							<div key={step.num} className="relative z-10 md:px-4">
 								{/* ステップ番号: border強化・背景色を少し明るく視認性向上 */}
-								<div className="w-12 h-12 bg-roast/40 border border-paper/20 flex items-center justify-center text-paper/80 font-serif text-lg mb-7 mx-auto md:mx-0">
+								<div className="w-12 h-12 bg-roast/40 border border-paper/20 flex items-center justify-center text-paper/80 font-serif text-lg mb-7">
 									{step.num}
 								</div>
-								<h3 className="text-base tracking-widest mb-4 text-paper/90 text-center md:text-left">
-									{step.title}
-								</h3>
-								<p className="text-[13px] text-paper/60 leading-[1.9] text-center md:text-left tracking-wide">
+								<h3 className="text-base tracking-widest mb-4 text-paper/90">{step.title}</h3>
+								<p className="text-sm text-paper/70 leading-[1.9] text-left tracking-wide">
 									{step.desc}
 								</p>
 							</div>
 						))}
 					</div>
 
-					<div className="bg-[#241A16] p-10 md:p-16 text-center relative overflow-hidden">
+					<div className="bg-[#241A16] p-6 md:p-16 text-center relative overflow-hidden">
 						<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
 						<MessageCircle className="w-6 h-6 text-[#06C755] mx-auto mb-6" />
-						<p className="font-sans text-[10px] tracking-[0.3em] text-paper/40 mb-8 uppercase">
+						<p className="font-sans text-sm tracking-widest text-paper/70 mb-8">
 							ご注文・お問い合わせは LINE が便利です
 						</p>
 						<a
 							href={LINE_URL}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex items-center gap-3 px-10 py-4 bg-[#06C755] hover:bg-[#05b14c] text-white font-medium tracking-widest text-base md:text-lg transition-colors"
+							className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-lg font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
 						>
 							<MessageCircle className="w-5 h-5" />
 							LINEで注文・問い合わせ
 						</a>
 						<div className="mt-12 pt-8 border-t border-paper/10">
-							<p className="text-[11px] text-paper/40 tracking-widest mb-3">
+							<p className="text-xs text-paper/50 tracking-widest mb-3">
 								LINE をご利用でない方はメールにて
 							</p>
 							<a
@@ -475,14 +473,6 @@ export default function App() {
 				<div className="max-w-5xl mx-auto">
 					<div className="grid md:grid-cols-2 gap-14 md:gap-8 mb-20">
 						<div>
-							<div className="mb-8">
-								<img
-									src="/logo.png"
-									alt="Logo"
-									className="w-20 opacity-40 invert brightness-0"
-									onError={(e) => (e.currentTarget.style.display = "none")}
-								/>
-							</div>
 							<p className="font-serif text-lg tracking-widest mb-6 text-paper/90">
 								コーヒーhouseヒロ
 							</p>
@@ -495,7 +485,7 @@ export default function App() {
 								href="https://www.instagram.com/coffee_house_hiro"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="inline-flex items-center gap-3 text-paper/40 hover:text-paper transition-colors tracking-widest text-[13px]"
+								className="inline-flex items-center gap-3 text-paper/60 hover:text-paper transition-colors tracking-widest text-[13px]"
 							>
 								<Instagram className="w-4 h-4" />
 								<span>@coffee_house_hiro</span>
@@ -504,7 +494,7 @@ export default function App() {
 								href={LINE_URL}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="flex items-center gap-3 mt-3 text-paper/40 hover:text-paper transition-colors tracking-widest text-[13px]"
+								className="flex items-center gap-3 mt-3 text-[#06C755]/80 hover:text-[#06C755] transition-colors tracking-widest text-[13px]"
 							>
 								<MessageCircle className="w-4 h-4" />
 								<span>LINE 公式アカウント</span>
@@ -513,7 +503,7 @@ export default function App() {
 
 						<div className="font-serif leading-loose space-y-10 pr-4">
 							<div>
-								<h4 className="text-[10px] font-sans tracking-[0.3em] text-caramel/70 mb-4 uppercase">
+								<h4 className="text-xs font-sans tracking-[0.3em] text-caramel mb-4 uppercase">
 									Business Hours
 								</h4>
 								<p className="tracking-wider text-[14px] text-paper/80">
@@ -528,7 +518,7 @@ export default function App() {
 							</div>
 
 							<div>
-								<h4 className="text-[10px] font-sans tracking-[0.3em] text-caramel/70 mb-4 uppercase">
+								<h4 className="text-xs font-sans tracking-[0.3em] text-caramel mb-4 uppercase">
 									Visit Details
 								</h4>
 								<p className="text-[13px] tracking-wide text-paper/70 leading-[1.9]">
@@ -540,7 +530,7 @@ export default function App() {
 						</div>
 					</div>
 
-					<div className="text-center font-sans tracking-[0.3em] text-[9px] text-paper/20 uppercase border-t border-white/5 pt-10">
+					<div className="text-center font-sans tracking-[0.3em] text-[11px] text-paper/40 uppercase border-t border-white/5 pt-10">
 						&copy; {new Date().getFullYear()} coffee house hiro. All rights reserved.
 					</div>
 				</div>
