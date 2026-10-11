@@ -215,14 +215,14 @@ export default function App() {
 					<div className="absolute inset-0 bg-gradient-to-t from-espresso/90 via-espresso/40 to-espresso/60"></div>
 				</div>
 
-				<div className="max-w-6xl w-full mx-auto relative z-10 pt-28 pb-24">
+				<div className="max-w-6xl lg:max-w-7xl w-full mx-auto relative z-10 pt-24 pb-16 md:pt-28 md:pb-24">
 					<motion.div
 						initial="hidden"
 						animate="visible"
 						variants={fadeIn}
-						className="w-full flex flex-col md:flex-row md:items-center gap-12"
+						className="w-full flex flex-col md:flex-row md:items-center gap-8 md:gap-12 lg:gap-16"
 					>
-						<div className="flex-1">
+						<div className="md:flex-none">
 							{/* キャッチコピー: 行間を広げてコントラスト強化 */}
 							<h1 className="font-serif text-[clamp(26px,3.5vw,52px)] leading-[1.8] mb-8 tracking-wider">
 								<span className="block whitespace-nowrap">平日はサラリーマン、</span>
@@ -241,11 +241,11 @@ export default function App() {
 								LINEで注文する
 							</a>
 						</div>
-						<div className="flex-shrink-0 md:self-center flex justify-center">
+						<div className="order-first md:order-none md:flex-1 min-w-0 flex justify-center md:justify-end">
 							<img
 								src="/images/logo.webp"
 								alt="コーヒーhouseヒロ"
-								className="w-[clamp(240px,34vw,480px)] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+								className="w-full max-w-[420px] md:max-w-[min(680px,78vh)] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
 							/>
 						</div>
 					</motion.div>
