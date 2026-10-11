@@ -55,6 +55,14 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 - 描画のたびに値が変わる要素(`new Date()`など)には`suppressHydrationWarning`を付ける。
 - `window`や`localStorage`をコンポーネントの描画中に参照しない。参照するとサーバー側のレンダーでエラーになるので、使うときは`useEffect`の中に入れる。
 
+## 価格の目印
+
+`index.html`の`__PRICE_MIN__`(説明文の最安値)と`__PRICE_RANGE__`(JSON-LDの`priceRange`)は、`prerender.mjs`が`src/menu.ts`の値で置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。dev serverでは目印がそのまま見えるが、本番のHTMLには残らない。
+
+## セキュリティヘッダー
+
+`vercel.json`でCSPなどのヘッダーを全ページに付けている。外部のスクリプトや画像を足すときは、CSPの`script-src`・`img-src`などに許可を足さないと読み込めない。motionがSSRで出す`style`属性のために`style-src-attr 'unsafe-inline'`が要る。
+
 ## 確かめる
 
 ```bash
