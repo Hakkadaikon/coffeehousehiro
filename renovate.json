@@ -1,12 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
   ],
   "automergeStrategy": "squash",
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
+      "minimumReleaseAge": "3 days",
       "automerge": true,
       "automergeType": "branch"
     },
