@@ -10,7 +10,7 @@
 
 ## 店舗情報・送料
 
-店名・住所・メールアドレス・SNSのURL・LINE公式アカウントのID・支払い方法は `src/content/business.yaml` の `shop` にまとめています。ページ本文と、検索エンジン向けの店舗情報(`index.html` のJSON-LD)は、どちらもビルド時にここから入ります。送料は `src/order/pricing.ts` にあります。
+店名・住所・メールアドレス・SNSのURL・LINE公式アカウントのID・支払い方法は `src/content/business.yaml` の `shop` にまとめています。店の緯度・経度(`latitude`・`longitude`)もここにあり、フッターの「Googleマップで開く」はこの位置を開きます。住所で検索しても地図に場所が出ないためです。ページ本文と、検索エンジン向けの店舗情報(`index.html` のJSON-LD)は、どちらもビルド時にここから入ります。送料は `src/order/pricing.ts` にあります。
 
 ## 特定商取引法に基づく表記
 
