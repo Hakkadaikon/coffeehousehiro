@@ -11,6 +11,7 @@ import {
 	LINE_URL,
 	PAYMENTS,
 	POSTAL,
+	PRIVACY_POLICY,
 	SHOP_NAME,
 } from "./shop.ts";
 
@@ -107,4 +108,35 @@ test("焙煎日の案内は強調して表示する", () => {
 test("連絡先はLINEを主に、使えない方はメールで案内する", () => {
 	assert.ok(row("LINE公式アカウント").includes(LINE_URL));
 	assert.match(row("電話番号"), /LINE.*メール/s);
+});
+
+const privacy = (label: string) => {
+	const r = PRIVACY_POLICY.find((r) => r.label === label);
+	assert.ok(r, label);
+	return r.lines.map((l) => l.text).join("\n");
+};
+
+test("プライバシーポリシーは、個人情報保護法で公表が必要な事項を載せる", () => {
+	assert.deepEqual(
+		PRIVACY_POLICY.map((r) => r.label),
+		[
+			"事業者",
+			"お預かりする情報",
+			"利用目的",
+			"第三者への提供",
+			"取扱いの委託",
+			"安全管理",
+			"保管期間",
+			"開示・訂正・削除のご請求",
+			"お問い合わせ窓口",
+			"制定日",
+		],
+	);
+});
+
+test("プライバシーポリシーの事業者と窓口は、特定商取引法に基づく表記・店舗情報と同じ", () => {
+	assert.ok(privacy("事業者").includes(row("販売事業者")));
+	assert.ok(privacy("事業者").includes(ADDRESS));
+	assert.ok(privacy("お問い合わせ窓口").includes(LINE_URL));
+	assert.ok(privacy("お問い合わせ窓口").includes(EMAIL));
 });

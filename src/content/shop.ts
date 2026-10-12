@@ -3,7 +3,7 @@
 import { parseBusiness } from "./business.ts";
 import data from "./business.yaml";
 
-const { shop, legalNotice } = parseBusiness(data);
+const { shop, legalNotice, privacyPolicy } = parseBusiness(data);
 
 export const SITE_URL = "https://coffeehousehiro.vercel.app/";
 export const SHOP_NAME = shop.name;
@@ -22,3 +22,5 @@ export const LINE_CHAT_URL = `https://line.me/R/oaMessage/%40${LINE_OA_ID}/`;
 export const PAYMENTS = shop.payments;
 /** 特定商取引法に基づく表記(/legal) */
 export const LEGAL_NOTICE = legalNotice;
+/** プライバシーポリシー(/legal#privacy) */
+export const PRIVACY_POLICY = privacyPolicy;

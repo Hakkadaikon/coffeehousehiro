@@ -24,12 +24,24 @@ const paragraph = (v: unknown, path: string) => {
 	return fail(path, "文字列か「strong: 文」");
 };
 
+/** 「項目名: 値」の並びを表の行にする。lines の1要素が1段落で、「strong: 文」と書いた段落は強調する */
+const rows = (v: unknown, path: string) =>
+	Object.entries(section(v, path)).map(([label, value]) => {
+		const rowPath = `${path}.${label}`;
+		const items: unknown[] =
+			typeof value === "string"
+				? [value]
+				: Array.isArray(value) && value.length > 0
+					? value
+					: fail(rowPath, "空でない文字列か、空でないリスト");
+		return { label, lines: items.map((item, i) => paragraph(item, `${rowPath} の${i + 1}行目`)) };
+	});
+
 export function parseBusiness(data: unknown) {
 	const root = section(data, "全体");
 	const shop = section(root.shop, "shop");
 	const instagram = section(shop.instagram, "shop.instagram");
 	const line = section(shop.line, "shop.line");
-	const legal = section(root.legalNotice, "legalNotice");
 	return {
 		shop: {
 			name: text(shop.name, "shop.name"),
@@ -48,16 +60,7 @@ export function parseBusiness(data: unknown) {
 			},
 			payments: texts(shop.payments, "shop.payments"),
 		},
-		/** 表の1行。lines の1要素が1段落で、「strong: 文」と書いた段落は強調する */
-		legalNotice: Object.entries(legal).map(([label, v]) => {
-			const path = `legalNotice.${label}`;
-			const items: unknown[] =
-				typeof v === "string"
-					? [v]
-					: Array.isArray(v) && v.length > 0
-						? v
-						: fail(path, "空でない文字列か、空でないリスト");
-			return { label, lines: items.map((item, i) => paragraph(item, `${path} の${i + 1}行目`)) };
-		}),
+		legalNotice: rows(root.legalNotice, "legalNotice"),
+		privacyPolicy: rows(root.privacyPolicy, "privacyPolicy"),
 	};
 }

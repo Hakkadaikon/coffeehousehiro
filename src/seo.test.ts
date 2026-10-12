@@ -97,6 +97,8 @@ test("特定商取引法に基づく表記のページはビルドに含め、�
 	assert.match(read("vite.config.ts"), /"legal\.html"/);
 	assert.match(read("legal.html"), /<meta name="robots" content="noindex" \/>/);
 	assert.ok(read("src/sections/SiteFooter.tsx").includes('href="/legal"'));
+	assert.ok(read("src/sections/SiteFooter.tsx").includes('href="/legal#privacy"'));
+	assert.ok(read("src/LegalNotice.tsx").includes('id="privacy"'));
 	assert.equal(JSON.parse(read("vercel.json")).cleanUrls, true);
 });
 
