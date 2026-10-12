@@ -28,7 +28,7 @@ export function Changelog() {
 				aria-label="サイトの更新履歴"
 				// biome-ignore lint/a11y/noNoninteractiveTabindex: スクロールする領域をキーボードで動かせるようにする
 				tabIndex={0}
-				className="max-h-[60vh] overflow-y-auto px-6 md:px-12 pb-6 pt-2 focus-visible:outline focus-visible:outline-1 focus-visible:outline-paper/40"
+				className="max-h-[min(20rem,45vh)] overflow-y-auto overscroll-contain px-6 md:px-12 pb-6 pt-2 focus-visible:outline focus-visible:outline-1 focus-visible:outline-paper/40"
 			>
 				<ol className="max-w-3xl space-y-5 text-[13px] md:text-[15px] leading-[1.9] tracking-wide">
 					{CHANGELOG.map((e) => (
