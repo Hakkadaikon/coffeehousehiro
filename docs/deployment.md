@@ -6,6 +6,12 @@
 
 ドメインが変わったときは、`src/content/shop.ts`・`index.html`・`public/robots.txt`・`public/sitemap.xml` に書いた本番URLも書き換えてください。
 
+main以外のブランチはVercelにデプロイしません(`vercel.json` の `git.deploymentEnabled`)。ブランチの確認はCIで行います。
+
+## アクセス解析
+
+訪問数とページの表示回数は、Vercel Web Analyticsで見ます。`src/main.tsx` の `inject()` が、同じドメインの `/_vercel/insights/` から計測用のスクリプトを読み込みます。cookieは使わず、注文フォームの入力内容も送りません。数字はVercelのダッシュボードの「Analytics」で見られます。
+
 ## ほかのホスティングサービスで公開するとき
 
 静的なWebサイトとして動作するため、Netlify、Cloudflare Pagesなどのホスティングサービスや、一般的なレンタルサーバーでも公開できます。ただし、CSPなどのセキュリティヘッダーとキャッシュの設定は `vercel.json` に書いているので、Vercel以外ではそのサービスの方法で同じ設定をしてください。
