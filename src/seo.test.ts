@@ -73,3 +73,14 @@ test("public/images には、写真リストとアイコンにある画像だけ
 		assert.ok(html.includes(`/images/${icon}`) || SOURCES.includes(`/images/${icon}`), icon);
 	}
 });
+
+test("ページの表示に外部のサーバーを使わない（フォントも自前で配信する）", () => {
+	// canonical は自分の URL を指すだけで、読み込みは起きない
+	const loads = (html.match(/<link [^>]*>/g) ?? []).filter((l) => !l.includes('rel="canonical"'));
+	for (const l of loads) assert.doesNotMatch(l, /href="https?:/, l);
+	const vercel = JSON.parse(read("vercel.json"));
+	const csp: string = vercel.headers[0].headers.find(
+		(h: { key: string }) => h.key === "Content-Security-Policy",
+	).value;
+	assert.doesNotMatch(csp, /https?:/);
+});

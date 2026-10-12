@@ -1,3 +1,6 @@
+/* 明朝体はこのサイトから配信する。使う文字の範囲のファイルだけをブラウザが読み込む */
+@import "@fontsource/shippori-mincho/400.css";
+@import "@fontsource/shippori-mincho/500.css";
 @import "tailwindcss";
 /* ドキュメントに書いたクラス名を拾って CSS が増えないよう、説明文は検出の対象から外す */
 @source not "../docs";
