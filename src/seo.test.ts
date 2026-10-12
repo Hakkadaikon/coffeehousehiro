@@ -4,21 +4,29 @@ import { test } from "node:test";
 import { PHOTOS } from "./content/photos.ts";
 import {
 	ADDRESS,
+	ADDRESS_PARTS,
+	EMAIL,
 	INSTAGRAM_URL,
 	LINE_URL,
 	MAP_URL,
 	PAYMENTS,
 	POSTAL,
+	SHOP_NAME,
 	SITE_URL,
 } from "./content/shop.ts";
+import { placeholders } from "./placeholders.ts";
 
 const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const html = read("index.html");
-const ldText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1] ?? "";
-// ビルド時に入る目印を仮の値に置き換えてから読む
-const ld = JSON.parse(ldText.replaceAll(/__[A-Z_]+__/g, "x"));
+// ビルドと同じく、目印を src/content の値で埋めてから読む
+let filled = html;
+for (const [key, value] of Object.entries(placeholders())) filled = filled.replaceAll(key, value);
+const ldText = filled.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1] ?? "";
+const ld = JSON.parse(ldText);
 
-test("検索エンジン向けの店舗情報は、サイトの住所・支払い方法・SNSと同じ", () => {
+test("検索エンジン向けの店舗情報は、サイトの店名・住所・連絡先・支払い方法・SNSと同じ", () => {
+	assert.equal(ld.name, SHOP_NAME);
+	assert.equal(ld.email, EMAIL);
 	const a = ld.address;
 	assert.equal(a.postalCode, POSTAL);
 	assert.equal(`${a.addressRegion}${a.addressLocality}${a.streetAddress}`, ADDRESS);
@@ -83,4 +91,18 @@ test("ページの表示に外部のサーバーを使わない（フォント�
 		(h: { key: string }) => h.key === "Content-Security-Policy",
 	).value;
 	assert.doesNotMatch(csp, /https?:/);
+});
+
+test("特定商取引法に基づく表記のページはビルドに含め、フッターからリンクし、検索結果には出さない", () => {
+	assert.match(read("vite.config.ts"), /"legal\.html"/);
+	assert.match(read("legal.html"), /<meta name="robots" content="noindex" \/>/);
+	assert.ok(read("src/sections/SiteFooter.tsx").includes('href="/legal"'));
+	assert.equal(JSON.parse(read("vercel.json")).cleanUrls, true);
+});
+
+test("index.html には店名・住所・連絡先を直接書かず、business.yaml の値をビルド時に入れる", () => {
+	for (const v of [SHOP_NAME, POSTAL, ADDRESS_PARTS.street, EMAIL, INSTAGRAM_URL, LINE_URL]) {
+		assert.ok(!html.includes(v), v);
+		assert.ok(filled.includes(v), v);
+	}
 });

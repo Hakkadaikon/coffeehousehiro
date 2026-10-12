@@ -8,11 +8,12 @@ import {
 	LINE_URL,
 	MAP_URL,
 	POSTAL,
+	SHOP_NAME,
 } from "../content/shop.ts";
 import { NAV_LINKS } from "../content/site.ts";
 import { SAVE_DAYS } from "../order/draft.ts";
 
-/** フッター。住所と地図・SNS、営業時間、来店案内、情報の取り扱い、ページ内リンク */
+/** フッター。住所と地図・SNS、営業時間、来店案内、情報の取り扱い、ページ内リンク、特定商取引法に基づく表記へのリンク */
 export function SiteFooter() {
 	return (
 		<footer id="access" className="bg-[#120D0B] text-paper pt-20 pb-12 px-6 md:px-12">
@@ -35,11 +36,19 @@ export function SiteFooter() {
 						</a>
 					))}
 				</nav>
+				<p className="text-center mb-8">
+					<a
+						href="/legal"
+						className="font-sans text-xs md:text-sm tracking-[0.2em] text-paper/60 hover:text-paper transition-colors underline underline-offset-4 decoration-paper/30"
+					>
+						特定商取引法に基づく表記
+					</a>
+				</p>
 				<div
 					suppressHydrationWarning
 					className="text-center font-sans tracking-[0.3em] text-[11px] md:text-[13px] text-paper/40 border-t border-white/5 pt-10"
 				>
-					&copy; {new Date().getFullYear()} コーヒーhouseヒロ
+					&copy; {new Date().getFullYear()} {SHOP_NAME}
 				</div>
 			</div>
 		</footer>
@@ -51,7 +60,7 @@ function ShopContact() {
 	return (
 		<div>
 			<h2 className="font-serif text-lg md:text-xl tracking-widest mb-6 text-paper/90">
-				コーヒーhouseヒロ
+				{SHOP_NAME}
 			</h2>
 			<address className="not-italic space-y-2 text-[13px] md:text-base text-paper/70 tracking-widest font-light mb-4">
 				<p>〒{POSTAL}</p>

@@ -1,6 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
-import { LINE_URL } from "../content/shop.ts";
+import { LINE_URL, SHOP_NAME } from "../content/shop.ts";
 import { NAV_LINKS } from "../content/site.ts";
 
 /** ページ上部のナビゲーション。PC ではページ内リンク、常に LINE 注文ボタンを出す */
@@ -9,7 +9,7 @@ export function SiteHeader() {
 		<header>
 			<nav className="absolute top-0 w-full z-50 py-5 px-6 md:px-12 flex justify-between items-center text-paper">
 				<div className="font-serif text-base md:text-2xl tracking-[0.15em] flex items-center gap-3">
-					コーヒーhouseヒロ
+					{SHOP_NAME}
 				</div>
 				<div className="hidden md:flex gap-10 md:text-base lg:text-lg font-medium tracking-[0.15em] uppercase">
 					{NAV_LINKS.map((l) => (
