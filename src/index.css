@@ -1,4 +1,8 @@
 @import "tailwindcss";
+/* ドキュメントに書いたクラス名を拾って CSS が増えないよう、説明文は検出の対象から外す */
+@source not "../docs";
+@source not "../.claude";
+@source not "../README.md";
 
 @theme {
 	--font-sans:
