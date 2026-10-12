@@ -118,6 +118,11 @@ function MenuItemRow({ item }: { item: MenuItem }) {
 				</span>
 			</div>
 			{sub && <p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">{sub}</p>}
+			{item.groundPrices && (
+				<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
+					{`粉（手挽き）は ${formatPrices(item.groundPrices)}`}
+				</p>
+			)}
 		</div>
 	);
 }

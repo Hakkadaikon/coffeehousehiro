@@ -9,9 +9,15 @@ export type CatalogItem = {
 	kind: Kind;
 	label: string;
 	prices: Price[];
+	/** 粉にすると価格が変わる豆だけ持つ、粉のときの価格 */
+	groundPrices?: number[];
 	sizes: string[];
 	roasts: string[];
 };
+
+/** 選んだサイズと挽き方での価格 */
+export const priceFor = (item: CatalogItem, size: number, grind: string): Price =>
+	grind === "粉" && item.groundPrices ? item.groundPrices[size] : item.prices[size];
 
 export type CartItem = { id: string; size: number; qty: number; grind: string; roast: string };
 
@@ -45,7 +51,7 @@ export const toLines = (cart: CartItem[], catalog: CatalogItem[]): CartLine[] =>
 		const size = item.sizes[c.size];
 		const label =
 			item.kind === "bean" ? `${item.label}　${size}・${c.grind}・${c.roast}` : item.label;
-		return [{ kind: item.kind, yen: item.prices[c.size], qty: c.qty, label, id: c.id }];
+		return [{ kind: item.kind, yen: priceFor(item, c.size, c.grind), qty: c.qty, label, id: c.id }];
 	});
 
 export type CartAction =

@@ -15,7 +15,7 @@ import {
 } from "./content/shop.ts";
 import { yen } from "./order/pricing.ts";
 
-/** JSON-LD のメニュー(Menu → MenuSection → MenuItem → Offer)。時価の品目は価格を載せず、幅のある価格は最小〜最大で載せる */
+/** JSON-LD のメニュー(Menu → MenuSection → MenuItem → Offer)。時価の品目は価格を載せず、幅のある価格は最小〜最大で、粉の価格は「サイズ・粉」の Offer で載せる */
 const menuJsonLd = () => ({
 	"@type": "Menu",
 	name: "コーヒー豆・ドリップバッグ",
@@ -42,6 +42,9 @@ const menuJsonLd = () => ({
 								},
 							],
 			);
+			for (const [i, price] of (item.groundPrices ?? []).entries()) {
+				offers.push({ "@type": "Offer", name: `${sizes[i]}・粉`, price, priceCurrency: "JPY" });
+			}
 			return {
 				"@type": "MenuItem",
 				name: item.sub ? `${item.name}（${item.sub}）` : item.name,

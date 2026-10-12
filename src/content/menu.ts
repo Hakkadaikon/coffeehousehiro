@@ -15,6 +15,8 @@ export type MenuItem = {
 	sub: string;
 	/** サイズごとの価格。null は時価・要相談、{ min, max } は価格に幅がある */
 	prices: Price[];
+	/** 粉にすると価格が変わるときだけ指定する、粉のときの価格 */
+	groundPrices?: number[];
 	/** カテゴリと違うサイズのときだけ指定する */
 	sizes?: string[];
 	/** 選べる焙煎度を絞るときだけ指定する */
@@ -75,6 +77,7 @@ export const MENU: MenuCategory[] = [
 				name: "パナマ",
 				sub: "ゲイシャ、エル・パロマール農園",
 				prices: [500, 2200],
+				groundPrices: [550, 2400],
 				sizes: ["20g", "100g"],
 				roasts: ["浅煎り"],
 			},
@@ -117,16 +120,17 @@ export const catalog = (): CatalogItem[] =>
 			kind: c.kind,
 			label: `${c.title} ${item.name}${item.sub ? `（${item.sub}）` : ""}`,
 			prices: item.prices,
+			groundPrices: item.groundPrices,
 			sizes: item.sizes ?? c.sizes,
 			roasts: c.kind === "bean" ? (item.roasts ?? [...ROASTS]) : [],
 		})),
 	);
 
-/** SEO 用の価格帯 [最安値, 最高値] */
+/** SEO 用の価格帯 [最安値, 最高値]。粉の価格も含める */
 export const priceRange = () => {
-	const all = MENU.flatMap((c) => c.items.flatMap((i) => i.prices)).flatMap((p) =>
-		p === null ? [] : typeof p === "number" ? [p] : [p.min, p.max],
-	);
+	const all = MENU.flatMap((c) =>
+		c.items.flatMap((i) => [...i.prices, ...(i.groundPrices ?? [])]),
+	).flatMap((p) => (p === null ? [] : typeof p === "number" ? [p] : [p.min, p.max]));
 	return [Math.min(...all), Math.max(...all)] as const;
 };
 

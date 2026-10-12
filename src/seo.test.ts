@@ -115,7 +115,7 @@ test("index.html には店名・住所・連絡先を直接書かず、business.
 	}
 });
 
-test("検索エンジン向けのメニューは、MENU のカテゴリ・品目・サイズ・価格と同じ（時価は価格なし、幅のある価格は最小〜最大）", () => {
+test("検索エンジン向けのメニューは、MENU のカテゴリ・品目・サイズ・価格と同じ（時価は価格なし、幅のある価格は最小〜最大、粉の価格は別の Offer）", () => {
 	const menu = ld.hasMenu;
 	assert.equal(menu["@type"], "Menu");
 	assert.deepEqual(
@@ -145,6 +145,9 @@ test("検索エンジン向けのメニューは、MENU のカテゴリ・品目
 								},
 							],
 			);
+			for (const [k, price] of (item.groundPrices ?? []).entries()) {
+				expected.push({ "@type": "Offer", name: `${sizes[k]}・粉`, price, priceCurrency: "JPY" });
+			}
 			assert.ok(items[j].name.startsWith(item.name), item.name);
 			assert.deepEqual(items[j].offers ?? [], expected, item.name);
 		});

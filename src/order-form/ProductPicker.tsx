@@ -1,5 +1,6 @@
 import { CATALOG_GROUPS, GRINDS } from "../content/menu.ts";
-import { formatPrices } from "../order/pricing.ts";
+import { priceFor } from "../order/cart.ts";
+import { formatPrice } from "../order/pricing.ts";
 import { Choice, headingCls, inputCls, Stepper } from "./controls.tsx";
 import type { Picker } from "./usePicker.ts";
 
@@ -61,7 +62,7 @@ export function ProductPicker({
 				value={item.sizes[picker.size]}
 				onChange={(v) => picker.setSize(item.sizes.indexOf(v))}
 				cols={item.sizes.length === 1 ? "grid-cols-1" : "grid-cols-2"}
-				render={(o, i) => `${o}　${formatPrices([item.prices[i]])}`}
+				render={(o, i) => `${o}　${formatPrice(priceFor(item, i, picker.grind))}`}
 			/>
 			<div className="flex items-center gap-4 mb-5">
 				<span className="text-sm text-roast/80">数量</span>

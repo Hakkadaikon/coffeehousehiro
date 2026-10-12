@@ -16,6 +16,7 @@ test("どの品目もサイズと価格の数がそろい、価格は正の整�
 		for (const item of c.items) {
 			const where = `${c.title} ${item.name}`;
 			assert.equal(item.prices.length, (item.sizes ?? c.sizes).length, where);
+			if (item.groundPrices) assert.equal(item.groundPrices.length, item.prices.length, where);
 			const ok = (n: number) => Number.isInteger(n) && n > 0;
 			for (const p of item.prices) {
 				assert.ok(
@@ -42,10 +43,10 @@ test("商品IDの区切りに使う / を名前に入れない", () => {
 	}
 });
 
-test("価格帯は時価を除いた全価格の最安値と最高値（幅のある価格は両端を含める）", () => {
-	const all = MENU.flatMap((c) => c.items.flatMap((i) => i.prices)).flatMap((p) =>
-		p === null ? [] : typeof p === "number" ? [p] : [p.min, p.max],
-	);
+test("価格帯は時価を除いた全価格の最安値と最高値（幅のある価格は両端、粉の価格も含める）", () => {
+	const all = MENU.flatMap((c) =>
+		c.items.flatMap((i) => [...i.prices, ...(i.groundPrices ?? [])]),
+	).flatMap((p) => (p === null ? [] : typeof p === "number" ? [p] : [p.min, p.max]));
 	const [min, max] = priceRange();
 	assert.equal(min, Math.min(...all));
 	assert.equal(max, Math.max(...all));

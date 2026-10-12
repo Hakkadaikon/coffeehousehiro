@@ -51,6 +51,19 @@ test("カートから注文の行を作る。豆はサイズ・挽き方・焙�
 	]);
 });
 
+test("粉の価格がある豆は、粉を選ぶとその価格で計算する", () => {
+	const gesha = { ...panama, groundPrices: [550, 2400] };
+	const cart = [
+		{ id: "p", size: 1, qty: 1, grind: "豆", roast: "浅煎り" },
+		{ id: "p", size: 1, qty: 1, grind: "粉", roast: "浅煎り" },
+		{ id: "a", size: 0, qty: 1, grind: "粉", roast: "中煎り" },
+	];
+	assert.deepEqual(
+		toLines(cart, [gesha, menu[0]]).map((l) => l.yen),
+		[850, 2400, 450],
+	);
+});
+
 test("カートの操作は、追加は末尾、数量変更と削除は指定した行だけで、元の配列は変えない", () => {
 	const a = { id: "a", size: 0, qty: 1, grind: "豆", roast: "中煎り" };
 	const d = { id: "d", size: 0, qty: 1, grind: "", roast: "" };
