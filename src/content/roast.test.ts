@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { ROASTS } from "./menu.ts";
-import { ROAST_LEVELS, roastAt } from "./roast.ts";
+import { parseCoffee, ROAST_LEVELS, roastAt } from "./roast.ts";
 
 test("スライダーの焙煎度は、注文フォームで選べる焙煎度と同じ並び", () => {
 	assert.deepEqual(
@@ -34,4 +34,15 @@ test("焙煎度の間では、色と味が連続して変わり、近い方の�
 test("範囲外の位置は端の焙煎度にする", () => {
 	assert.equal(roastAt(-10).level, ROAST_LEVELS[0]);
 	assert.equal(roastAt(120).level, ROAST_LEVELS[2]);
+});
+
+test("coffee.yaml の形が違うときは、読み込んだ時点で失敗する", () => {
+	const level = ROAST_LEVELS[0];
+	const bad = (patch: object) => ({ roastLevels: [{ ...level, ...patch }, ROAST_LEVELS[1]] });
+	assert.doesNotThrow(() => parseCoffee({ roastLevels: ROAST_LEVELS }));
+	assert.throws(() => parseCoffee({}), /roastLevels/);
+	assert.throws(() => parseCoffee({ roastLevels: [level] }), /roastLevels/);
+	assert.throws(() => parseCoffee(bad({ color: "brown" })), /color/);
+	assert.throws(() => parseCoffee(bad({ about: "" })), /about/);
+	assert.throws(() => parseCoffee(bad({ taste: { ...level.taste, body: 6 } })), /body/);
 });

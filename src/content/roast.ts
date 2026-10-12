@@ -1,36 +1,57 @@
-// 焙煎度スライダーの中身。焙煎度ごとの豆の色・味の強さ(1〜5)・説明。
-// 焙煎度の名前は、注文フォームで選べるもの(menu.ts の ROASTS)と同じにする。
+// 焙煎度スライダーの中身。値は coffee.yaml に書き、ここでは形を検査して、スライダーの位置での色と味を計算する。
+import data from "./coffee.yaml";
 
-export const ROAST_LEVELS = [
-	{
-		name: "浅煎り",
-		color: "#B5804C",
-		aroma: "豆によっては、柑橘や花、ベリーのような明るい香り",
-		about:
-			"酸味がはっきりしていて、すっきりと軽い口当たりです。産地ごとの個性がいちばん出やすい焙煎度です。",
-		drink: "ブラックで。少し冷めてから飲むと、甘みと酸味がよく分かります。",
-		taste: { acidity: 5, bitterness: 1, body: 2 },
-	},
-	{
-		name: "中煎り",
-		color: "#7B4A28",
-		aroma: "ナッツやキャラメルのような甘い香り",
-		about: "酸味と苦味のバランスがよく、甘みを感じやすい焙煎度です。毎日飲んでも飽きにくい味です。",
-		drink: "ブラックでも、少しミルクを入れても合います。",
-		taste: { acidity: 3, bitterness: 3, body: 3 },
-	},
-	{
-		name: "中深煎り",
-		color: "#4A2B19",
-		aroma: "チョコレートやローストしたナッツのような香ばしい香り",
-		about: "苦味とコクがしっかりしていて、酸味は控えめです。",
-		drink: "カフェオレや、甘いお菓子と一緒に。",
-		taste: { acidity: 2, bitterness: 4, body: 4 },
-	},
-] as const;
-
-export type RoastLevel = (typeof ROAST_LEVELS)[number];
 export type Taste = { acidity: number; bitterness: number; body: number };
+export type RoastLevel = {
+	name: string;
+	color: string;
+	about: string;
+	aroma: string;
+	drink: string;
+	taste: Taste;
+};
+
+const fail = (path: string, want: string): never => {
+	throw new Error(`coffee.yaml の ${path} は、${want}で書いてください`);
+};
+const text = (v: unknown, path: string) =>
+	typeof v === "string" && v !== "" ? v : fail(path, "空でない文字列");
+const record = (v: unknown, path: string) =>
+	typeof v === "object" && v !== null && !Array.isArray(v)
+		? (v as Record<string, unknown>)
+		: fail(path, "「項目名: 値」の並び");
+const strength = (v: unknown, path: string) =>
+	typeof v === "number" && v >= 1 && v <= 5 ? v : fail(path, "1〜5の数");
+
+/** 形が違えば読み込んだ時点で例外にして、テストとビルドを止める */
+export function parseCoffee(data: unknown): { roastLevels: RoastLevel[] } {
+	const { roastLevels } = record(data, "全体");
+	if (!Array.isArray(roastLevels) || roastLevels.length < 2) {
+		return fail("roastLevels", "2つ以上の焙煎度のリスト");
+	}
+	return {
+		roastLevels: roastLevels.map((v, i) => {
+			const path = `roastLevels の${i + 1}件目`;
+			const l = record(v, path);
+			const taste = record(l.taste, `${path}の taste`);
+			const color = text(l.color, `${path}の color`);
+			return {
+				name: text(l.name, `${path}の name`),
+				color: /^#[0-9A-Fa-f]{6}$/.test(color) ? color : fail(`${path}の color`, "#RRGGBB"),
+				about: text(l.about, `${path}の about`),
+				aroma: text(l.aroma, `${path}の aroma`),
+				drink: text(l.drink, `${path}の drink`),
+				taste: {
+					acidity: strength(taste.acidity, `${path}の taste.acidity`),
+					bitterness: strength(taste.bitterness, `${path}の taste.bitterness`),
+					body: strength(taste.body, `${path}の taste.body`),
+				},
+			};
+		}),
+	};
+}
+
+export const ROAST_LEVELS = parseCoffee(data).roastLevels;
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const rgb = (hex: string) => [1, 3, 5].map((i) => Number.parseInt(hex.slice(i, i + 2), 16));
@@ -54,5 +75,5 @@ export function roastAt(pos: number) {
 		bitterness: lerp(from.taste.bitterness, to.taste.bitterness, f),
 		body: lerp(from.taste.body, to.taste.body, f),
 	};
-	return { level: ROAST_LEVELS[Math.ceil(t - 0.5)] as RoastLevel, color, taste };
+	return { level: ROAST_LEVELS[Math.ceil(t - 0.5)], color, taste };
 }
