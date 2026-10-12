@@ -18,7 +18,7 @@ export function OrderBar() {
 			</a>
 			<ExternalLink href={LINE_URL} className={`${btn} bg-[#06C755] hover:bg-[#05b14c] text-white`}>
 				<MessageCircle aria-hidden className="hidden min-[360px]:block w-4 h-4 shrink-0" />
-				LINE注文
+				LINEで注文・相談
 			</ExternalLink>
 		</div>
 	);

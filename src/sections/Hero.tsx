@@ -5,7 +5,7 @@ import { fadeIn } from "../components/motion.ts";
 import { HERO } from "../content/photos.ts";
 import { LINE_URL } from "../content/shop.ts";
 
-/** ファーストビュー。キャッチコピー、LINE 注文ボタン、ロゴ(h1) */
+/** ファーストビュー。キャッチコピー、LINE の注文・問い合わせボタン、ロゴ(h1) */
 export function Hero() {
 	return (
 		<section className="relative min-h-[100svh] md:min-h-[90vh] flex items-center px-6 overflow-hidden bg-espresso text-paper">
@@ -41,7 +41,9 @@ export function Hero() {
 							className="mt-10 inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:text-xl md:px-10 md:py-5 bg-[#06C755] hover:bg-[#05b14c] text-white font-medium tracking-wider shadow-lg shadow-black/30 transition-colors"
 						>
 							<MessageCircle className="w-5 h-5" />
-							LINEで注文する
+							<span className="text-center">
+								LINEで<span className="inline-block">注文・お問い合わせ</span>
+							</span>
 						</ExternalLink>
 					</div>
 					<div className="order-first md:order-none md:flex-1 min-w-0 flex justify-center md:justify-end">
