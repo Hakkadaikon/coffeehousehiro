@@ -14,15 +14,10 @@
 
 ## 画像
 
-画像は `public/images/` に入っています。差し替えるときは同じ名前のファイルで上書きしてください。
+画像は `public/images/` に入っています。
 
-| ファイル | 用途 |
-|---|---|
-| `public/images/logo.webp` | ロゴ画像 |
-| `public/images/favicon.png` | ファビコン |
-| `public/images/apple-touch-icon.png` | iPhoneのホーム画面に追加したときのアイコン |
-| `public/images/IMAGE_7.jpeg` | トップの背景画像、SNSで共有したときのサムネイル |
-| `public/images/IMAGE_1.jpeg` | Concept欄の写真 |
-| `public/images/IMAGE_1.jpeg` 〜 `IMAGE_10.jpeg`(`IMAGE_6` を除く) | Instagram欄に並べる写真 |
+写真の一覧(ファイル名・サイズ・代替テキスト)は `src/photos.ts` だけに書いています。トップの背景(`HERO`)とConcept欄(`CONCEPT`)にどの写真を使うかも、ここで決めます。SNSで共有したときのサムネイルと検索エンジン向けの店舗情報の画像は、ビルド時にここから入ります。
 
-写真を足したり外したりするときは、`src/App.tsx` の写真リストも書き換えてください。
+写真のファイル名は「2桁の連番_英語の要約.jpeg」にします(例: `01_red-hut-exterior.jpeg`)。番号は01から順に並べ、`src/photos.ts` の並びと合わせます。写真を足す・外す・名前を変えるときは、ファイルと `src/photos.ts` の両方を直してください。食い違っていると `npm test` が失敗します。
+
+写真以外の `logo.webp`(ロゴ)・`favicon.png`(ファビコン)・`apple-touch-icon.png`(iPhoneのホーム画面のアイコン)は、役割で名前を決めているので連番を付けません。

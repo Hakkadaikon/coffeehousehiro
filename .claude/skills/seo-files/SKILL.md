@@ -37,12 +37,12 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 
 - `src/shop.ts`の`SITE_URL`
 - `index.html`の`<link rel="canonical">`
-- `index.html`の`og:url`・`og:image`
-- `index.html`のJSON-LDの`@id`・`url`・`image`・`logo`
+- `index.html`の`og:url`
+- `index.html`のJSON-LDの`@id`・`url`・`logo`
 - `public/robots.txt`の`Sitemap:`
 - `public/sitemap.xml`の`<loc>`
 
-書き換えたら`npm test`を実行する。`src/site.test.ts`が、`SITE_URL`とほかの場所のURLが食い違っていないかを確かめる。
+`og:image`とJSON-LDの`image`は、ビルド時に`SITE_URL`と`src/photos.ts`から作るので書き換えなくてよい。書き換えたら`npm test`を実行する。`src/site.test.ts`が、`SITE_URL`とほかの場所のURLが食い違っていないかを確かめる。
 
 ## 店舗情報(NAP)をそろえる
 
@@ -56,9 +56,18 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 - 描画のたびに値が変わる要素(`new Date()`など)には`suppressHydrationWarning`を付ける。
 - `window`や`localStorage`をコンポーネントの描画中に参照しない。参照するとサーバー側のレンダーでエラーになるので、使うときは`useEffect`の中に入れる。
 
-## 価格の目印
+## 価格と画像の目印
 
-`index.html`の`__PRICE_MIN__`(説明文の最安値)と`__PRICE_RANGE__`(JSON-LDの`priceRange`)は、`prerender.mjs`が`src/menu.ts`の値で置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。dev serverでは目印がそのまま見えるが、本番のHTMLには残らない。
+`index.html`の次の目印は、`prerender.mjs`がビルド時に置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。
+
+| 目印 | 中身 | 元の値 |
+|---|---|---|
+| `__PRICE_MIN__` | 説明文の最安値 | `src/menu.ts` |
+| `__PRICE_RANGE__` | JSON-LDの`priceRange` | `src/menu.ts` |
+| `__HERO_IMAGE_URL__` | `og:image`とJSON-LDの`image` | `src/photos.ts`の`HERO` |
+| `__CONCEPT_IMAGE_URL__` | JSON-LDの`image` | `src/photos.ts`の`CONCEPT` |
+
+dev serverでは目印がそのまま見えるが、本番のHTMLには残らない。
 
 ## セキュリティヘッダー
 
