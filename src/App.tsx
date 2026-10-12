@@ -47,7 +47,11 @@ const IG_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);
 export default function App() {
 	const fadeIn = {
 		hidden: { opacity: 0, y: 20 },
-		visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] as const } },
+		visible: {
+			opacity: 1,
+			y: 0,
+			transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1] as const },
+		},
 	};
 
 	const staggerContainer = {
