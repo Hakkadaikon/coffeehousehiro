@@ -19,7 +19,7 @@ const legalLink =
 
 export function SiteFooter() {
 	return (
-		<footer id="access" className="bg-[#120D0B] text-paper pt-20 pb-12 px-6 md:px-12">
+		<footer id="access" className="bg-[#120D0B] text-paper pt-20 pb-28 md:pb-28 px-6 md:px-12">
 			<div className="max-w-5xl mx-auto">
 				<div className="grid md:grid-cols-2 gap-14 md:gap-8 mb-20">
 					<ShopContact />

@@ -4,6 +4,7 @@ import { Hero } from "./sections/Hero.tsx";
 import { HowToOrder } from "./sections/HowToOrder.tsx";
 import { InstagramFeed } from "./sections/InstagramFeed.tsx";
 import { Menu } from "./sections/Menu.tsx";
+import { OrderBar } from "./sections/OrderBar.tsx";
 import { RoastSlider } from "./sections/RoastSlider.tsx";
 import { SiteFooter } from "./sections/SiteFooter.tsx";
 import { SiteHeader } from "./sections/SiteHeader.tsx";
@@ -23,6 +24,7 @@ export default function App() {
 					<HowToOrder />
 				</main>
 				<SiteFooter />
+				<OrderBar />
 			</div>
 		</MotionConfig>
 	);
