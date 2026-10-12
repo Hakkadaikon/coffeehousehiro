@@ -74,3 +74,7 @@ test("特定商取引法に基づく表記の店名・所在地・連絡先・�
 	assert.ok(row("商品代金以外の必要料金").includes(yen(SHIPPING_YEN)));
 	assert.equal(row("支払方法"), PAYMENTS.join("・"));
 });
+
+test("返品特約として、お客様都合の返品を受けないことを明記する（書かないと到着後8日以内の返品を受ける義務が生じる）", () => {
+	assert.ok(row("返品・交換").includes("お客様のご都合による返品はお受けしていません"));
+});
