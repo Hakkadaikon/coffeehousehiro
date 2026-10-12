@@ -24,10 +24,10 @@ test("注文の近くに、お客様都合の返品を受けないことと、�
 	assert.ok(ORDER_NOTICE.includes("到着後7日以内を目安に"));
 });
 
-test("このサイトでの情報の取り扱いは、注文フォームとアクセス解析の2つを説明する", () => {
+test("このサイトでの情報の取り扱いは、注文フォーム・来店予約フォーム・アクセス解析の3つを説明する", () => {
 	assert.deepEqual(
 		SITE_DATA_POLICY.map((p) => p.label),
-		["かんたん注文フォーム", "アクセス解析"],
+		["かんたん注文フォーム", "来店予約フォーム", "アクセス解析"],
 	);
 	assert.ok(SITE_DATA_POLICY[0].text.includes(`${SAVE_DAYS}日`));
 });
