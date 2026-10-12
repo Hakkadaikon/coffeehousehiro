@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { SHIPPING_YEN, yen } from "../order/pricing.ts";
+import { SHIPPING_EXAMPLE } from "../order/pricing.ts";
 import { parseBusiness } from "./business.ts";
 import data from "./business.yaml";
 import {
@@ -51,7 +51,6 @@ test("特定商取引法に基づく表記は、法律で表示が必要な項�
 		LEGAL_NOTICE.map((r) => r.label),
 		[
 			"販売事業者",
-			"運営責任者",
 			"所在地",
 			"電話番号",
 			"メールアドレス",
@@ -61,20 +60,26 @@ test("特定商取引法に基づく表記は、法律で表示が必要な項�
 			"支払方法",
 			"支払時期",
 			"申込みの有効期限",
+			"ご注文の確定",
 			"引渡時期",
-			"返品・交換",
+			"返品・キャンセル",
 		],
 	);
 });
 
 test("特定商取引法に基づく表記の店名・所在地・連絡先・送料・支払方法は、ページ本文と同じ", () => {
-	assert.equal(row("販売事業者"), SHOP_NAME);
+	assert.ok(row("販売事業者").includes(`屋号：${SHOP_NAME}`));
 	assert.equal(row("所在地"), `〒${POSTAL}\n${ADDRESS}`);
 	assert.equal(row("メールアドレス"), EMAIL);
-	assert.ok(row("商品代金以外の必要料金").includes(yen(SHIPPING_YEN)));
+	assert.ok(row("商品代金以外の必要料金").includes(SHIPPING_EXAMPLE));
 	assert.equal(row("支払方法"), PAYMENTS.join("・"));
 });
 
 test("返品特約として、お客様都合の返品を受けないことを明記する（書かないと到着後8日以内の返品を受ける義務が生じる）", () => {
-	assert.ok(row("返品・交換").includes("お客様のご都合による返品はお受けしていません"));
+	assert.ok(row("返品・キャンセル").includes("お客様のご都合による返品はお受けしていません"));
+});
+
+test("店側の不良・誤りへの対応は、7日を締切ではなく目安として書く", () => {
+	assert.ok(row("返品・キャンセル").includes("到着後7日以内を目安に"));
+	assert.ok(!row("返品・キャンセル").includes("当店の過失"));
 });
