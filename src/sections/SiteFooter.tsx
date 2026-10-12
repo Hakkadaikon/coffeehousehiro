@@ -132,10 +132,10 @@ function ShopHours() {
 					<br />
 					ご来店を希望される場合は、
 					<a
-						href="#reserve"
+						href="#reserve-form"
 						className="underline underline-offset-4 decoration-paper/30 hover:text-paper"
 					>
-						来店予約フォーム
+						かんたん来店予約フォーム
 					</a>
 					から、事前にLINEでご連絡ください。赤い小屋で、実際にコーヒーをお召し上がりいただけます。
 				</p>
