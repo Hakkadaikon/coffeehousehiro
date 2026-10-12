@@ -40,3 +40,9 @@ test("changelog.yaml の形が違えば読み込みで止める", () => {
 		assert.throws(() => parseChangelog(bad), JSON.stringify(bad));
 	}
 });
+
+test("更新履歴の項目は「〇〇を追加・更新・削除・公開」のどれかで終え、表記をそろえる", () => {
+	for (const { items } of CHANGELOG) {
+		for (const item of items) assert.match(item, /.を(追加|更新|削除|公開)$/, item);
+	}
+});
