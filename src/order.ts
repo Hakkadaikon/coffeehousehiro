@@ -36,7 +36,11 @@ export const cleanLine = (s: string, max: number) =>
 		.trim()
 		.slice(0, max);
 
-export const LIMITS = { name: 50, postal: 8, address: 200, phone: 15 } as const;
+/** 郵便番号・電話番号用。長音記号やマイナスなど日本語入力で混じるハイフンを "-" にそろえ、〒を外す */
+export const cleanDigits = (s: string, max: number) =>
+	cleanLine(s.replace(/[〒\s]/g, "").replace(/[ー－−‐‑–—―]/g, "-"), max);
+
+export const LIMITS = { name: 50, postal: 10, address: 200, phone: 15 } as const;
 
 export type Form = {
 	name: string;
@@ -111,7 +115,7 @@ export const restoreCart = (
 	catalog: CatalogItem[],
 	now: number,
 ): CartItem[] => {
-	if (!saved || isExpired(saved.savedAt, now)) return [];
+	if (!saved || !Array.isArray(saved.cart) || isExpired(saved.savedAt, now)) return [];
 	return saved.cart.filter((c) => {
 		const item = catalog.find((i) => i.id === c.id);
 		return (

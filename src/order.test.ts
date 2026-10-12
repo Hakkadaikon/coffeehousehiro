@@ -3,9 +3,11 @@ import { test } from "node:test";
 import { catalog, priceRange } from "./menu.ts";
 import {
 	buildMessage,
+	cleanDigits,
 	cleanLine,
 	formatPrices,
 	isExpired,
+	LIMITS,
 	LINE_CHAT_URL,
 	type Line,
 	restoreCart,
@@ -203,4 +205,47 @@ test("期限切れの判定は30日ちょうどまで有効、NaNは期限切れ
 	assert.equal(isExpired(0, 30 * DAY), false);
 	assert.equal(isExpired(0, 30 * DAY + 1), true);
 	assert.equal(isExpired(Number.NaN, 0), true);
+});
+
+test("郵便番号・電話番号は日本語入力のハイフンや〒も受け付ける", () => {
+	const ok = { name: "山田", postal: "", address: "倉敷市", phone: "", payment: "PayPay" };
+	for (const postal of ["712ー8046", "712−8046", "712‐8046", "〒712-8046", "〒７１２－８０４６"]) {
+		assert.ok(postal.length <= LIMITS.postal, "入力欄の maxLength で切れない");
+		const f = { ...ok, postal: cleanDigits(postal, LIMITS.postal) };
+		assert.equal(f.postal, "712-8046");
+		assert.deepEqual(validate(f), []);
+	}
+	const phone = cleanDigits("090ー1234ー5678", LIMITS.phone);
+	assert.equal(phone, "090-1234-5678");
+	assert.deepEqual(validate({ ...ok, postal: "712-8046", phone }), []);
+});
+
+test("空のフォームは必須項目をすべて指摘し、電話番号は任意", () => {
+	assert.deepEqual(validate({ name: "", postal: "", address: "", phone: "", payment: "" }), [
+		"name",
+		"postal",
+		"address",
+		"payment",
+	]);
+});
+
+test("数量は1〜20だけ、整数でない値や負のサイズは捨てる", () => {
+	const item = (qty: number, size = 0) => ({ id: "a", size, qty, grind: "豆", roast: "浅煎り" });
+	const saved = {
+		savedAt: 0,
+		cart: [item(0), item(1), item(20), item(21), item(1.5), item(1, -1)],
+	};
+	assert.deepEqual(
+		restoreCart(saved, menu, 0).map((c) => c.qty),
+		[1, 20],
+	);
+});
+
+test("壊れた保存データ（cart が配列でない）は空のカートにする", () => {
+	assert.deepEqual(restoreCart({ savedAt: 0, cart: undefined } as never, menu, 0), []);
+});
+
+test("すべて価格をご相談する商品なら、合計は送料だけで注記が付く", () => {
+	const text = buildMessage([{ kind: "drip", yen: null, qty: 1, label: "D" }], form);
+	assert.ok(text.includes("小計：¥0\n送料：¥270\n合計：¥270（価格をご相談する商品を除く）"));
 });

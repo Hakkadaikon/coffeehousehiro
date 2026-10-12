@@ -4,6 +4,7 @@ import { catalog, GRINDS } from "./menu.ts";
 import {
 	buildMessage,
 	type CartItem,
+	cleanDigits,
 	cleanLine,
 	type Form,
 	formatPrices,
@@ -175,9 +176,9 @@ export default function OrderBuilder() {
 
 	const clean: Form = {
 		name: cleanLine(form.name, LIMITS.name),
-		postal: cleanLine(form.postal, LIMITS.postal),
+		postal: cleanDigits(form.postal, LIMITS.postal),
 		address: cleanLine(form.address, LIMITS.address),
-		phone: cleanLine(form.phone, LIMITS.phone),
+		phone: cleanDigits(form.phone, LIMITS.phone),
 		payment: form.payment,
 	};
 
