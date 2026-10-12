@@ -1,27 +1,12 @@
 import { ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { catalog, GRINDS } from "./menu.ts";
-import {
-	buildMessage,
-	type CartItem,
-	cleanDigits,
-	cleanLine,
-	type Form,
-	formatPrices,
-	isExpired,
-	LIMITS,
-	LINE_CHAT_URL,
-	type Line,
-	MAX_QTY,
-	PAYMENTS,
-	restoreCart,
-	shippingFee,
-	subtotal,
-	total,
-	validate,
-	yen,
-} from "./order.ts";
-import { clearDraft, loadDraft, saveDraft } from "./orderStore.ts";
+import { catalog, GRINDS } from "./content/menu.ts";
+import { LINE_CHAT_URL, PAYMENTS } from "./content/shop.ts";
+import { type CartItem, isExpired, MAX_QTY, restoreCart } from "./order/cart.ts";
+import { clearDraft, loadDraft, saveDraft } from "./order/draftStore.ts";
+import { cleanDigits, cleanLine, type Form, LIMITS, validate } from "./order/form.ts";
+import { buildMessage } from "./order/message.ts";
+import { formatPrices, type Line, shippingFee, subtotal, total, yen } from "./order/pricing.ts";
 
 const CATALOG = catalog();
 const GROUPS = [...new Set(CATALOG.map((i) => i.id.split("/")[0]))];

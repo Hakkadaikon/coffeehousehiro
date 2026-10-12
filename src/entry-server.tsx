@@ -1,9 +1,9 @@
 import { renderToString } from "react-dom/server";
 import App from "./App.tsx";
-import { priceRange } from "./menu.ts";
-import { yen } from "./order.ts";
-import { CONCEPT, HERO } from "./photos.ts";
-import { SITE_URL } from "./shop.ts";
+import { priceRange } from "./content/menu.ts";
+import { CONCEPT, HERO } from "./content/photos.ts";
+import { SITE_URL } from "./content/shop.ts";
+import { yen } from "./order/pricing.ts";
 
 export const render = () => renderToString(<App />);
 

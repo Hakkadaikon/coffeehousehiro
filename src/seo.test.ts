@@ -1,9 +1,16 @@
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
-import { PAYMENTS } from "./order.ts";
-import { PHOTOS } from "./photos.ts";
-import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, POSTAL, SITE_URL } from "./shop.ts";
+import { PHOTOS } from "./content/photos.ts";
+import {
+	ADDRESS,
+	INSTAGRAM_URL,
+	LINE_URL,
+	MAP_URL,
+	PAYMENTS,
+	POSTAL,
+	SITE_URL,
+} from "./content/shop.ts";
 
 const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const html = read("index.html");

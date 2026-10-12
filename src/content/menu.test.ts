@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { categoryNote, categoryUnit, itemSub, MENU, priceRange, ROASTS } from "./menu.ts";
+import { catalog, categoryNote, categoryUnit, itemSub, MENU, priceRange, ROASTS } from "./menu.ts";
 
 test("どの品目もサイズと価格の数がそろい、価格は正の整数か時価", () => {
 	for (const c of MENU) {
@@ -60,4 +60,16 @@ test("品目の補足行に、違うサイズと焙煎度の制限を足す", ()
 		"ゲイシャ　20g / 100g　浅煎りのみ",
 	);
 	assert.equal(itemSub({ name: "ブラジル", sub: "", prices: [1, 2] }), "");
+});
+
+test("メニューから注文用の商品リストを作る", () => {
+	const items = catalog();
+	assert.equal(new Set(items.map((i) => i.id)).size, items.length);
+	const panama = items.find((i) => i.label.includes("パナマ"));
+	assert.deepEqual(panama?.sizes, ["20g", "100g"]);
+	assert.deepEqual(panama?.roasts, ["浅煎り"]);
+	assert.equal(
+		items.find((i) => i.label.includes("タンザニア"))?.label,
+		"シングル タンザニア（キリマンジャロ AA）",
+	);
 });

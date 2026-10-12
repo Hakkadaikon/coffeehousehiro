@@ -1,10 +1,10 @@
 import { Mail, MapPin, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
-import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./menu.ts";
+import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./content/menu.ts";
+import { CONCEPT, HERO, PHOTOS } from "./content/photos.ts";
+import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, PAYMENTS, POSTAL } from "./content/shop.ts";
 import OrderBuilder from "./OrderBuilder.tsx";
-import { formatPrices, PAYMENTS } from "./order.ts";
-import { CONCEPT, HERO, PHOTOS } from "./photos.ts";
-import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, POSTAL } from "./shop.ts";
+import { formatPrices } from "./order/pricing.ts";
 
 /** lucide-react v1 で消えたブランドアイコンを、同じ線画で描く */
 const Instagram = ({ className }: { className?: string }) => (

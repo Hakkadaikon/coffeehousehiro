@@ -1,5 +1,5 @@
 // 注文フォームの下書きを、この端末のブラウザ(IndexedDB)にだけ保存する。サーバーには送らない。
-import type { CartItem } from "./order.ts";
+import type { CartItem } from "./cart.ts";
 
 export type Draft = {
 	savedAt: number;

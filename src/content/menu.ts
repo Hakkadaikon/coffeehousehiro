@@ -1,5 +1,5 @@
 // メニューの唯一の元データ。サイトのメニュー表示・注文フォーム・SEO の価格帯はすべてここから作る。
-import type { CatalogItem } from "./order.ts";
+import type { CatalogItem } from "../order/cart.ts";
 
 export const MENU_START_DATE = "2026年10月1日";
 export const GRINDS = ["豆", "粉"] as const;
