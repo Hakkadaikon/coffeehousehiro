@@ -130,7 +130,14 @@ function ShopHours() {
 				<p className="text-[13px] md:text-[17px] tracking-wide text-paper/80 leading-[1.9] text-pretty">
 					ご来店は1組4名様までの完全予約制です。
 					<br />
-					ご来店を希望される場合は、事前にInstagramなどのメッセージでご連絡ください。赤い小屋で、実際にコーヒーをお召し上がりいただけます。
+					ご来店を希望される場合は、
+					<a
+						href="#reserve"
+						className="underline underline-offset-4 decoration-paper/30 hover:text-paper"
+					>
+						来店予約フォーム
+					</a>
+					から、事前にLINEでご連絡ください。赤い小屋で、実際にコーヒーをお召し上がりいただけます。
 				</p>
 			</div>
 		</div>
