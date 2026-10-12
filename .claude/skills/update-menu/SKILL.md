@@ -40,6 +40,8 @@ description: コーヒーhouseヒロのメニュー・価格・送料・改定�
 
 そのあと`public/sitemap.xml`の`<lastmod>`を今日の日付にする。手順は`seo-files` skillに従う。
 
+メニュー・価格・送料を変えたら、`update-changelog` skillの手順で`src/content/changelog.yaml`に「メニューと価格を更新」などの1行を足す。
+
 ## 4. 確かめる
 
 ```bash

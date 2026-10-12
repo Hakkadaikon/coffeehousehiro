@@ -21,6 +21,7 @@ src/
   placeholders.ts      index.html の目印に入れる値
   content/             お店のデータ。メニュー、写真、店舗情報、ナビと注文手順の文言
     business.yaml      店舗情報と特定商取引法に基づく表記。shop.ts がこれを読み込んで検査する
+    changelog.yaml     サイトの更新履歴。changelog.ts がこれを読み込んで検査する
   order/               注文の計算と検査。React に依存しない関数だけを置く
     pricing.ts         金額と送料
     form.ts            お届け先の入力の整形と検査
