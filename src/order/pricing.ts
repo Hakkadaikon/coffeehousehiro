@@ -6,24 +6,29 @@ export const SHIPPING_YEN = 270;
 const UNITS = { bean: 1, drip: 0.5 } as const;
 export type Kind = keyof typeof UNITS;
 
-/** 注文の1行。yen が null の商品は時価(価格はお店と相談) */
-export type Line = { kind: Kind; yen: number | null; qty: number; label?: string };
+/** 価格。null は時価、{ min, max } は価格に幅がある。どちらも金額はお店が案内する */
+export type Price = number | null | { min: number; max: number };
+
+/** 注文の1行。yen が数値でない商品は、合計に含めず価格をお店と相談する */
+export type Line = { kind: Kind; yen: Price; qty: number; label?: string };
 
 export const yen = (n: number) => `¥${n.toLocaleString("ja-JP")}`;
 
 /** 「2アイテム分ごと」だけでは1アイテムの送料が分かりにくいので、例を添えて表示する */
 export const SHIPPING_EXAMPLE = `1〜2アイテム分で${yen(SHIPPING_YEN)}、3〜4アイテム分で${yen(SHIPPING_YEN * 2)}`;
 
-export const formatPrices = (prices: (number | null)[]) =>
-	prices.map((p) => (p === null ? "時価・要相談" : yen(p))).join(" / ");
+export const formatPrice = (p: Price) =>
+	p === null ? "時価・要相談" : typeof p === "number" ? yen(p) : `${yen(p.min)}〜${yen(p.max)}`;
 
-export const subtotal = (l: Line) => (l.yen === null ? null : l.yen * l.qty);
+export const formatPrices = (prices: Price[]) => prices.map(formatPrice).join(" / ");
+
+export const subtotal = (l: Line) => (typeof l.yen === "number" ? l.yen * l.qty : null);
 
 const units = (lines: Line[]) => lines.reduce((sum, l) => sum + UNITS[l.kind] * l.qty, 0);
 
 export const shippingFee = (lines: Line[]) => Math.ceil(units(lines) / 2) * SHIPPING_YEN;
 
-/** 時価の商品を除いた商品代金の合計 */
+/** 価格が決まっていない商品(時価・価格に幅がある)を除いた商品代金の合計 */
 export const itemsTotal = (lines: Line[]) => lines.reduce((sum, l) => sum + (subtotal(l) ?? 0), 0);
 
 export const total = (lines: Line[]) => itemsTotal(lines) + shippingFee(lines);

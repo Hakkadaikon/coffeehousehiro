@@ -19,11 +19,13 @@ test("価格表示はメニューの表記と同じ", () => {
 	assert.equal(formatPrices([500, 1000]), "¥500 / ¥1,000");
 	assert.equal(formatPrices([570]), "¥570");
 	assert.equal(formatPrices([null]), "時価・要相談");
+	assert.equal(formatPrices([{ min: 1000, max: 1500 }]), "¥1,000〜¥1,500");
 });
 
 test("小計は単価×数量、時価の品は小計なし", () => {
 	assert.equal(subtotal(bean(850, 3)), 2550);
 	assert.equal(subtotal(drip(null, 2)), null);
+	assert.equal(subtotal({ kind: "drip", yen: { min: 1000, max: 1500 }, qty: 2 }), null);
 });
 
 test("送料は2アイテム分ごとに¥270、豆1袋=1・ドリップバッグ1セット=0.5", () => {
@@ -54,4 +56,10 @@ test("送料の例は、実際の送料の計算と同じ", () => {
 	assert.equal(SHIPPING_EXAMPLE, `1〜2アイテム分で${fee(2)}、3〜4アイテム分で${fee(4)}`);
 	assert.equal(fee(1), fee(2));
 	assert.equal(fee(3), fee(4));
+});
+
+test("価格に幅のある商品は、時価と同じく合計に含めない", () => {
+	const range = { kind: "drip", yen: { min: 1000, max: 1500 }, qty: 1 } as const;
+	assert.equal(total([bean(450), range]), 450 + 270);
+	assert.equal(itemsTotal([bean(450), range]), 450);
 });

@@ -1,5 +1,5 @@
 // カートの中身と、その操作。
-import type { Kind, Line } from "./pricing.ts";
+import type { Kind, Line, Price } from "./pricing.ts";
 
 export const MAX_QTY = 20;
 
@@ -8,7 +8,7 @@ export type CatalogItem = {
 	id: string;
 	kind: Kind;
 	label: string;
-	prices: (number | null)[];
+	prices: Price[];
 	sizes: string[];
 	roasts: string[];
 };

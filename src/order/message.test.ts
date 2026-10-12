@@ -70,3 +70,12 @@ test("すべて価格をご相談する商品なら、合計は送料だけで�
 	const text = buildMessage([{ kind: "drip", yen: null, qty: 1, label: "D" }], form);
 	assert.ok(text.includes("小計：¥0\n送料：¥270\n合計：¥270（価格をご相談する商品を除く）"));
 });
+
+test("価格に幅のある商品は、その幅を書いたうえでご相談にする", () => {
+	const text = buildMessage(
+		[{ kind: "drip", yen: { min: 1000, max: 1500 }, qty: 1, label: "D" }],
+		form,
+	);
+	assert.ok(text.includes("・D ×1　¥1,000〜¥1,500（価格はご相談）"));
+	assert.ok(text.includes("合計：¥270（価格をご相談する商品を除く）"));
+});

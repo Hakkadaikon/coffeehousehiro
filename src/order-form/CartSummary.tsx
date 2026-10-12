@@ -1,5 +1,6 @@
 import type { CartLine } from "../order/cart.ts";
 import {
+	formatPrice,
 	itemsTotal,
 	SHIPPING_EXAMPLE,
 	SHIPPING_YEN,
@@ -20,7 +21,7 @@ export function CartSummary({
 	onQtyChange: (index: number, qty: number) => void;
 	onRemove: (index: number) => void;
 }) {
-	const hasQuote = lines.some((l) => l.yen === null);
+	const hasQuote = lines.some((l) => subtotal(l) === null);
 	return (
 		<>
 			<h4 className={headingCls}>カート</h4>
@@ -42,7 +43,7 @@ export function CartSummary({
 								<div className="flex flex-col items-end gap-1.5 shrink-0">
 									<Stepper small value={l.qty} onChange={(q) => onQtyChange(idx, q)} />
 									<span className="tabular-nums text-sm">
-										{s === null ? "時価・要相談" : yen(s)}
+										{s === null ? formatPrice(l.yen) : yen(s)}
 									</span>
 									<button
 										type="button"
@@ -79,7 +80,7 @@ export function CartSummary({
 			</p>
 			{hasQuote && (
 				<p className="text-xs md:text-sm text-roast/70 mt-1">
-					※時価の商品は合計に含まれません。金額はLINEでご案内します。
+					※価格に幅のある商品・時価の商品は合計に含まれません。金額はLINEでご案内します。
 				</p>
 			)}
 		</>

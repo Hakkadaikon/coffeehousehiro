@@ -1,11 +1,19 @@
 // LINE でお店に送る注文メッセージを組み立てる。
 import { MENU_START_DATE } from "../content/menu.ts";
 import type { Form } from "./form.ts";
-import { itemsTotal, type Line, shippingFee, subtotal, total, yen } from "./pricing.ts";
+import {
+	formatPrice,
+	itemsTotal,
+	type Line,
+	shippingFee,
+	subtotal,
+	total,
+	yen,
+} from "./pricing.ts";
 
 /** お客さんがお店に送る依頼文。金額はお店が確定させる前提の目安として書く */
 export const buildMessage = (lines: Line[], f: Form) => {
-	const hasQuote = lines.some((l) => l.yen === null);
+	const hasQuote = lines.some((l) => subtotal(l) === null);
 	return [
 		"コーヒーhouseヒロ様",
 		"以下の内容で注文をお願いします。",
@@ -13,7 +21,13 @@ export const buildMessage = (lines: Line[], f: Form) => {
 		"【注文内容】",
 		...lines.map((l) => {
 			const s = subtotal(l);
-			return `・${l.label} ×${l.qty}　${s === null ? "価格はご相談" : yen(s)}`;
+			const price =
+				s !== null
+					? yen(s)
+					: l.yen === null
+						? "価格はご相談"
+						: `${formatPrice(l.yen)}（価格はご相談）`;
+			return `・${l.label} ×${l.qty}　${price}`;
 		}),
 		`小計：${yen(itemsTotal(lines))}`,
 		`送料：${yen(shippingFee(lines))}`,
