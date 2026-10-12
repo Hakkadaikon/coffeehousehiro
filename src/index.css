@@ -6,6 +6,7 @@
 @source not "../docs";
 @source not "../.claude";
 @source not "../README.md";
+@source not "../scripts";
 
 @theme {
 	--font-sans:
