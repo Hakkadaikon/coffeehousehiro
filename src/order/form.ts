@@ -44,15 +44,3 @@ export const cleanForm = (f: Form): Form => ({
 	phone: cleanDigits(f.phone, LIMITS.phone),
 	payment: f.payment,
 });
-
-/** 端末に保存したフォームを戻す。文字列でない値は空にし、電話番号は保存しないので戻さない */
-export const restoreForm = (saved: Partial<Record<keyof Form, unknown>> | undefined): Form => {
-	const str = (v: unknown) => (typeof v === "string" ? v : "");
-	return {
-		name: str(saved?.name),
-		postal: str(saved?.postal),
-		address: str(saved?.address),
-		phone: "",
-		payment: str(saved?.payment),
-	};
-};

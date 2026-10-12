@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { CATALOG } from "../content/menu.ts";
-import { type CartItem, isExpired, restoreCart } from "../order/cart.ts";
+import type { CartItem } from "../order/cart.ts";
+import { isExpired, restoreCart, restoreForm } from "../order/draft.ts";
 import { clearDraft, loadDraft, saveDraft } from "../order/draftStore.ts";
-import { type Form, restoreForm } from "../order/form.ts";
+import type { Form } from "../order/form.ts";
 
 /**
  * 注文フォームの下書きを、同意があるときだけこの端末(IndexedDB)に保存する。

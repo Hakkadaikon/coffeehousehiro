@@ -1,12 +1,5 @@
 // 注文フォームの下書きを、この端末のブラウザ(IndexedDB)にだけ保存する。サーバーには送らない。
-import type { CartItem } from "./cart.ts";
-
-export type Draft = {
-	savedAt: number;
-	cart: CartItem[];
-	/** 電話番号は保存しない */
-	form: { name: string; postal: string; address: string; payment: string };
-};
+import type { Draft } from "./draft.ts";
 
 const DB = "coffeehousehiro";
 const STORE = "order";

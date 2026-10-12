@@ -1,14 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import {
-	cleanDigits,
-	cleanForm,
-	cleanLine,
-	EMPTY_FORM,
-	LIMITS,
-	restoreForm,
-	validate,
-} from "./form.ts";
+import { cleanDigits, cleanForm, cleanLine, EMPTY_FORM, LIMITS, validate } from "./form.ts";
 
 test("1行の入力は全角を半角に寄せ、制御文字・改行・方向制御文字を消し、上限で切る", () => {
 	assert.equal(cleanLine("７１２－８０４６", 10), "712-8046");
@@ -70,18 +62,4 @@ test("フォーム全体を欄ごとの規則で整え、支払い方法はそ�
 		},
 	);
 	assert.equal(cleanForm({ ...EMPTY_FORM, name: "あ".repeat(60) }).name.length, LIMITS.name);
-});
-
-test("保存したフォームは文字列の欄だけ戻し、電話番号は戻さない", () => {
-	assert.deepEqual(restoreForm(undefined), EMPTY_FORM);
-	assert.deepEqual(
-		restoreForm({
-			name: "山田",
-			postal: 7128046,
-			address: "倉敷市",
-			phone: "090",
-			payment: "PayPay",
-		}),
-		{ name: "山田", postal: "", address: "倉敷市", phone: "", payment: "PayPay" },
-	);
 });
