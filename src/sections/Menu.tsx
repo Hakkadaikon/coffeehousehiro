@@ -9,7 +9,7 @@ import {
 	type MenuCategory,
 	type MenuItem,
 } from "../content/menu.ts";
-import { formatPrices, SHIPPING_YEN, yen } from "../order/pricing.ts";
+import { formatPrices, SHIPPING_EXAMPLE, SHIPPING_YEN, yen } from "../order/pricing.ts";
 
 /** 商品一覧。カテゴリと価格は content/menu.ts から作る */
 export function Menu() {
@@ -47,6 +47,10 @@ export function Menu() {
 							</span>
 						</span>
 						<span className="inline-block">を頂戴いたします。</span>
+					</p>
+					<p className="text-xs md:text-sm font-sans tracking-wider text-roast/80 text-center mt-3 text-pretty">
+						<span className="inline-block">{`（${SHIPPING_EXAMPLE}）`}</span>
+						<span className="inline-block">価格はすべて税込です。</span>
 					</p>
 					<p className="text-center mt-6">
 						<a

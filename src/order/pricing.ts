@@ -11,6 +11,9 @@ export type Line = { kind: Kind; yen: number | null; qty: number; label?: string
 
 export const yen = (n: number) => `¥${n.toLocaleString("ja-JP")}`;
 
+/** 「2アイテム分ごと」だけでは1アイテムの送料が分かりにくいので、例を添えて表示する */
+export const SHIPPING_EXAMPLE = `1〜2アイテム分で${yen(SHIPPING_YEN)}、3〜4アイテム分で${yen(SHIPPING_YEN * 2)}`;
+
 export const formatPrices = (prices: (number | null)[]) =>
 	prices.map((p) => (p === null ? "時価・要相談" : yen(p))).join(" / ");
 

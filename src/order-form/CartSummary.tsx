@@ -1,5 +1,13 @@
 import type { CartLine } from "../order/cart.ts";
-import { itemsTotal, SHIPPING_YEN, shippingFee, subtotal, total, yen } from "../order/pricing.ts";
+import {
+	itemsTotal,
+	SHIPPING_EXAMPLE,
+	SHIPPING_YEN,
+	shippingFee,
+	subtotal,
+	total,
+	yen,
+} from "../order/pricing.ts";
 import { headingCls, Stepper } from "./controls.tsx";
 
 /** カートの中身と、小計・送料・合計 */
@@ -67,7 +75,7 @@ export function CartSummary({
 				</div>
 			</dl>
 			<p className="text-xs md:text-sm text-roast/70 mt-2">
-				{`送料は全国一律、2アイテム分ごとに${yen(SHIPPING_YEN)}です。`}
+				{`送料は全国一律、2アイテム分ごとに${yen(SHIPPING_YEN)}です（${SHIPPING_EXAMPLE}）。価格はすべて税込です。`}
 			</p>
 			{hasQuote && (
 				<p className="text-xs md:text-sm text-roast/70 mt-1">

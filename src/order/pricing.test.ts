@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatPrices, itemsTotal, type Line, shippingFee, subtotal, total } from "./pricing.ts";
+import {
+	formatPrices,
+	itemsTotal,
+	type Line,
+	SHIPPING_EXAMPLE,
+	shippingFee,
+	subtotal,
+	total,
+	yen,
+} from "./pricing.ts";
 
 const bean = (yen: number | null, qty = 1): Line => ({ kind: "bean", yen, qty });
 const drip = (yen: number | null, qty = 1): Line => ({ kind: "drip", yen, qty });
@@ -38,4 +47,11 @@ test("商品代金の合計は、合計から送料を引いた額", () => {
 	const lines = [bean(850, 2), drip(570), drip(null)];
 	assert.equal(itemsTotal(lines), 850 * 2 + 570);
 	assert.equal(itemsTotal(lines), total(lines) - shippingFee(lines));
+});
+
+test("送料の例は、実際の送料の計算と同じ", () => {
+	const fee = (beans: number) => yen(shippingFee([bean(450, beans)]));
+	assert.equal(SHIPPING_EXAMPLE, `1〜2アイテム分で${fee(2)}、3〜4アイテム分で${fee(4)}`);
+	assert.equal(fee(1), fee(2));
+	assert.equal(fee(3), fee(4));
 });
