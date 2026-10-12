@@ -2,7 +2,7 @@ import { GRINDS, MENU_START_DATE } from "./menu.ts";
 
 export const SHIPPING_YEN = 270;
 export const LINE_OA_ID = "992mqixg";
-export const PAYMENTS = ["PayPay", "楽天Pay", "銀行振込"] as const;
+export const PAYMENTS = ["PayPay", "楽天ペイ", "銀行振込"] as const;
 export const MAX_QTY = 20;
 const SAVE_DAYS = 30;
 
