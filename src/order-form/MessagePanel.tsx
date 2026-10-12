@@ -1,6 +1,6 @@
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { LINE_CHAT_URL } from "../content/shop.ts";
-import { ORDER_NOTICE } from "../content/site.ts";
+import { ORDER_NOTICE, PRIVACY_NOTICE } from "../content/site.ts";
 import { headingCls } from "./controls.tsx";
 import { useCopy } from "./useCopy.ts";
 
@@ -34,12 +34,20 @@ export function MessagePanel({
 			)}
 			<p className="text-xs md:text-sm text-roast/70 mt-3 mb-4 text-pretty">
 				{ORDER_NOTICE}
+				{PRIVACY_NOTICE}
 				詳しくは
 				<a
 					href="/legal"
 					className="underline underline-offset-4 decoration-roast/40 hover:text-espresso transition-colors"
 				>
 					特定商取引法に基づく表記
+				</a>
+				・
+				<a
+					href="/legal#privacy"
+					className="underline underline-offset-4 decoration-roast/40 hover:text-espresso transition-colors"
+				>
+					プライバシーポリシー
 				</a>
 				をご覧ください。
 			</p>
