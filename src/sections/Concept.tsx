@@ -37,7 +37,7 @@ export function Concept() {
 							ブラックコーヒーとアイスコーヒーを専門に扱っており、豆本来の個性を引き出す焙煎を丹念に行っています。
 						</p>
 					</div>
-					<div className="max-w-3xl mx-auto mt-16 md:mt-20 pt-10 md:pt-12 border-t border-espresso/10 grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+					<div className="mt-16 md:mt-20 pt-10 md:pt-12 border-t border-espresso/10 grid lg:grid-cols-[2fr_3fr] gap-6 lg:gap-16 items-center">
 						<div className="space-y-3">
 							<p className="text-xs md:text-sm tracking-widest uppercase text-caramel font-sans">
 								Qualification
