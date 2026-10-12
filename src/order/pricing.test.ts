@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatPrices, type Line, shippingFee, subtotal, total } from "./pricing.ts";
+import { formatPrices, itemsTotal, type Line, shippingFee, subtotal, total } from "./pricing.ts";
 
 const bean = (yen: number | null, qty = 1): Line => ({ kind: "bean", yen, qty });
 const drip = (yen: number | null, qty = 1): Line => ({ kind: "drip", yen, qty });
@@ -32,4 +32,10 @@ test("合計は時価を除いた小計と送料の和", () => {
 	assert.equal(total([]), 0);
 	assert.equal(total([bean(850, 2), drip(570)]), 850 * 2 + 570 + 540);
 	assert.equal(total([bean(450), drip(null)]), 450 + 270);
+});
+
+test("商品代金の合計は、合計から送料を引いた額", () => {
+	const lines = [bean(850, 2), drip(570), drip(null)];
+	assert.equal(itemsTotal(lines), 850 * 2 + 570);
+	assert.equal(itemsTotal(lines), total(lines) - shippingFee(lines));
 });
