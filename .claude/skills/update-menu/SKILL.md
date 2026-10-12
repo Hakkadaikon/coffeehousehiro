@@ -36,7 +36,7 @@ description: コーヒーhouseヒロのメニュー・価格・送料・改定�
 
 ## 3. SEO用の値
 
-`index.html`の説明文の最安値とJSON-LDの`priceRange`は、ビルド時に`MENU`から自動で入る(`index.html`には`__PRICE_MIN__`・`__PRICE_RANGE__`の目印だけがある)。支払い方法のJSON-LD(`paymentAccepted`)も`business.yaml`から自動で入るので、`index.html`は手で直さない。
+`index.html`の説明文の最安値、JSON-LDの`priceRange`とメニュー(`hasMenu`)は、ビルド時に`MENU`から自動で入る(`index.html`には`__PRICE_MIN__`・`__PRICE_RANGE__`・`__MENU_JSON__`の目印だけがある)。支払い方法のJSON-LD(`paymentAccepted`)も`business.yaml`から自動で入るので、`index.html`は手で直さない。
 
 そのあと`public/sitemap.xml`の`<lastmod>`を今日の日付にする。手順は`seo-files` skillに従う。
 

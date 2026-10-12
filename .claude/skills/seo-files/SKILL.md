@@ -58,7 +58,7 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 
 ## 店舗情報・価格・画像の目印
 
-`index.html`の次の目印は、`prerender.mjs`がビルド時に`src/placeholders.ts`の値で置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。値に`"`・`<`・`>`・`&`・`\`が入っていてもビルドが止まる(HTMLとJSONにそのまま入るため)。
+`index.html`の次の目印は、`prerender.mjs`がビルド時に`src/placeholders.ts`の値で置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。値に`"`・`<`・`>`・`&`・`\`が入っていてもビルドが止まる(HTMLとJSONにそのまま入るため)。名前が`_JSON__`で終わる目印はJSONの値そのものなので、引用符で囲まずに置き、`src/placeholders.ts`で`<`をエスケープしてから入れる。
 
 | 目印 | 中身 | 元の値 |
 |---|---|---|
@@ -68,6 +68,7 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 | `__PAYMENTS__` | JSON-LDの`paymentAccepted` | `business.yaml`の`shop.payments` |
 | `__PRICE_MIN__` | 説明文の最安値 | `src/content/menu.ts` |
 | `__PRICE_RANGE__` | JSON-LDの`priceRange` | `src/content/menu.ts` |
+| `__MENU_JSON__` | JSON-LDの`hasMenu`(カテゴリ・品目・サイズ・価格。時価の品目は価格なし) | `src/content/menu.ts`の`MENU` |
 | `__HERO_IMAGE_URL__` | `og:image`とJSON-LDの`image` | `src/content/photos.ts`の`HERO` |
 | `__CONCEPT_IMAGE_URL__` | JSON-LDの`image` | `src/content/photos.ts`の`CONCEPT` |
 
