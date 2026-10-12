@@ -1,6 +1,14 @@
 import { motion } from "motion/react";
 import { fadeIn, staggerContainer } from "../components/motion.ts";
-import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "../content/menu.ts";
+import {
+	categoryNote,
+	categoryUnit,
+	itemSub,
+	MENU,
+	MENU_START_DATE,
+	type MenuCategory,
+	type MenuItem,
+} from "../content/menu.ts";
 import { formatPrices } from "../order/pricing.ts";
 
 /** 商品一覧。カテゴリと価格は content/menu.ts から作る */
@@ -26,56 +34,7 @@ export function Menu() {
 					className="space-y-16"
 				>
 					{MENU.map((cat, i) => (
-						<motion.div
-							key={cat.title}
-							variants={fadeIn}
-							className={`relative ${cat.limited ? "bg-paper border border-caramel/30 p-6 md:p-10 shadow-sm" : ""}`}
-						>
-							<div className="border-b border-espresso/20 pb-5 mb-8">
-								<span className="block font-serif text-caramel text-sm md:text-lg tracking-widest mb-2">
-									0{i + 1}
-								</span>
-								<h3 className="font-serif text-xl md:text-[32px] tracking-widest mb-1">
-									{cat.title}
-									{cat.limited && (
-										<span className="ml-3 text-[11px] md:text-[13px] font-sans bg-caramel text-paper px-2 py-0.5 align-middle tracking-wider">
-											LIMITED
-										</span>
-									)}
-								</h3>
-								<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4">
-									{categoryNote(cat) && (
-										<p className="text-xs md:text-base text-roast/70 font-sans tracking-wider">
-											{categoryNote(cat)}
-										</p>
-									)}
-									<span className="text-xs md:text-base tracking-wider text-roast/75 font-sans shrink-0">
-										{categoryUnit(cat)}
-									</span>
-								</div>
-							</div>
-
-							<div className="space-y-5 md:space-y-7 font-serif text-lg md:text-2xl text-roast lg:px-6">
-								{cat.items.map((item) => (
-									<div key={item.name + item.sub} className="group">
-										<div className="flex items-baseline justify-between">
-											<span className="shrink-0 tracking-wider md:tracking-widest">
-												{item.name}
-											</span>
-											<div className="flex-grow min-w-4 border-b border-dotted border-espresso/25 mx-2 md:mx-10"></div>
-											<span className="tracking-wide md:tracking-widest text-base md:text-2xl font-medium tabular-nums whitespace-nowrap">
-												{formatPrices(item.prices)}
-											</span>
-										</div>
-										{itemSub(item) && (
-											<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
-												{itemSub(item)}
-											</p>
-										)}
-									</div>
-								))}
-							</div>
-						</motion.div>
+						<MenuCategoryBlock key={cat.title} category={cat} number={i + 1} />
 					))}
 				</motion.div>
 				<motion.div variants={fadeIn} className="mt-16 pt-10 border-t border-espresso/15">
@@ -100,5 +59,65 @@ export function Menu() {
 				</motion.div>
 			</div>
 		</section>
+	);
+}
+
+/** 1カテゴリ分。番号・カテゴリ名・注記・単位の見出しと、品目の一覧。限定品は枠で囲む */
+function MenuCategoryBlock({ category: cat, number }: { category: MenuCategory; number: number }) {
+	return (
+		<motion.div
+			variants={fadeIn}
+			className={`relative ${cat.limited ? "bg-paper border border-caramel/30 p-6 md:p-10 shadow-sm" : ""}`}
+		>
+			<div className="border-b border-espresso/20 pb-5 mb-8">
+				<span className="block font-serif text-caramel text-sm md:text-lg tracking-widest mb-2">
+					0{number}
+				</span>
+				<h3 className="font-serif text-xl md:text-[32px] tracking-widest mb-1">
+					{cat.title}
+					{cat.limited && (
+						<span className="ml-3 text-[11px] md:text-[13px] font-sans bg-caramel text-paper px-2 py-0.5 align-middle tracking-wider">
+							LIMITED
+						</span>
+					)}
+				</h3>
+				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4">
+					{categoryNote(cat) && (
+						<p className="text-xs md:text-base text-roast/70 font-sans tracking-wider">
+							{categoryNote(cat)}
+						</p>
+					)}
+					<span className="text-xs md:text-base tracking-wider text-roast/75 font-sans shrink-0">
+						{categoryUnit(cat)}
+					</span>
+				</div>
+			</div>
+
+			<div className="space-y-5 md:space-y-7 font-serif text-lg md:text-2xl text-roast lg:px-6">
+				{cat.items.map((item) => (
+					<MenuItemRow key={item.name + item.sub} item={item} />
+				))}
+			</div>
+		</motion.div>
+	);
+}
+
+/** 品目1行。品名と価格を点線でつなぎ、補足があれば下に出す */
+function MenuItemRow({ item }: { item: MenuItem }) {
+	return (
+		<div className="group">
+			<div className="flex items-baseline justify-between">
+				<span className="shrink-0 tracking-wider md:tracking-widest">{item.name}</span>
+				<div className="flex-grow min-w-4 border-b border-dotted border-espresso/25 mx-2 md:mx-10"></div>
+				<span className="tracking-wide md:tracking-widest text-base md:text-2xl font-medium tabular-nums whitespace-nowrap">
+					{formatPrices(item.prices)}
+				</span>
+			</div>
+			{itemSub(item) && (
+				<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
+					{itemSub(item)}
+				</p>
+			)}
+		</div>
 	);
 }
