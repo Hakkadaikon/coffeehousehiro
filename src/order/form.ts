@@ -33,3 +33,26 @@ export const validate = (f: Form) => {
 	if (!(PAYMENTS as readonly string[]).includes(f.payment)) errors.push("payment");
 	return errors;
 };
+
+export const EMPTY_FORM: Form = { name: "", postal: "", address: "", phone: "", payment: "" };
+
+/** 送信・保存・検査に使う形へ、欄ごとに整える */
+export const cleanForm = (f: Form): Form => ({
+	name: cleanLine(f.name, LIMITS.name),
+	postal: cleanDigits(f.postal, LIMITS.postal),
+	address: cleanLine(f.address, LIMITS.address),
+	phone: cleanDigits(f.phone, LIMITS.phone),
+	payment: f.payment,
+});
+
+/** 端末に保存したフォームを戻す。文字列でない値は空にし、電話番号は保存しないので戻さない */
+export const restoreForm = (saved: Partial<Record<keyof Form, unknown>> | undefined): Form => {
+	const str = (v: unknown) => (typeof v === "string" ? v : "");
+	return {
+		name: str(saved?.name),
+		postal: str(saved?.postal),
+		address: str(saved?.address),
+		phone: "",
+		payment: str(saved?.payment),
+	};
+};
