@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle } from "lucide-react";
+import { ChevronDown, MapPin, MessageCircle } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { InstagramIcon } from "../components/InstagramIcon.tsx";
 import {
@@ -10,8 +10,9 @@ import {
 	POSTAL,
 } from "../content/shop.ts";
 import { NAV_LINKS } from "../content/site.ts";
+import { SAVE_DAYS } from "../order/draft.ts";
 
-/** フッター。住所と地図・SNS、営業時間、来店案内、ページ内リンク */
+/** フッター。住所と地図・SNS、営業時間、来店案内、情報の取り扱い、ページ内リンク */
 export function SiteFooter() {
 	return (
 		<footer id="access" className="bg-[#120D0B] text-paper pt-20 pb-12 px-6 md:px-12">
@@ -21,6 +22,8 @@ export function SiteFooter() {
 
 					<ShopHours />
 				</div>
+
+				<DataPolicy />
 
 				<nav
 					aria-label="ページ内リンク"
@@ -112,5 +115,29 @@ function ShopHours() {
 				</p>
 			</div>
 		</div>
+	);
+}
+
+/** このサイトでの情報の取り扱い。普段は閉じておき、見出しを押すと開く */
+function DataPolicy() {
+	const label = "block mb-1 font-sans text-xs md:text-sm tracking-[0.2em] text-paper/60";
+	return (
+		<details className="group mb-16 max-w-2xl border-t border-white/5 pt-10">
+			<summary className="flex w-fit cursor-pointer list-none items-center gap-3 py-3 -my-3 font-sans text-xs md:text-sm tracking-[0.2em] text-caramel hover:text-paper transition-colors [&::-webkit-details-marker]:hidden">
+				このサイトでの情報の取り扱い
+				<ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
+			</summary>
+			<div className="mt-6 space-y-5 text-[13px] md:text-[17px] text-paper/80 leading-[1.9] tracking-wide text-pretty">
+				<p>
+					<span className={label}>かんたん注文フォーム</span>
+					{`入力内容は、当サイトのサーバーには送信しません。「この端末に保存する」を選んだときだけ、この端末のブラウザに保存します。最後に保存してから${SAVE_DAYS}日を過ぎた内容は、次にこのページを開いたときに消去します。電話番号は保存しません。`}
+				</p>
+				<p>
+					<span className={label}>アクセス解析</span>
+					アクセス数を把握するため、Vercel Inc.（米国）のVercel Web
+					Analyticsを使っています。閲覧した日時とページ、参照元のページ、おおよその地域（国・都道府県・市区町村）、OS・ブラウザ・端末の種類を集計します。Cookieは使いません。同じ方の訪問かどうかは通信の情報から作った値で区別し、その値は24時間で破棄されます。集計結果から個人を特定することはできません。解析のための送信はブラウザのコンテンツブロック機能などで止められ、止めてもページは閲覧できます。
+				</p>
+			</div>
+		</details>
 	);
 }
