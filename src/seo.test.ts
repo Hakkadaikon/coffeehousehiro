@@ -49,8 +49,13 @@ test("Googleマップのリンクは住所で検索する", () => {
 	assert.equal(url.searchParams.get("query"), ADDRESS);
 });
 
+// src 以下の全コンポーネントのソース。アイコンの参照を探すのに使う
+const SOURCES = readdirSync(new URL("./", import.meta.url), { recursive: true })
+	.filter((f) => String(f).endsWith(".tsx"))
+	.map((f) => read(`src/${f}`))
+	.join("\n");
 const IMAGE_FILES = readdirSync(new URL("../public/images/", import.meta.url));
-// 写真以外の画像。役割で名前を決めていて、index.html と App.tsx から直接参照している
+// 写真以外の画像。役割で名前を決めていて、index.html と src 以下のコンポーネントから直接参照している
 const ICONS = ["logo.webp", "favicon.png", "apple-touch-icon.png"];
 
 test("写真のファイル名は「2桁の連番_英語の要約」で、番号は1から順に並ぶ", () => {
@@ -65,9 +70,6 @@ test("public/images には、写真リストとアイコンにある画像だけ
 	const expected = [...PHOTOS.map((p) => p.src.replace("/images/", "")), ...ICONS];
 	assert.deepEqual([...IMAGE_FILES].sort(), [...expected].sort());
 	for (const icon of ICONS) {
-		assert.ok(
-			html.includes(`/images/${icon}`) || read("src/App.tsx").includes(`/images/${icon}`),
-			icon,
-		);
+		assert.ok(html.includes(`/images/${icon}`) || SOURCES.includes(`/images/${icon}`), icon);
 	}
 });
