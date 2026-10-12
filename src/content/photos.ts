@@ -46,3 +46,6 @@ export const PHOTOS = [
 export const HERO = PHOTOS[5];
 /** Concept 欄の写真 */
 export const CONCEPT = PHOTOS[0];
+
+/** Instagram欄に並べる順。先頭が大タイルで、モバイルでは先頭5枚だけ表示する */
+export const INSTAGRAM_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);

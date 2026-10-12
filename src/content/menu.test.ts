@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { catalog, categoryNote, categoryUnit, itemSub, MENU, priceRange, ROASTS } from "./menu.ts";
+import {
+	catalog,
+	categoryNote,
+	categoryUnit,
+	groupCatalog,
+	itemSub,
+	MENU,
+	priceRange,
+	ROASTS,
+} from "./menu.ts";
 
 test("どの品目もサイズと価格の数がそろい、価格は正の整数か時価", () => {
 	for (const c of MENU) {
@@ -71,5 +80,17 @@ test("メニューから注文用の商品リストを作る", () => {
 	assert.equal(
 		items.find((i) => i.label.includes("タンザニア"))?.label,
 		"シングル タンザニア（キリマンジャロ AA）",
+	);
+});
+
+test("注文フォームの商品はメニューのカテゴリ順にまとめ、どの商品も1回だけ出す", () => {
+	const groups = groupCatalog(catalog());
+	assert.deepEqual(
+		groups.map(([title]) => title),
+		MENU.map((c) => c.title),
+	);
+	assert.deepEqual(
+		groups.flatMap(([, items]) => items),
+		catalog(),
 	);
 });
