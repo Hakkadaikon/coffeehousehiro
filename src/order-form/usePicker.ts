@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { GRINDS } from "../content/menu.ts";
-import { type CatalogItem, roastFor } from "../order/cart.ts";
+import { CATALOG, DEFAULT_ROAST, GRINDS, type Grind } from "../content/menu.ts";
+import { roastFor } from "../order/cart.ts";
 
 /** 「1. 商品を選ぶ」で選んでいる商品・サイズ・挽き方・焙煎度・数量 */
-export function usePicker(catalog: CatalogItem[]) {
-	const [id, setId] = useState(catalog[0].id);
+export function usePicker() {
+	const [id, setId] = useState(CATALOG[0].id);
 	const [size, setSize] = useState(0);
-	const [grind, setGrind] = useState<string>(GRINDS[0]);
-	const [roast, setRoast] = useState("おまかせ");
+	const [grind, setGrind] = useState<Grind>(GRINDS[0]);
+	const [roast, setRoast] = useState<string>(DEFAULT_ROAST);
 	const [qty, setQty] = useState(1);
 
-	const item = catalog.find((i) => i.id === id) ?? catalog[0];
+	const item = CATALOG.find((i) => i.id === id) ?? CATALOG[0];
 	return {
 		item,
 		size,

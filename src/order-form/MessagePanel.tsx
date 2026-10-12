@@ -1,25 +1,20 @@
-import type { RefObject } from "react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { LINE_CHAT_URL } from "../content/shop.ts";
 import { headingCls } from "./controls.tsx";
+import { useCopy } from "./useCopy.ts";
 
 /** 3. 注文メッセージを確認して送る。コピーしてから LINE のトーク画面を開く */
 export function MessagePanel({
 	text,
 	hasItems,
 	canSend,
-	copied,
-	onCopy,
-	previewRef,
 }: {
 	text: string;
 	hasItems: boolean;
 	/** カートに商品があり、お届け先とお支払い方法の入力がそろっている */
 	canSend: boolean;
-	copied: boolean;
-	onCopy: () => void;
-	previewRef: RefObject<HTMLTextAreaElement | null>;
 }) {
+	const { copied, copy, previewRef } = useCopy(text);
 	return (
 		<>
 			<h4 className={`${headingCls} mt-10`}>3. 注文メッセージを確認して送る</h4>
@@ -38,7 +33,7 @@ export function MessagePanel({
 			)}
 			<ExternalLink
 				href={canSend ? LINE_CHAT_URL : undefined}
-				onClick={canSend ? onCopy : undefined}
+				onClick={canSend ? copy : undefined}
 				aria-disabled={!canSend}
 				className={`mt-4 w-full h-14 flex items-center justify-center bg-[#06C755] text-white font-bold tracking-widest md:text-lg shadow-lg shadow-[#06C755]/20 transition-opacity ${
 					canSend ? "hover:bg-[#05b14c]" : "opacity-40 pointer-events-none"
@@ -51,7 +46,7 @@ export function MessagePanel({
 			</p>
 			<button
 				type="button"
-				onClick={onCopy}
+				onClick={copy}
 				disabled={!hasItems}
 				className="mt-3 w-full h-12 border border-espresso/30 hover:border-espresso transition-colors disabled:opacity-40"
 			>

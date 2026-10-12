@@ -4,6 +4,10 @@ import type { CatalogItem } from "../order/cart.ts";
 export const MENU_START_DATE = "2026年10月1日";
 export const GRINDS = ["豆", "粉"] as const;
 export const ROASTS = ["浅煎り", "中煎り", "中深煎り", "おまかせ"] as const;
+export type Grind = (typeof GRINDS)[number];
+export type Roast = (typeof ROASTS)[number];
+/** 注文フォームで最初に選ばれている焙煎度 */
+export const DEFAULT_ROAST: Roast = "おまかせ";
 
 export type MenuItem = {
 	name: string;

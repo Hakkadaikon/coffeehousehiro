@@ -10,7 +10,6 @@ import { DeliveryFields } from "./DeliveryFields.tsx";
 import { MessagePanel } from "./MessagePanel.tsx";
 import { ProductPicker } from "./ProductPicker.tsx";
 import { SaveConsent } from "./SaveConsent.tsx";
-import { useCopy } from "./useCopy.ts";
 import { useOpenOnLink } from "./useOpenOnLink.ts";
 import { useOrderDraft } from "./useOrderDraft.ts";
 import { usePicker } from "./usePicker.ts";
@@ -21,7 +20,7 @@ import { usePicker } from "./usePicker.ts";
  */
 export function OrderForm() {
 	const [open, setOpen] = useOpenOnLink("#order-form");
-	const picker = usePicker(CATALOG);
+	const picker = usePicker();
 	const [cart, dispatch] = useReducer(cartReducer, []);
 	const [form, setForm] = useState<Form>(EMPTY_FORM);
 	const [added, setAdded] = useState(false);
@@ -44,7 +43,6 @@ export function OrderForm() {
 	const errors = validate(clean);
 	const text = buildMessage(lines, clean);
 	const canSend = lines.length > 0 && errors.length === 0;
-	const { copied, copy, previewRef } = useCopy(text);
 
 	const add = () => {
 		dispatch({ type: "add", item: newCartItem(picker.item, picker) });
@@ -107,14 +105,7 @@ export function OrderForm() {
 							onQtyChange={(index, qty) => dispatch({ type: "setQty", index, qty })}
 							onRemove={(index) => dispatch({ type: "remove", index })}
 						/>
-						<MessagePanel
-							text={text}
-							hasItems={lines.length > 0}
-							canSend={canSend}
-							copied={copied}
-							onCopy={copy}
-							previewRef={previewRef}
-						/>
+						<MessagePanel text={text} hasItems={lines.length > 0} canSend={canSend} />
 					</div>
 				</div>
 			</div>
