@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { fadeIn } from "../components/motion.ts";
-import { CONCEPT } from "../content/photos.ts";
+import { CERTIFICATE, CONCEPT } from "../content/photos.ts";
 
 /** お店のこだわりと店主の紹介 */
 export function Concept() {
@@ -48,6 +48,15 @@ export function Concept() {
 								<p className="font-sans text-xs md:text-base text-roast/75 tracking-wider leading-relaxed">
 									たしかな知識と技術で、最高の一杯をお届けします。
 								</p>
+								<img
+									src={CERTIFICATE.src}
+									alt={CERTIFICATE.alt}
+									width={CERTIFICATE.w}
+									height={CERTIFICATE.h}
+									loading="lazy"
+									decoding="async"
+									className="w-full max-w-md h-auto mt-5 shadow-sm"
+								/>
 							</div>
 						</div>
 					</div>

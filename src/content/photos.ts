@@ -42,12 +42,21 @@ export const PHOTOS: Photo[] = [
 		alt: "抽出したコーヒーとサーバー",
 	},
 	{ src: "/images/09_roasted-beans.jpeg", w: 1080, h: 810, alt: "焙煎を終えたコーヒー豆" },
+	{
+		src: "/images/10_jcqa-instructor-certificate.jpeg",
+		w: 1080,
+		h: 810,
+		alt: "店主のJ.C.Q.A.認定コーヒーインストラクター2級の認定証と認定ブローチ",
+	},
 ];
 
 /** トップの背景。SNS で共有したときのサムネイルにも使う */
 export const HERO = PHOTOS[5];
 /** Concept 欄の写真 */
 export const CONCEPT = PHOTOS[0];
+
+/** Concept 欄の資格の紹介に添える写真。Instagram欄には並べない */
+export const CERTIFICATE = PHOTOS[9];
 
 /** Instagram欄に並べる順。先頭が大タイルで、モバイルでは先頭5枚だけ表示する */
 export const INSTAGRAM_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);
