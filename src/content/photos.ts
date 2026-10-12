@@ -1,6 +1,8 @@
 // サイトで使う写真の一覧。ファイル名・サイズ・代替テキストはここだけに書く。
 // ファイル名は「2桁の連番_英語の要約.jpeg」。index.html の OGP と JSON-LD の画像も、ビルド時にここから埋める。
-export const PHOTOS = [
+export type Photo = { src: string; w: number; h: number; alt: string };
+
+export const PHOTOS: Photo[] = [
 	{
 		src: "/images/01_red-hut-exterior.jpeg",
 		w: 1080,

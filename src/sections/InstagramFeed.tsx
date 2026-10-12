@@ -2,8 +2,8 @@ import { motion } from "motion/react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { InstagramIcon } from "../components/InstagramIcon.tsx";
 import { fadeIn } from "../components/motion.ts";
-import { INSTAGRAM_TILES } from "../content/photos.ts";
-import { INSTAGRAM_URL, LINE_URL } from "../content/shop.ts";
+import { INSTAGRAM_TILES, type Photo } from "../content/photos.ts";
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL, LINE_URL } from "../content/shop.ts";
 
 /** 営業日とお知らせは Instagram で。写真を並べてアカウントへ誘導する */
 export function InstagramFeed() {
@@ -32,35 +32,11 @@ export function InstagramFeed() {
 
 				<ExternalLink
 					href={INSTAGRAM_URL}
-					aria-label="Instagramで@coffee_house_hiroの投稿を見る（新しいタブで開きます）"
+					aria-label={`Instagramで${INSTAGRAM_HANDLE}の投稿を見る（新しいタブで開きます）`}
 					className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2"
 				>
 					{INSTAGRAM_TILES.map((img, i) => (
-						<div
-							key={img.src}
-							className={`group/tile relative overflow-hidden bg-roast ${
-								i === 0 ? "col-span-2 aspect-square md:row-span-2 md:aspect-auto" : "aspect-square"
-							} ${i >= 5 ? "hidden md:block" : ""}`}
-						>
-							<img
-								src={img.src}
-								alt={img.alt}
-								width={img.w}
-								height={img.h}
-								loading="lazy"
-								decoding="async"
-								className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/tile:scale-105"
-							/>
-							<div className="absolute inset-0 bg-espresso/0 group-hover/tile:bg-espresso/45 transition-colors duration-500 flex items-center justify-center">
-								<InstagramIcon className="w-7 h-7 text-paper opacity-0 group-hover/tile:opacity-100 transition-opacity duration-500" />
-							</div>
-							{i === 0 && (
-								<div className="absolute inset-x-0 bottom-0 p-4 md:p-6 bg-gradient-to-t from-espresso/85 to-transparent flex items-center gap-3">
-									<InstagramIcon className="w-5 h-5 md:w-6 md:h-6" />
-									<span className="tracking-widest text-sm md:text-lg">@coffee_house_hiro</span>
-								</div>
-							)}
-						</div>
+						<InstagramTile key={img.src} photo={img} index={i} />
 					))}
 				</ExternalLink>
 
@@ -82,5 +58,35 @@ export function InstagramFeed() {
 				</div>
 			</motion.div>
 		</section>
+	);
+}
+
+/** 写真1枚のタイル。先頭(index 0)は大きく出してアカウント名を重ね、6枚目以降はスマホでは隠す */
+function InstagramTile({ photo, index }: { photo: Photo; index: number }) {
+	return (
+		<div
+			className={`group/tile relative overflow-hidden bg-roast ${
+				index === 0 ? "col-span-2 aspect-square md:row-span-2 md:aspect-auto" : "aspect-square"
+			} ${index >= 5 ? "hidden md:block" : ""}`}
+		>
+			<img
+				src={photo.src}
+				alt={photo.alt}
+				width={photo.w}
+				height={photo.h}
+				loading="lazy"
+				decoding="async"
+				className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/tile:scale-105"
+			/>
+			<div className="absolute inset-0 bg-espresso/0 group-hover/tile:bg-espresso/45 transition-colors duration-500 flex items-center justify-center">
+				<InstagramIcon className="w-7 h-7 text-paper opacity-0 group-hover/tile:opacity-100 transition-opacity duration-500" />
+			</div>
+			{index === 0 && (
+				<div className="absolute inset-x-0 bottom-0 p-4 md:p-6 bg-gradient-to-t from-espresso/85 to-transparent flex items-center gap-3">
+					<InstagramIcon className="w-5 h-5 md:w-6 md:h-6" />
+					<span className="tracking-widest text-sm md:text-lg">{INSTAGRAM_HANDLE}</span>
+				</div>
+			)}
+		</div>
 	);
 }
