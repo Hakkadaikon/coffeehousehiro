@@ -18,6 +18,15 @@ const texts = (v: unknown, path: string) =>
 const degree = (v: unknown, path: string, max: number) =>
 	typeof v === "number" && Math.abs(v) <= max ? v : fail(path, `-${max}〜${max}の数値`);
 
+/** 来店の時間帯 [開始, 終わり]。0〜24時の整数で、開始が終わりより前 */
+const hours = (v: unknown, path: string): [number, number] =>
+	Array.isArray(v) &&
+	v.length === 2 &&
+	v.every((h) => Number.isInteger(h) && h >= 0 && h <= 24) &&
+	v[0] < v[1]
+		? [v[0], v[1]]
+		: fail(path, "[開始, 終わり] の0〜24の整数で、開始が終わりより前");
+
 /** 段落は文字列か「strong: 文」(強調する段落) */
 const paragraph = (v: unknown, path: string) => {
 	if (typeof v === "string") return { text: text(v, path), strong: false };
@@ -46,6 +55,7 @@ export function parseBusiness(data: unknown) {
 	const shop = section(root.shop, "shop");
 	const instagram = section(shop.instagram, "shop.instagram");
 	const line = section(shop.line, "shop.line");
+	const visit = section(shop.visit, "shop.visit");
 	return {
 		shop: {
 			name: text(shop.name, "shop.name"),
@@ -65,6 +75,14 @@ export function parseBusiness(data: unknown) {
 				accountId: text(line.accountId, "shop.line.accountId"),
 			},
 			payments: texts(shop.payments, "shop.payments"),
+			visit: {
+				weekdayHours: hours(visit.weekdayHours, "shop.visit.weekdayHours"),
+				holidayHours: hours(visit.holidayHours, "shop.visit.holidayHours"),
+				maxGuests:
+					Number.isInteger(visit.maxGuests) && (visit.maxGuests as number) > 0
+						? (visit.maxGuests as number)
+						: fail("shop.visit.maxGuests", "1以上の整数"),
+			},
 		},
 		legalNotice: rows(root.legalNotice, "legalNotice"),
 		privacyPolicy: rows(root.privacyPolicy, "privacyPolicy"),

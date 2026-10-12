@@ -22,6 +22,8 @@ export const LINE_OA_ID = shop.line.accountId;
 /** 本文なしで公式アカウントのトーク画面を開く。住所や氏名を URL に載せないため、本文はコピーして貼ってもらう */
 export const LINE_CHAT_URL = `https://line.me/R/oaMessage/%40${LINE_OA_ID}/`;
 export const PAYMENTS = shop.payments;
+/** 来店予約の時間帯(原則)と、1組の人数の上限 */
+export const VISIT = shop.visit;
 /** 特定商取引法に基づく表記(/legal) */
 export const LEGAL_NOTICE = legalNotice;
 /** プライバシーポリシー(/legal#privacy) */
