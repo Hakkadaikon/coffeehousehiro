@@ -1,9 +1,10 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { INSTAGRAM_URL, LINE_CHAT_URL, VISIT } from "../content/shop.ts";
 import { Choice, headingCls, inputCls, TextField } from "../order-form/controls.tsx";
 import { useCopy } from "../order-form/useCopy.ts";
+import { useOpenOnLink } from "../order-form/useOpenOnLink.ts";
 import {
 	buildReserveMessage,
 	type Day,
@@ -12,7 +13,7 @@ import {
 	isRestDay,
 	monthCells,
 	startTimes,
-} from "../reserve/visit.ts";
+} from "./visit.ts";
 
 /** 先の月は、今月を含めて何か月分まで選べるか */
 const MONTHS_AHEAD = 3;
@@ -29,8 +30,12 @@ const hoursLabel = ([open, close]: [number, number]) => `${open}時〜${close}�
 const sameDay = (a: Day | null, b: Day) => a?.y === b.y && a.m === b.m && a.d === b.d;
 const before = (a: Day, b: Day) => a.y * 10000 + a.m * 100 + a.d < b.y * 10000 + b.m * 100 + b.d;
 
-/** 来店予約フォーム。日付・時刻・人数を選ぶと、LINE で送る予約のメッセージができる */
-export function Reserve() {
+/**
+ * かんたん来店予約フォーム。日付・時刻・人数を選ぶと、LINE で送る予約のメッセージができる。
+ * 普段は閉じておき、ページ内リンク(#reserve-form)で来たときに開く。
+ */
+export function ReserveForm() {
+	const [open, setOpen] = useOpenOnLink("#reserve-form");
 	// 今日はブラウザで決める。ビルド時に書き出す HTML と食い違わないよう、最初は空にしておく
 	const [today, setToday] = useState<Day | null>(null);
 	useEffect(() => {
@@ -45,7 +50,8 @@ export function Reserve() {
 	const [note, setNote] = useState("");
 
 	const times = day ? startTimes(day) : [];
-	const pickedTime = times.includes(time) ? time : "";
+	// スライダーは必ずどこかを指すので、時刻を選ぶ前はその日のいちばん早い時刻にしておく
+	const pickedTime = times.includes(time) ? time : (times[0] ?? "");
 	const ready = Boolean(day && pickedTime && name.trim());
 	const text =
 		day && pickedTime
@@ -60,24 +66,41 @@ export function Reserve() {
 	const { copied, copy, previewRef } = useCopy(text);
 
 	return (
-		<section id="reserve" className="py-24 md:py-32 px-6 md:px-12 bg-paper scroll-mt-4">
-			<div className="max-w-4xl lg:max-w-5xl mx-auto">
-				<div className="text-center mb-12 md:mb-16">
-					<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">ご来店予約</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/60 uppercase">
-						Reservation
-					</p>
-					<p className="text-sm md:text-base tracking-wider text-roast/80 mt-6 leading-[1.9] text-pretty">
-						<span className="inline-block">赤い小屋で、</span>
-						<span className="inline-block">実際にコーヒーを</span>
-						<span className="inline-block">お召し上がりいただけます。</span>
-						<span className="inline-block">ご来店は1組{VISIT.maxGuests}名様までの</span>
-						<span className="inline-block">完全予約制です。</span>
+		<details
+			id="reserve-form"
+			open={open}
+			onToggle={(e) => setOpen(e.currentTarget.open)}
+			className="group mt-10 bg-paper text-espresso shadow-2xl shadow-black/40 scroll-mt-8"
+		>
+			<summary className="flex items-center justify-between gap-4 p-5 md:p-10 lg:p-12 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+				<div>
+					<h3 className="font-serif text-2xl md:text-[32px] tracking-wider md:tracking-widest mb-3">
+						<span className="inline-block">かんたん</span>
+						<span className="inline-block">来店予約フォーム</span>
+					</h3>
+					<p className="text-sm md:text-base text-roast/80 text-pretty">
+						<span className="inline-block">日付と時刻を選ぶだけで、</span>
+						<span className="inline-block">LINEで送る来店予約のメッセージができあがります。</span>
 					</p>
 				</div>
+				<span className="shrink-0 flex items-center gap-1 text-sm md:text-base text-caramel">
+					<span className="group-open:hidden">開く</span>
+					<span className="hidden group-open:inline">閉じる</span>
+					<ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
+				</span>
+			</summary>
+
+			<div className="px-5 pb-5 md:px-10 md:pb-10 lg:px-12 lg:pb-12">
+				<p className="text-sm md:text-base text-roast/85 tracking-wide leading-[1.9] mb-8 text-pretty">
+					<span className="inline-block">赤い小屋で、</span>
+					<span className="inline-block">実際にコーヒーを</span>
+					<span className="inline-block">お召し上がりいただけます。</span>
+					<span className="inline-block">ご来店は1組{VISIT.maxGuests}名様までの</span>
+					<span className="inline-block">完全予約制です。</span>
+				</p>
 
 				{/* 注意書きは、1列のときは日付の前、2列のときはカレンダーの下の空きに置く */}
-				<div className="bg-white/60 border border-espresso/10 p-5 md:p-10 grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-10 lg:gap-x-12 lg:gap-y-8">
+				<div className="grid lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-10 lg:gap-x-12 lg:gap-y-8">
 					<ul className="lg:col-start-1 lg:row-start-2 space-y-2 text-sm text-roast/85 leading-[1.9] tracking-wide text-pretty list-disc pl-5 marker:text-caramel">
 						<li>
 							営業日・お休みの日は、
@@ -96,7 +119,7 @@ export function Reserve() {
 					</ul>
 
 					<div className="lg:row-start-1 w-full max-w-md">
-						<h3 className={headingCls}>1. 日付を選ぶ</h3>
+						<h4 className={headingCls}>1. 日付を選ぶ</h4>
 						{today ? (
 							<Calendar
 								today={today}
@@ -121,19 +144,11 @@ export function Reserve() {
 					</div>
 
 					<div className="lg:col-start-2 lg:row-span-2">
-						<h3 className={headingCls}>2. 時刻と人数を選ぶ</h3>
+						<h4 className={headingCls}>2. 時刻と人数を選ぶ</h4>
 						<p className="text-sm md:text-base text-roast/80 mb-4 min-h-6">
 							{day ? `${formatDay(day)}` : "カレンダーから日付を選んでください。"}
 						</p>
-						{day && (
-							<Choice
-								legend="ご来店の時刻"
-								options={times}
-								value={pickedTime}
-								onChange={setTime}
-								cols="grid-cols-5"
-							/>
-						)}
+						{day && <TimePicker times={times} value={pickedTime} onChange={setTime} />}
 						<Choice
 							legend="人数"
 							options={GUESTS}
@@ -160,7 +175,7 @@ export function Reserve() {
 							/>
 						</label>
 
-						<h3 className={headingCls}>3. メッセージを送る</h3>
+						<h4 className={headingCls}>3. メッセージを送る</h4>
 						<textarea
 							ref={previewRef}
 							readOnly
@@ -211,7 +226,63 @@ export function Reserve() {
 					</div>
 				</div>
 			</div>
-		</section>
+		</details>
+	);
+}
+
+/** ご来店の時刻。スライダーで30分ごとに動かせ、1時間ごとの時刻はボタンでも選べる */
+function TimePicker({
+	times,
+	value,
+	onChange,
+}: {
+	times: string[];
+	value: string;
+	onChange: (time: string) => void;
+}) {
+	const index = times.indexOf(value);
+	return (
+		<fieldset className="mb-5">
+			<legend className="text-sm md:text-base text-roast/80 mb-2">ご来店の時刻</legend>
+			<p className="font-serif text-3xl tabular-nums tracking-wider mb-1" aria-hidden>
+				{value}
+				<span className="text-base text-roast/70 ml-1">〜</span>
+			</p>
+			<input
+				type="range"
+				min={0}
+				max={times.length - 1}
+				step={1}
+				value={index}
+				onChange={(e) => onChange(times[Number(e.target.value)])}
+				aria-label="ご来店の時刻（30分ごと）"
+				aria-valuetext={value}
+				className="w-full h-8 accent-caramel cursor-pointer focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-caramel"
+			/>
+			<div className="flex justify-between text-xs text-roast/60 tabular-nums mb-3">
+				<span>{times[0]}</span>
+				<span>{times.at(-1)}</span>
+			</div>
+			<div className="grid grid-cols-5 gap-2">
+				{times
+					.filter((t) => t.endsWith(":00"))
+					.map((t) => (
+						<button
+							key={t}
+							type="button"
+							aria-pressed={value === t}
+							onClick={() => onChange(t)}
+							className={`h-11 border text-sm md:text-base tabular-nums transition-colors ${
+								value === t
+									? "bg-espresso text-paper border-espresso"
+									: "border-espresso/20 hover:border-espresso/50"
+							}`}
+						>
+							{t}
+						</button>
+					))}
+			</div>
+		</fieldset>
 	);
 }
 

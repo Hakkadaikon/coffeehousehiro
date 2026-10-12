@@ -5,7 +5,6 @@ import { HowToOrder } from "./sections/HowToOrder.tsx";
 import { InstagramFeed } from "./sections/InstagramFeed.tsx";
 import { Menu } from "./sections/Menu.tsx";
 import { OrderBar } from "./sections/OrderBar.tsx";
-import { Reserve } from "./sections/Reserve.tsx";
 import { RoastSlider } from "./sections/RoastSlider.tsx";
 import { SiteFooter } from "./sections/SiteFooter.tsx";
 import { SiteHeader } from "./sections/SiteHeader.tsx";
@@ -23,7 +22,6 @@ export default function App() {
 					<Menu />
 					<RoastSlider />
 					<HowToOrder />
-					<Reserve />
 				</main>
 				<SiteFooter />
 				<OrderBar />

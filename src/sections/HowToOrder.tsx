@@ -3,8 +3,9 @@ import { ExternalLink } from "../components/ExternalLink.tsx";
 import { EMAIL, LINE_URL } from "../content/shop.ts";
 import { ORDER_NOTICE, ORDER_STEPS, PRIVACY_NOTICE } from "../content/site.ts";
 import { OrderForm } from "../order-form/OrderForm.tsx";
+import { ReserveForm } from "../reserve/ReserveForm.tsx";
 
-/** ご注文方法。手順、かんたん注文フォーム、LINE とメールの問い合わせ先 */
+/** ご注文方法。手順、かんたん注文フォーム、かんたん来店予約フォーム、LINE とメールの問い合わせ先 */
 export function HowToOrder() {
 	return (
 		<section id="order" className="py-24 md:py-32 px-6 md:px-12 bg-espresso text-paper">
@@ -39,6 +40,7 @@ export function HowToOrder() {
 				</p>
 
 				<OrderForm />
+				<ReserveForm />
 
 				<ContactCard />
 			</div>
