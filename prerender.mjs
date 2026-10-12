@@ -12,5 +12,7 @@ for (const [key, value] of Object.entries(placeholders())) {
 	if (!html.includes(key)) throw new Error(`${key} not found in ${file}`);
 	html = html.replaceAll(key, value);
 }
+const leftover = html.match(/__[A-Z_]+__/);
+if (leftover) throw new Error(`${leftover[0]} is not filled in ${file}`);
 fs.writeFileSync(file, html);
 fs.rmSync("dist-ssr", { recursive: true });
