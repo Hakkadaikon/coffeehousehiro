@@ -1,3 +1,4 @@
+import { ExternalLink } from "./components/ExternalLink.tsx";
 import { LEGAL_NOTICE, SHOP_NAME } from "./content/shop.ts";
 
 /** 特定商取引法に基づく表記のページ。ビルド時に HTML へ書き出すだけで、JavaScript は読み込まない */
@@ -24,9 +25,24 @@ export default function LegalNotice() {
 						>
 							<dt className="font-medium text-paper/50">{r.label}</dt>
 							<dd className="text-pretty">
-								{r.lines.map((line) => (
-									<p key={line}>{line}</p>
-								))}
+								{r.lines.map(({ text, strong }) =>
+									strong ? (
+										<p key={text} className="my-2 border-l-2 border-caramel pl-3">
+											<strong className="font-medium text-paper">{text}</strong>
+										</p>
+									) : /^https?:\/\//.test(text) ? (
+										<p key={text}>
+											<ExternalLink
+												href={text}
+												className="underline underline-offset-4 decoration-paper/30 hover:text-paper hover:decoration-paper/70 transition-colors break-all"
+											>
+												{text}
+											</ExternalLink>
+										</p>
+									) : (
+										<p key={text}>{text}</p>
+									),
+								)}
 							</dd>
 						</div>
 					))}

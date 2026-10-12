@@ -8,6 +8,7 @@ import {
 	EMAIL,
 	LEGAL_NOTICE,
 	LINE_CHAT_URL,
+	LINE_URL,
 	PAYMENTS,
 	POSTAL,
 	SHOP_NAME,
@@ -32,6 +33,8 @@ test("business.yaml の項目が欠けたり、文字列でなかったりした
 		(d: typeof ok) => (d.legalNotice = { 電話番号: "" }),
 		(d: typeof ok) => (d.legalNotice = { 電話番号: [] }),
 		(d: typeof ok) => (d.legalNotice = ["x"]),
+		(d: typeof ok) => (d.legalNotice = { 引渡時期: [{ strong: "" }] }),
+		(d: typeof ok) => (d.legalNotice = { 引渡時期: [{ bold: "x" }] }),
 	];
 	for (const breakIt of broken) {
 		const d = structuredClone(ok);
@@ -43,7 +46,7 @@ test("business.yaml の項目が欠けたり、文字列でなかったりした
 const row = (label: string) => {
 	const r = LEGAL_NOTICE.find((r) => r.label === label);
 	assert.ok(r, label);
-	return r.lines.join("\n");
+	return r.lines.map((l) => l.text).join("\n");
 };
 
 test("特定商取引法に基づく表記は、法律で表示が必要な項目をこの順にすべて載せる", () => {
@@ -53,6 +56,7 @@ test("特定商取引法に基づく表記は、法律で表示が必要な項�
 			"販売事業者",
 			"所在地",
 			"電話番号",
+			"LINE公式アカウント",
 			"メールアドレス",
 			"販売価格",
 			"販売数量",
@@ -82,4 +86,25 @@ test("返品特約として、お客様都合の返品を受けないことを�
 test("店側の不良・誤りへの対応は、7日を締切ではなく目安として書く", () => {
 	assert.ok(row("返品・キャンセル").includes("到着後7日以内を目安に"));
 	assert.ok(!row("返品・キャンセル").includes("当店の過失"));
+});
+
+test("表記の行は「strong: 文」と書くと強調表示にする", () => {
+	const { legalNotice } = parseBusiness({
+		...(data as object),
+		legalNotice: { 引渡時期: ["a", { strong: "b" }] },
+	});
+	assert.deepEqual(legalNotice[0].lines, [
+		{ text: "a", strong: false },
+		{ text: "b", strong: true },
+	]);
+});
+
+test("焙煎日の案内は強調して表示する", () => {
+	const r = LEGAL_NOTICE.find((r) => r.label === "引渡時期");
+	assert.ok(r?.lines.some((l) => l.strong && l.text.startsWith("焙煎は原則として土曜日・日曜日")));
+});
+
+test("連絡先はLINEを主に、使えない方はメールで案内する", () => {
+	assert.ok(row("LINE公式アカウント").includes(LINE_URL));
+	assert.match(row("電話番号"), /LINE.*メール/s);
 });
