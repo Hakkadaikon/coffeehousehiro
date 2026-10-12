@@ -1,8 +1,27 @@
-import { Instagram, Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./menu.ts";
 import OrderBuilder from "./OrderBuilder.tsx";
 import { formatPrices } from "./order.ts";
+
+/** lucide-react v1 で消えたブランドアイコンを、同じ線画で描く */
+const Instagram = ({ className }: { className?: string }) => (
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 24 24"
+		fill="none"
+		stroke="currentColor"
+		strokeWidth={2}
+		strokeLinecap="round"
+		strokeLinejoin="round"
+		className={className}
+		aria-hidden="true"
+	>
+		<rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+		<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+		<line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+	</svg>
+);
 
 const PHOTOS = [
 	{ src: "/images/IMAGE_1.jpeg", w: 1080, h: 1080, alt: "コーヒーhouseヒロの赤い小屋の外観" },
