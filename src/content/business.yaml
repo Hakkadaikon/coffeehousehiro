@@ -9,6 +9,9 @@ shop:
   region: 岡山県
   locality: 倉敷市
   street: 福田町福田2370-6
+  # 店の位置(北緯・東経)。Googleマップのリンクと、検索エンジン向けの店舗情報に使う。住所で検索しても場所が出ないため
+  latitude: 34.54845
+  longitude: 133.75713
   email: coffeehousehiro@gmail.com
   instagram:
     handle: "@coffee_house_hiro"

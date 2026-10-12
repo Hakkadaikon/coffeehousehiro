@@ -11,7 +11,9 @@ export const POSTAL = shop.postalCode;
 /** JSON-LD では住所を分けて載せる */
 export const ADDRESS_PARTS = { region: shop.region, locality: shop.locality, street: shop.street };
 export const ADDRESS = `${shop.region}${shop.locality}${shop.street}`;
-export const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`;
+export const GEO = { latitude: shop.latitude, longitude: shop.longitude };
+/** 住所で検索しても場所が出ないので、緯度・経度で開く */
+export const MAP_URL = `https://www.google.com/maps/search/?api=1&query=${GEO.latitude},${GEO.longitude}`;
 export const EMAIL = shop.email;
 export const INSTAGRAM_HANDLE = shop.instagram.handle;
 export const INSTAGRAM_URL = shop.instagram.url;

@@ -5,6 +5,7 @@ import { CONCEPT, HERO } from "./content/photos.ts";
 import {
 	ADDRESS_PARTS,
 	EMAIL,
+	GEO,
 	INSTAGRAM_URL,
 	LINE_URL,
 	PAYMENTS,
@@ -54,6 +55,7 @@ export const placeholders = () => {
 		__PRICE_MIN__: yen(min),
 		__PRICE_RANGE__: `${yen(min)}〜${yen(max)}`,
 		__MENU_JSON__: json(menuJsonLd()),
+		__GEO_JSON__: json({ "@type": "GeoCoordinates", ...GEO }),
 		__HERO_IMAGE_URL__: url(HERO.src),
 		__CONCEPT_IMAGE_URL__: url(CONCEPT.src),
 	};

@@ -7,6 +7,7 @@ import {
 	ADDRESS,
 	ADDRESS_PARTS,
 	EMAIL,
+	GEO,
 	INSTAGRAM_URL,
 	LINE_URL,
 	MAP_URL,
@@ -51,11 +52,15 @@ test("sitemapのlastmodはYYYY-MM-DDで、未来の日付にしない", () => {
 	assert.ok(lastmod <= todayJst);
 });
 
-test("Googleマップのリンクは住所で検索する", () => {
+test("Googleマップのリンクは、住所ではなく店の緯度・経度を開く（住所では場所が出ないため）", () => {
 	const url = new URL(MAP_URL);
 	assert.equal(url.origin + url.pathname, "https://www.google.com/maps/search/");
 	assert.equal(url.searchParams.get("api"), "1");
-	assert.equal(url.searchParams.get("query"), ADDRESS);
+	assert.equal(url.searchParams.get("query"), `${GEO.latitude},${GEO.longitude}`);
+});
+
+test("検索エンジン向けの店舗情報に、店の緯度・経度を載せる", () => {
+	assert.deepEqual(ld.geo, { "@type": "GeoCoordinates", ...GEO });
 });
 
 // src 以下の全コンポーネントのソース。アイコンの参照を探すのに使う

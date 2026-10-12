@@ -14,6 +14,10 @@ const texts = (v: unknown, path: string) =>
 		? v.map((x, i) => text(x, `${path} の${i + 1}行目`))
 		: fail(path, "空でない文字列か、空でないリスト");
 
+/** 緯度・経度。数値で、範囲内であること */
+const degree = (v: unknown, path: string, max: number) =>
+	typeof v === "number" && Math.abs(v) <= max ? v : fail(path, `-${max}〜${max}の数値`);
+
 /** 段落は文字列か「strong: 文」(強調する段落) */
 const paragraph = (v: unknown, path: string) => {
 	if (typeof v === "string") return { text: text(v, path), strong: false };
@@ -49,6 +53,8 @@ export function parseBusiness(data: unknown) {
 			region: text(shop.region, "shop.region"),
 			locality: text(shop.locality, "shop.locality"),
 			street: text(shop.street, "shop.street"),
+			latitude: degree(shop.latitude, "shop.latitude", 90),
+			longitude: degree(shop.longitude, "shop.longitude", 180),
 			email: text(shop.email, "shop.email"),
 			instagram: {
 				handle: text(instagram.handle, "shop.instagram.handle"),

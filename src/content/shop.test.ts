@@ -30,6 +30,8 @@ test("business.yaml の項目が欠けたり、文字列でなかったりした
 		(d: typeof ok) => delete d.shop.email,
 		(d: typeof ok) => (d.shop.postalCode = 7128046),
 		(d: typeof ok) => (d.shop.payments = []),
+		(d: typeof ok) => (d.shop.latitude = "34.5"),
+		(d: typeof ok) => (d.shop.longitude = 200),
 		(d: typeof ok) => delete d.shop.line,
 		(d: typeof ok) => (d.legalNotice = { 電話番号: "" }),
 		(d: typeof ok) => (d.legalNotice = { 電話番号: [] }),
