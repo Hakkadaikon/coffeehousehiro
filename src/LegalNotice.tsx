@@ -6,7 +6,7 @@ type Row = (typeof LEGAL_NOTICE)[number];
 
 // プライバシーポリシーには、フッターと同じ「このサイトでの情報の取り扱い」を制定日の前に入れる
 const SITE_ROWS: Row[] = SITE_DATA_POLICY.map((p) => ({
-	label: `このサイトでの情報（${p.label}）`,
+	label: p.label,
 	lines: [{ text: p.text, strong: false }],
 }));
 const isDate = (r: Row) => r.label === "制定日";
@@ -29,7 +29,7 @@ export default function LegalNotice() {
 					{SHOP_NAME}
 				</a>
 			</header>
-			<main className="max-w-3xl mx-auto px-6 md:px-12 pt-10 pb-24">
+			<main className="max-w-6xl mx-auto px-6 md:px-12 pt-10 pb-24">
 				<h1 className="sr-only">特定商取引法に基づく表記・プライバシーポリシー</h1>
 				<section id="tokushoho" aria-labelledby="tokushoho-title">
 					<h2 id="tokushoho-title" className={h2}>
@@ -59,11 +59,11 @@ export default function LegalNotice() {
 /** 項目名と本文の表。「strong:」の段落は強調し、URL だけの段落はリンクにする */
 function Table({ rows }: { rows: Row[] }) {
 	return (
-		<dl className="border-t border-white/10 text-sm md:text-base leading-[1.9] tracking-wide">
+		<dl className="border-t border-white/10 text-sm md:text-base lg:text-[17px] leading-[1.9] tracking-wide">
 			{rows.map((r) => (
 				<div
 					key={r.label}
-					className="grid md:grid-cols-[13rem_1fr] gap-1 md:gap-6 py-5 border-b border-white/10"
+					className="grid md:grid-cols-[13rem_1fr] lg:grid-cols-[16rem_1fr] gap-1 md:gap-6 lg:gap-10 py-5 lg:py-6 border-b border-white/10"
 				>
 					<dt className="font-medium text-paper/50">{r.label}</dt>
 					<dd className="text-pretty">
