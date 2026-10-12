@@ -37,18 +37,23 @@ test("土日と祝日は休日、それ以外は平日", () => {
 	assert.ok(!isRestDay({ y: 2026, m: 10, d: 13 }));
 });
 
-test("選べる開始時刻は、平日は18時から、休日は10時から、終わりの1時間前まで", () => {
+test("選べる開始時刻は30分ごとで、平日は18時から、休日は10時から、終わりの1時間前まで", () => {
 	assert.deepEqual(startTimes({ y: 2026, m: 10, d: 13 }), [
 		"18:00",
+		"18:30",
 		"19:00",
+		"19:30",
 		"20:00",
+		"20:30",
 		"21:00",
+		"21:30",
 		"22:00",
 	]);
 	const holiday = startTimes({ y: 2026, m: 10, d: 12 });
 	assert.equal(holiday[0], "10:00");
+	assert.equal(holiday[1], "10:30");
 	assert.equal(holiday.at(-1), "22:00");
-	assert.equal(holiday.length, 13);
+	assert.equal(holiday.length, 25);
 });
 
 test("月のカレンダーは日曜始まりで、前後の月の日で週を埋める", () => {

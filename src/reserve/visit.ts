@@ -67,10 +67,13 @@ export const isHoliday = ({ y, m, d }: Day) => holidaysOf(y).has(key(date(y, m, 
 /** 土日・祝日 */
 export const isRestDay = (day: Day) => [0, 6].includes(weekday(day)) || isHoliday(day);
 
-/** その日に選べる来店の開始時刻。終わりの1時間前まで、1時間ごと */
+/** その日に選べる来店の開始時刻。終わりの1時間前まで、30分ごと */
 export const startTimes = (day: Day) => {
 	const [open, close] = isRestDay(day) ? VISIT.holidayHours : VISIT.weekdayHours;
-	return Array.from({ length: close - open }, (_, i) => `${String(open + i).padStart(2, "0")}:00`);
+	return Array.from({ length: (close - open) * 2 - 1 }, (_, i) => {
+		const minutes = open * 60 + i * 30;
+		return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${minutes % 60 ? "30" : "00"}`;
+	});
 };
 
 /** 月のカレンダーのマス。日曜始まりで、前後の月の日で週を埋める */
