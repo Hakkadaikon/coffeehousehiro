@@ -16,52 +16,64 @@ export function HowToOrder() {
 					</p>
 				</div>
 
-				<div className="grid md:grid-cols-3 gap-10 md:gap-8 mb-20 font-serif relative">
-					<div className="hidden md:block absolute top-[1.5rem] left-0 w-full h-px bg-paper/10"></div>
-					{ORDER_STEPS.map((step) => (
-						<div key={step.num} className="relative z-10 md:px-4">
-							<div className="w-12 h-12 bg-roast/40 border border-paper/20 flex items-center justify-center text-paper/80 font-serif text-lg mb-7">
-								{step.num}
-							</div>
-							<h3 className="text-base md:text-xl tracking-widest mb-4 text-paper/90">
-								{step.title}
-							</h3>
-							<p className="text-sm md:text-[17px] text-paper/80 leading-[1.9] text-left tracking-wide text-pretty">
-								{step.desc}
-							</p>
-						</div>
-					))}
-				</div>
+				<OrderSteps />
 
 				<OrderForm />
 
-				<div className="mt-20 bg-[#241A16] p-6 md:p-16 text-center relative overflow-hidden">
-					<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
-					<MessageCircle className="w-6 h-6 text-[#06C755] mx-auto mb-6" />
-					<p className="font-sans text-sm md:text-lg tracking-widest text-paper/70 mb-8">
-						商品のご相談・お問い合わせはLINEへ
-					</p>
-					<ExternalLink
-						href={LINE_URL}
-						className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-xl font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
-					>
-						<MessageCircle className="w-5 h-5" />
-						LINEでご相談・お問い合わせ
-					</ExternalLink>
-					<div className="mt-12 pt-8 border-t border-paper/10">
-						<p className="text-xs md:text-base text-paper/65 tracking-widest mb-3">
-							LINEをご利用でない方は、メールでも承ります
-						</p>
-						<a
-							href={`mailto:${EMAIL}`}
-							className="inline-flex items-center gap-2 font-serif text-sm md:text-lg text-paper/75 hover:text-caramel transition-colors tracking-widest break-all"
-						>
-							<Mail className="w-4 h-4" />
-							{EMAIL}
-						</a>
-					</div>
-				</div>
+				<ContactCard />
 			</div>
 		</section>
+	);
+}
+
+/** 注文から発送までの3つの手順 */
+function OrderSteps() {
+	return (
+		<div className="grid md:grid-cols-3 gap-10 md:gap-8 mb-20 font-serif relative">
+			<div className="hidden md:block absolute top-[1.5rem] left-0 w-full h-px bg-paper/10"></div>
+			{ORDER_STEPS.map((step) => (
+				<div key={step.num} className="relative z-10 md:px-4">
+					<div className="w-12 h-12 bg-roast/40 border border-paper/20 flex items-center justify-center text-paper/80 font-serif text-lg mb-7">
+						{step.num}
+					</div>
+					<h3 className="text-base md:text-xl tracking-widest mb-4 text-paper/90">{step.title}</h3>
+					<p className="text-sm md:text-[17px] text-paper/80 leading-[1.9] text-left tracking-wide text-pretty">
+						{step.desc}
+					</p>
+				</div>
+			))}
+		</div>
+	);
+}
+
+/** 相談・問い合わせ先。LINE を主に、使えない方向けにメールを出す */
+function ContactCard() {
+	return (
+		<div className="mt-20 bg-[#241A16] p-6 md:p-16 text-center relative overflow-hidden">
+			<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
+			<MessageCircle className="w-6 h-6 text-[#06C755] mx-auto mb-6" />
+			<p className="font-sans text-sm md:text-lg tracking-widest text-paper/70 mb-8">
+				商品のご相談・お問い合わせはLINEへ
+			</p>
+			<ExternalLink
+				href={LINE_URL}
+				className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-xl font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
+			>
+				<MessageCircle className="w-5 h-5" />
+				LINEでご相談・お問い合わせ
+			</ExternalLink>
+			<div className="mt-12 pt-8 border-t border-paper/10">
+				<p className="text-xs md:text-base text-paper/65 tracking-widest mb-3">
+					LINEをご利用でない方は、メールでも承ります
+				</p>
+				<a
+					href={`mailto:${EMAIL}`}
+					className="inline-flex items-center gap-2 font-serif text-sm md:text-lg text-paper/75 hover:text-caramel transition-colors tracking-widest break-all"
+				>
+					<Mail className="w-4 h-4" />
+					{EMAIL}
+				</a>
+			</div>
+		</div>
 	);
 }
