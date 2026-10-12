@@ -27,6 +27,9 @@ export const ORDER_STEPS = [
 	},
 ] as const;
 
+/** このサイトのソースコード */
+export const SOURCE_CODE_URL = "https://github.com/Hakkadaikon/coffeehousehiro";
+
 /** ご注文方法と注文フォームのボタンの近くに出す、返品・キャンセルの要点。詳しくは /legal */
 export const ORDER_NOTICE =
 	"商品はご注文後に焙煎するため、焙煎後のキャンセルと、お客様のご都合による返品はお受けしていません。商品の不良・誤りは、到着後7日以内を目安にご連絡ください。";

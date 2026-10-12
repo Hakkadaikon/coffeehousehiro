@@ -1,5 +1,6 @@
 import { ChevronDown, MapPin, MessageCircle } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
+import { GitHubIcon } from "../components/GitHubIcon.tsx";
 import { InstagramIcon } from "../components/InstagramIcon.tsx";
 import {
 	ADDRESS,
@@ -10,7 +11,7 @@ import {
 	POSTAL,
 	SHOP_NAME,
 } from "../content/shop.ts";
-import { NAV_LINKS, SITE_DATA_POLICY } from "../content/site.ts";
+import { NAV_LINKS, SITE_DATA_POLICY, SOURCE_CODE_URL } from "../content/site.ts";
 
 /** フッター。住所と地図・SNS、営業時間、来店案内、情報の取り扱い、ページ内リンク、特定商取引法に基づく表記・プライバシーポリシーへのリンク */
 const legalLink =
@@ -57,7 +58,7 @@ export function SiteFooter() {
 	);
 }
 
-/** 店名・住所と地図、SNS */
+/** 店名・住所と地図、SNS、このサイトのソースコード */
 function ShopContact() {
 	return (
 		<div>
@@ -90,6 +91,13 @@ function ShopContact() {
 			>
 				<MessageCircle className="w-4 h-4" />
 				<span>LINE公式アカウント</span>
+			</ExternalLink>
+			<ExternalLink
+				href={SOURCE_CODE_URL}
+				className="flex items-center gap-3 mt-3 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base"
+			>
+				<GitHubIcon className="w-4 h-4" />
+				<span>このサイトのソースコード（GitHub）</span>
 			</ExternalLink>
 		</div>
 	);
