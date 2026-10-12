@@ -1,10 +1,8 @@
-import { MessageCircle } from "lucide-react";
-import { ExternalLink } from "../components/ExternalLink.tsx";
-import { LINE_URL, SHOP_NAME } from "../content/shop.ts";
+import { SHOP_NAME } from "../content/shop.ts";
 import { NAV_LINKS } from "../content/site.ts";
 import { Changelog } from "./Changelog.tsx";
 
-/** ページ上部。更新履歴の帯と、その下のナビゲーション(PC ではページ内リンク、常に LINE 注文ボタン) */
+/** ページ上部。更新履歴の帯と、その下のナビゲーション(PC ではページ内リンク)。注文ボタンは画面下の OrderBar に出す */
 export function SiteHeader() {
 	return (
 		<header className="relative">
@@ -20,13 +18,6 @@ export function SiteHeader() {
 						</a>
 					))}
 				</div>
-				<ExternalLink
-					href={LINE_URL}
-					className="inline-flex items-center gap-2 px-4 py-2 bg-[#06C755] hover:bg-[#05b14c] text-white text-xs md:text-base md:px-5 md:py-2.5 font-medium tracking-wider transition-colors"
-				>
-					<MessageCircle className="w-4 h-4" />
-					LINE注文
-				</ExternalLink>
 			</nav>
 		</header>
 	);
