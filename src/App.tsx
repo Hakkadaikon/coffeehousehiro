@@ -1,8 +1,9 @@
-import { Mail, MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./menu.ts";
 import OrderBuilder from "./OrderBuilder.tsx";
-import { formatPrices } from "./order.ts";
+import { formatPrices, PAYMENTS } from "./order.ts";
+import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, POSTAL } from "./shop.ts";
 
 /** lucide-react v1 で消えたブランドアイコンを、同じ線画で描く */
 const Instagram = ({ className }: { className?: string }) => (
@@ -40,8 +41,6 @@ const PHOTOS = [
 	{ src: "/images/IMAGE_10.jpeg", w: 1080, h: 810, alt: "焙煎を終えたコーヒー豆" },
 ];
 
-const LINE_URL = "https://lin.ee/Zp3za2N";
-const INSTAGRAM_URL = "https://www.instagram.com/coffee_house_hiro/";
 // 先頭が大タイル。モバイルでは先頭 5 枚だけ表示する
 const IG_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);
 export default function App() {
@@ -416,7 +415,7 @@ export default function App() {
 								{
 									num: "II",
 									title: "お支払いのご案内",
-									desc: "折り返し、商品代金と送料の合計、およびお支払い先情報（PayPay・楽天Pay・銀行振込）をご連絡します。",
+									desc: `折り返し、商品代金と送料の合計、およびお支払い先情報（${PAYMENTS.join("・")}）をご連絡します。`,
 								},
 								{
 									num: "III",
@@ -480,10 +479,20 @@ export default function App() {
 							<h2 className="font-serif text-lg md:text-xl tracking-widest mb-6 text-paper/90">
 								コーヒーhouseヒロ
 							</h2>
-							<address className="not-italic space-y-2 text-[13px] md:text-base text-paper/70 tracking-widest font-light mb-10">
-								<p>〒712-8046</p>
-								<p>岡山県倉敷市福田町福田2370-6</p>
+							<address className="not-italic space-y-2 text-[13px] md:text-base text-paper/70 tracking-widest font-light mb-4">
+								<p>〒{POSTAL}</p>
+								<p>{ADDRESS}</p>
 							</address>
+							<a
+								href={MAP_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								aria-label={`${ADDRESS} をGoogleマップで開く（新しいタブ）`}
+								className="flex w-fit items-center gap-3 mb-10 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base underline underline-offset-4 decoration-paper/30 hover:decoration-paper/70"
+							>
+								<MapPin className="w-4 h-4" />
+								<span>Googleマップで開く</span>
+							</a>
 
 							<a
 								href={INSTAGRAM_URL}
