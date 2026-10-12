@@ -16,6 +16,9 @@ npm run build  # dist に本番用のファイルを書き出す
 
 ## ドキュメント
 
+メニューの変更などの更新は、Claude Codeにskillsを使って頼むことをある程度前提にしています。
+
+- [AIでの更新](docs/ai-maintenance.md): 用意しているskillsと頼み方
 - [開発](docs/development.md): 技術スタック、テスト、ビルド、コード整形
 - [メニュー・画像の更新](docs/content.md): メニューと価格、店舗情報、画像の差し替え
 - [公開](docs/deployment.md): Vercelでの公開と、ほかのホスティングサービスで公開するとき
