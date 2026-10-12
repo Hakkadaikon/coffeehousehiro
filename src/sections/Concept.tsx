@@ -29,7 +29,7 @@ export function Concept() {
 							className="w-full aspect-[4/3] md:aspect-[16/9] object-cover object-[50%_55%] motion-safe:group-hover:scale-105 transition-transform duration-1000 ease-out"
 						/>
 					</div>
-					<div className="max-w-2xl mx-auto mt-12 md:mt-16 space-y-7 font-serif leading-[2] text-roast tracking-wide text-pretty">
+					<div className="mt-12 md:mt-16 space-y-7 font-serif leading-[2] text-roast tracking-wide text-pretty">
 						<p className="text-base md:text-lg lg:text-xl">
 							コーヒーhouseヒロの店主は、月曜日から金曜日はごく普通のサラリーマン。しかし土日・祝日になると、岡山県倉敷市の小さな赤い小屋で、情熱を持ったロースターへと姿を変えます。
 						</p>
@@ -37,16 +37,16 @@ export function Concept() {
 							ブラックコーヒーとアイスコーヒーを専門に扱っており、豆本来の個性を引き出す焙煎を丹念に行っています。
 						</p>
 					</div>
-					<div className="mt-16 md:mt-20 pt-10 md:pt-12 border-t border-espresso/10 grid lg:grid-cols-[2fr_3fr] gap-6 lg:gap-16 items-center">
-						<div className="space-y-3">
-							<p className="text-xs md:text-sm tracking-widest uppercase text-caramel font-sans">
+					<div className="mt-16 md:mt-20 pt-10 md:pt-12 border-t border-espresso/10 grid lg:grid-cols-2 gap-6 lg:gap-16 items-center">
+						<div className="space-y-3 lg:space-y-5">
+							<p className="text-xs md:text-sm lg:text-base tracking-widest uppercase text-caramel font-sans">
 								Qualification
 							</p>
-							<p className="font-serif text-base md:text-lg tracking-widest leading-relaxed text-roast">
+							<p className="font-serif text-base md:text-lg lg:text-[28px] tracking-widest lg:tracking-wider leading-relaxed text-roast">
 								<span className="inline-block">J.C.Q.A.認定</span>
 								<span className="inline-block">コーヒーインストラクター2級</span>
 							</p>
-							<p className="font-sans text-sm md:text-base text-roast/75 tracking-wider leading-relaxed">
+							<p className="font-sans text-sm md:text-base lg:text-xl text-roast/75 tracking-wider leading-relaxed">
 								<span className="inline-block">たしかな知識と技術で、</span>
 								<span className="inline-block">最高の一杯をお届けします。</span>
 							</p>
