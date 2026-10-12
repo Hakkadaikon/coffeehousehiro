@@ -133,12 +133,12 @@ function ShopHours() {
 function DataPolicy() {
 	const label = "block mb-1 font-sans text-xs md:text-sm tracking-[0.2em] text-paper/60";
 	return (
-		<details className="group mb-16 max-w-2xl border-t border-white/5 pt-10">
+		<details className="group mb-16 border-t border-white/5 pt-10">
 			<summary className="flex w-fit cursor-pointer list-none items-center gap-3 py-3 -my-3 font-sans text-xs md:text-sm tracking-[0.2em] text-caramel hover:text-paper transition-colors [&::-webkit-details-marker]:hidden">
 				このサイトでの情報の取り扱い
 				<ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
 			</summary>
-			<div className="mt-6 space-y-5 text-[13px] md:text-[17px] text-paper/80 leading-[1.9] tracking-wide text-pretty">
+			<div className="mt-6 grid gap-5 lg:grid-cols-2 lg:gap-12 text-[13px] md:text-[17px] text-paper/80 leading-[1.9] tracking-wide text-pretty">
 				{SITE_DATA_POLICY.map((p) => (
 					<p key={p.label}>
 						<span className={label}>{p.label}</span>
