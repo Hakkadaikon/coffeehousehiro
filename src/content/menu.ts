@@ -125,9 +125,14 @@ export const priceRange = () => {
 	return [Math.min(...all), Math.max(...all)] as const;
 };
 
+/** 注文フォームで選べる商品 */
+export const CATALOG = catalog();
+
 /** 注文フォームの商品選択用。カテゴリ名ごとに、メニューの順でまとめる */
 export const groupCatalog = (items: CatalogItem[]): [string, CatalogItem[]][] =>
 	[...new Set(items.map((i) => i.id.split("/")[0]))].map((g) => [
 		g,
 		items.filter((i) => i.id.startsWith(`${g}/`)),
 	]);
+
+export const CATALOG_GROUPS = groupCatalog(CATALOG);
