@@ -10,10 +10,12 @@ import {
 	POSTAL,
 	SHOP_NAME,
 } from "../content/shop.ts";
-import { NAV_LINKS } from "../content/site.ts";
-import { SAVE_DAYS } from "../order/draft.ts";
+import { NAV_LINKS, SITE_DATA_POLICY } from "../content/site.ts";
 
-/** フッター。住所と地図・SNS、営業時間、来店案内、情報の取り扱い、ページ内リンク、特定商取引法に基づく表記へのリンク */
+/** フッター。住所と地図・SNS、営業時間、来店案内、情報の取り扱い、ページ内リンク、特定商取引法に基づく表記・プライバシーポリシーへのリンク */
+const legalLink =
+	"font-sans text-xs md:text-sm tracking-[0.2em] text-paper/60 hover:text-paper transition-colors underline underline-offset-4 decoration-paper/30";
+
 export function SiteFooter() {
 	return (
 		<footer id="access" className="bg-[#120D0B] text-paper pt-20 pb-12 px-6 md:px-12">
@@ -36,12 +38,12 @@ export function SiteFooter() {
 						</a>
 					))}
 				</nav>
-				<p className="text-center mb-8">
-					<a
-						href="/legal"
-						className="font-sans text-xs md:text-sm tracking-[0.2em] text-paper/60 hover:text-paper transition-colors underline underline-offset-4 decoration-paper/30"
-					>
+				<p className="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-8">
+					<a href="/legal" className={legalLink}>
 						特定商取引法に基づく表記
+					</a>
+					<a href="/legal#privacy" className={legalLink}>
+						プライバシーポリシー
 					</a>
 				</p>
 				<div
@@ -137,15 +139,12 @@ function DataPolicy() {
 				<ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
 			</summary>
 			<div className="mt-6 space-y-5 text-[13px] md:text-[17px] text-paper/80 leading-[1.9] tracking-wide text-pretty">
-				<p>
-					<span className={label}>かんたん注文フォーム</span>
-					{`入力内容は、当サイトのサーバーには送信しません。「この端末に保存する」を選んだときだけ、この端末のブラウザに保存します。最後に保存してから${SAVE_DAYS}日を過ぎた内容は、次にこのページを開いたときに消去します。電話番号は保存しません。`}
-				</p>
-				<p>
-					<span className={label}>アクセス解析</span>
-					アクセス数を把握するため、Vercel Inc.（米国）のVercel Web
-					Analyticsを使っています。閲覧した日時とページ、参照元のページ、おおよその地域（国・都道府県・市区町村）、OS・ブラウザ・端末の種類を集計します。Cookieは使いません。同じ方の訪問かどうかは通信の情報から作った値で区別し、その値は24時間で破棄されます。集計結果から個人を特定することはできません。解析のための送信はブラウザのコンテンツブロック機能などで止められ、止めてもページは閲覧できます。
-				</p>
+				{SITE_DATA_POLICY.map((p) => (
+					<p key={p.label}>
+						<span className={label}>{p.label}</span>
+						{p.text}
+					</p>
+				))}
 			</div>
 		</details>
 	);
