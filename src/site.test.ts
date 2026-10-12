@@ -1,14 +1,15 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 import { PAYMENTS } from "./order.ts";
+import { PHOTOS } from "./photos.ts";
 import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, POSTAL, SITE_URL } from "./shop.ts";
 
 const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const html = read("index.html");
 const ldText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1] ?? "";
 // ビルド時に入る目印を仮の値に置き換えてから読む
-const ld = JSON.parse(ldText.replaceAll("__PRICE_RANGE__", "¥1〜¥2"));
+const ld = JSON.parse(ldText.replaceAll(/__[A-Z_]+__/g, "x"));
 
 test("検索エンジン向けの店舗情報は、サイトの住所・支払い方法・SNSと同じ", () => {
 	const a = ld.address;
@@ -39,4 +40,27 @@ test("Googleマップのリンクは住所で検索する", () => {
 	assert.equal(url.origin + url.pathname, "https://www.google.com/maps/search/");
 	assert.equal(url.searchParams.get("api"), "1");
 	assert.equal(url.searchParams.get("query"), ADDRESS);
+});
+
+const IMAGE_FILES = readdirSync(new URL("../public/images/", import.meta.url));
+// 写真以外の画像。役割で名前を決めていて、index.html と App.tsx から直接参照している
+const ICONS = ["logo.webp", "favicon.png", "apple-touch-icon.png"];
+
+test("写真のファイル名は「2桁の連番_英語の要約」で、番号は1から順に並ぶ", () => {
+	const names = PHOTOS.map((p) => p.src.replace("/images/", ""));
+	names.forEach((name, i) => {
+		assert.match(name, /^\d{2}_[a-z0-9]+(-[a-z0-9]+)*\.jpeg$/, name);
+		assert.equal(Number(name.slice(0, 2)), i + 1, name);
+	});
+});
+
+test("public/images には、写真リストとアイコンにある画像だけを置き、どれも実在する", () => {
+	const expected = [...PHOTOS.map((p) => p.src.replace("/images/", "")), ...ICONS];
+	assert.deepEqual([...IMAGE_FILES].sort(), [...expected].sort());
+	for (const icon of ICONS) {
+		assert.ok(
+			html.includes(`/images/${icon}`) || read("src/App.tsx").includes(`/images/${icon}`),
+			icon,
+		);
+	}
 });

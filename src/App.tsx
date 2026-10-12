@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./menu.ts";
 import OrderBuilder from "./OrderBuilder.tsx";
 import { formatPrices, PAYMENTS } from "./order.ts";
+import { CONCEPT, HERO, PHOTOS } from "./photos.ts";
 import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, POSTAL } from "./shop.ts";
 
 /** lucide-react v1 で消えたブランドアイコンを、同じ線画で描く */
@@ -23,23 +24,6 @@ const Instagram = ({ className }: { className?: string }) => (
 		<line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
 	</svg>
 );
-
-const PHOTOS = [
-	{ src: "/images/IMAGE_1.jpeg", w: 1080, h: 1080, alt: "コーヒーhouseヒロの赤い小屋の外観" },
-	{ src: "/images/IMAGE_2.jpeg", w: 1080, h: 810, alt: "4席のテーブルとカウンターがある店内" },
-	{ src: "/images/IMAGE_3.jpeg", w: 1080, h: 810, alt: "手回し焙煎機と電気ケトル" },
-	{ src: "/images/IMAGE_4.jpeg", w: 1080, h: 810, alt: "照明のある予約制の店内スペース" },
-	{ src: "/images/IMAGE_5.jpeg", w: 1080, h: 644, alt: "焙煎豆の保存瓶" },
-	{ src: "/images/IMAGE_7.jpeg", w: 1080, h: 810, alt: "焙煎機のドラムの中で煎られるコーヒー豆" },
-	{
-		src: "/images/IMAGE_8.jpeg",
-		w: 1080,
-		h: 810,
-		alt: "スケールに載せたドリッパーでのハンドドリップ",
-	},
-	{ src: "/images/IMAGE_9.jpeg", w: 1080, h: 810, alt: "抽出したコーヒーとサーバー" },
-	{ src: "/images/IMAGE_10.jpeg", w: 1080, h: 810, alt: "焙煎を終えたコーヒー豆" },
-];
 
 // 先頭が大タイル。モバイルでは先頭 5 枚だけ表示する
 const IG_TILES = [5, 6, 2, 8, 7, 1, 3, 4, 0].map((i) => PHOTOS[i]);
@@ -101,10 +85,10 @@ export default function App() {
 				<section className="relative min-h-[100svh] md:min-h-[90vh] flex items-center px-6 overflow-hidden bg-espresso text-paper">
 					<div className="absolute inset-0 z-0">
 						<img
-							src="/images/IMAGE_7.jpeg"
+							src={HERO.src}
 							alt=""
-							width={1080}
-							height={810}
+							width={HERO.w}
+							height={HERO.h}
 							fetchPriority="high"
 							className="w-full h-full object-cover opacity-30 scale-105"
 						/>
@@ -173,10 +157,10 @@ export default function App() {
 								<div className="relative overflow-hidden group">
 									<div className="absolute inset-0 bg-espresso/5 z-10 group-hover:bg-transparent transition-colors duration-700"></div>
 									<img
-										src="/images/IMAGE_1.jpeg"
+										src={CONCEPT.src}
 										alt="倉敷市福田町にある手作りの赤い小屋の外観"
-										width={1080}
-										height={1080}
+										width={CONCEPT.w}
+										height={CONCEPT.h}
 										loading="lazy"
 										decoding="async"
 										className="w-full h-auto object-cover filter grayscale-[40%] contrast-[1.1] group-hover:scale-105 transition-transform duration-1000 ease-out"
