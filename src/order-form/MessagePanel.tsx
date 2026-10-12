@@ -1,4 +1,5 @@
 import type { RefObject } from "react";
+import { ExternalLink } from "../components/ExternalLink.tsx";
 import { LINE_CHAT_URL } from "../content/shop.ts";
 import { headingCls } from "./controls.tsx";
 
@@ -35,10 +36,8 @@ export function MessagePanel({
 					商品をカートに追加し、お名前・郵便番号・ご住所・お支払い方法を入力すると送信できます。
 				</p>
 			)}
-			<a
+			<ExternalLink
 				href={canSend ? LINE_CHAT_URL : undefined}
-				target="_blank"
-				rel="noopener noreferrer"
 				onClick={canSend ? onCopy : undefined}
 				aria-disabled={!canSend}
 				className={`mt-4 w-full h-14 flex items-center justify-center bg-[#06C755] text-white font-bold tracking-widest md:text-lg shadow-lg shadow-[#06C755]/20 transition-opacity ${
@@ -46,7 +45,7 @@ export function MessagePanel({
 				}`}
 			>
 				コピーしてLINEを開く
-			</a>
+			</ExternalLink>
 			<p className="text-xs md:text-sm text-roast/70 mt-2 text-pretty">
 				注文メッセージをコピーして、LINEのトーク画面を開きます。入力欄に貼り付けて送信すると、ご注文がお店に届きます。
 			</p>
