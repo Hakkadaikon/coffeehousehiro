@@ -9,7 +9,7 @@ import {
 	type MenuCategory,
 	type MenuItem,
 } from "../content/menu.ts";
-import { formatPrices } from "../order/pricing.ts";
+import { formatPrices, SHIPPING_YEN, yen } from "../order/pricing.ts";
 
 /** 商品一覧。カテゴリと価格は content/menu.ts から作る */
 export function Menu() {
@@ -43,7 +43,7 @@ export function Menu() {
 						<span className="inline-block">
 							2アイテム分ごとに
 							<span className="font-serif text-2xl md:text-[32px] mx-1 text-caramel font-medium">
-								¥270
+								{yen(SHIPPING_YEN)}
 							</span>
 						</span>
 						<span className="inline-block">を頂戴いたします。</span>
@@ -64,6 +64,7 @@ export function Menu() {
 
 /** 1カテゴリ分。番号・カテゴリ名・注記・単位の見出しと、品目の一覧。限定品は枠で囲む */
 function MenuCategoryBlock({ category: cat, number }: { category: MenuCategory; number: number }) {
+	const note = categoryNote(cat);
 	return (
 		<motion.div
 			variants={fadeIn}
@@ -82,10 +83,8 @@ function MenuCategoryBlock({ category: cat, number }: { category: MenuCategory; 
 					)}
 				</h3>
 				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4">
-					{categoryNote(cat) && (
-						<p className="text-xs md:text-base text-roast/70 font-sans tracking-wider">
-							{categoryNote(cat)}
-						</p>
+					{note && (
+						<p className="text-xs md:text-base text-roast/70 font-sans tracking-wider">{note}</p>
 					)}
 					<span className="text-xs md:text-base tracking-wider text-roast/75 font-sans shrink-0">
 						{categoryUnit(cat)}
@@ -104,6 +103,7 @@ function MenuCategoryBlock({ category: cat, number }: { category: MenuCategory; 
 
 /** 品目1行。品名と価格を点線でつなぎ、補足があれば下に出す */
 function MenuItemRow({ item }: { item: MenuItem }) {
+	const sub = itemSub(item);
 	return (
 		<div className="group">
 			<div className="flex items-baseline justify-between">
@@ -113,11 +113,7 @@ function MenuItemRow({ item }: { item: MenuItem }) {
 					{formatPrices(item.prices)}
 				</span>
 			</div>
-			{itemSub(item) && (
-				<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
-					{itemSub(item)}
-				</p>
-			)}
+			{sub && <p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">{sub}</p>}
 		</div>
 	);
 }

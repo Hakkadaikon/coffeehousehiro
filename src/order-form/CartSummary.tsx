@@ -1,5 +1,5 @@
 import type { CartLine } from "../order/cart.ts";
-import { itemsTotal, shippingFee, subtotal, total, yen } from "../order/pricing.ts";
+import { itemsTotal, SHIPPING_YEN, shippingFee, subtotal, total, yen } from "../order/pricing.ts";
 import { headingCls, Stepper } from "./controls.tsx";
 
 /** カートの中身と、小計・送料・合計 */
@@ -27,7 +27,7 @@ export function CartSummary({
 						return (
 							<li
 								// biome-ignore lint/suspicious/noArrayIndexKey: 同じ商品を別の焙煎度で複数行入れられる。行に内部状態はない
-								key={`${l.item.id}-${idx}`}
+								key={`${l.id}-${idx}`}
 								className="flex items-start justify-between gap-3 py-3 border-b border-espresso/10"
 							>
 								<div className="font-serif text-sm md:text-base min-w-0">{l.label}</div>
@@ -67,7 +67,7 @@ export function CartSummary({
 				</div>
 			</dl>
 			<p className="text-xs md:text-sm text-roast/70 mt-2">
-				送料は全国一律、2アイテム分ごとに¥270です。
+				{`送料は全国一律、2アイテム分ごとに${yen(SHIPPING_YEN)}です。`}
 			</p>
 			{hasQuote && (
 				<p className="text-xs md:text-sm text-roast/70 mt-1">
