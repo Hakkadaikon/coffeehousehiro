@@ -35,17 +35,18 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 
 ドメインが変わったら、次をすべて書き換える。
 
+- `src/shop.ts`の`SITE_URL`
 - `index.html`の`<link rel="canonical">`
 - `index.html`の`og:url`・`og:image`
 - `index.html`のJSON-LDの`@id`・`url`・`image`・`logo`
 - `public/robots.txt`の`Sitemap:`
 - `public/sitemap.xml`の`<loc>`
 
-書き換えたら`grep -rn 'coffeehousehiro.vercel.app' index.html public`で、取りこぼしがないか確かめる。
+書き換えたら`npm test`を実行する。`src/site.test.ts`が、`SITE_URL`とほかの場所のURLが食い違っていないかを確かめる。
 
 ## 店舗情報(NAP)をそろえる
 
-店名・住所・連絡先は、ページ本文とJSON-LDで同じ表記にする。店名は`コーヒーhouseヒロ`(半角スペースなし)、住所は`〒712-8046 岡山県倉敷市福田町福田2370-6`(番地の前にスペースを入れない)。
+店名・住所・連絡先は、ページ本文とJSON-LDで同じ表記にする。本文の住所・LINE・InstagramのURLは`src/shop.ts`にあり、支払い方法は`src/order.ts`の`PAYMENTS`にある。JSON-LDは手で書いているので、これらを変えたら`index.html`も直す。食い違うと`npm test`が失敗する。店名は`コーヒーhouseヒロ`(半角スペースなし)、住所は`〒712-8046 岡山県倉敷市福田町福田2370-6`(番地の前にスペースを入れない)。
 
 ## プリレンダーを壊さない
 
