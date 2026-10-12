@@ -21,9 +21,10 @@ src/
   order/               注文の計算と検査。React に依存しない関数だけを置く
     pricing.ts         金額と送料
     form.ts            お届け先の入力の整形と検査
-    cart.ts            カートの操作(reducer)と、保存したカートの復元
+    cart.ts            カートの操作(reducer)と、注文の行への変換
     message.ts         LINE で送る注文メッセージ
-    draftStore.ts      下書きの保存先(IndexedDB)
+    draft.ts           端末に保存する下書きの形と、読み込んだ値の検証
+    draftStore.ts      下書きの保存先(IndexedDB)の読み書き
   order-form/          かんたん注文フォーム
     OrderForm.tsx      状態を持つ親。表示は子の部品に任せる
     use*.ts            商品選択・下書き保存・コピー・開閉のフック
