@@ -16,7 +16,7 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 
 ### 週間アクセスレポート(Discord)
 
-毎週月曜の9:00(日本時間)に、先週(月曜〜日曜)のアクセスをDiscordに送ります。GitHubの「Actions」タブで「Weekly analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
+毎週月曜の9:00(日本時間)に、先週(月曜〜日曜)のアクセスをDiscordに送ります。GitHubの「Actions」タブで「Weekly analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、今日を含む直近7日間を集計します。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
 
 送る内容は、訪問者数とページビュー数、日別の数、よく見られたページ、リファラー(参照元)、端末、国・地域です。訪問者は日ごとに数えるので、週の合計は延べ人数になります。
 

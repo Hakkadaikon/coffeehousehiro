@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildReport, lastWeek } from "./report.ts";
+import { buildReport, lastWeek, recentWeek } from "./report.ts";
 
 test("集計期間は、実行日の前日までの7日間（日本時間）", () => {
 	// 月曜 9:00 JST に動いたとき、前の週の月曜〜日曜
@@ -65,4 +65,17 @@ test("Discord の1メッセージの上限（2000文字）を超えない", () =
 		visitors: 1,
 	}));
 	assert.ok(buildReport({ ...data, pages: many }).length <= 2000);
+});
+
+test("手動で動かすときは、今日を含む直近7日間（日本時間）", () => {
+	assert.deepEqual(recentWeek(new Date("2026-10-12T07:58:00Z")), {
+		since: "2026-10-06",
+		until: "2026-10-12",
+	});
+});
+
+test("期間中のアクセスが1件もないときは、そのことを書き添える", () => {
+	const empty = { ...data, days: [], pages: [], referrers: [], devices: [], countries: [] };
+	assert.match(buildReport(empty), /この期間のアクセスはありません/);
+	assert.doesNotMatch(buildReport(data), /この期間のアクセスはありません/);
 });

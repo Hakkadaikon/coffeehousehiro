@@ -1,7 +1,7 @@
 // 先週のアクセスを Vercel Web Analytics API から集計し、Discord に送る。GitHub Actions(analytics-report.yml)から動かす。
 // 環境変数: VERCEL_TOKEN, VERCEL_PROJECT_ID, DISCORD_WEBHOOK_URL(必須)、VERCEL_TEAM_ID(チームのプロジェクトのときだけ)
-// --dry-run を付けると、Discord に送らずに文面を表示する。
-import { buildReport, lastWeek, type Row } from "./report.ts";
+// --dry-run を付けると、Discord に送らずに文面を表示する。REPORT_RECENT=true で今日を含む直近7日間を集計する。
+import { buildReport, lastWeek, type Row, recentWeek } from "./report.ts";
 
 const dryRun = process.argv.includes("--dry-run");
 const env = (name: string) => {
@@ -16,7 +16,8 @@ const env = (name: string) => {
 const token = env("VERCEL_TOKEN");
 const projectId = env("VERCEL_PROJECT_ID");
 const webhook = dryRun ? "" : env("DISCORD_WEBHOOK_URL");
-const range = lastWeek(new Date());
+// 手動実行(REPORT_RECENT=true)は今日を含む直近7日間、定期実行は先週の月曜〜日曜
+const range = (process.env.REPORT_RECENT === "true" ? recentWeek : lastWeek)(new Date());
 
 /** visits/aggregate を by で分けて取る */
 async function visits(by: string, limit?: number): Promise<Row[]> {
@@ -42,6 +43,10 @@ const [days, pages, referrers, devices, countries] = await Promise.all([
 	visits("deviceType"),
 	visits("country", 5),
 ]);
+// Actions のログで、API から何件返ったかを確かめられるようにする
+console.log(
+	`${range.since}〜${range.until}: days=${days.length} pages=${pages.length} referrers=${referrers.length} devices=${devices.length} countries=${countries.length}`,
+);
 const content = buildReport({ range, days, pages, referrers, devices, countries });
 
 if (dryRun) {
