@@ -2,7 +2,7 @@ import { CalendarDays, ClipboardList, MessageCircle } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { LINE_URL } from "../content/shop.ts";
 
-// スマホは3つ並べるので、アイコンの下に短い文字。PC は横に並べる
+// スマホは3つ並べるので、アイコンの下に文字。PC は横に並べる。文言はどちらも同じ
 const btn =
 	"flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 h-14 md:h-12 px-1 md:px-5 text-[11px] md:text-base font-medium md:tracking-wider whitespace-nowrap transition-colors shadow-lg";
 const icon = "w-5 h-5 md:w-4 md:h-4 shrink-0";
@@ -16,19 +16,21 @@ export function OrderBar() {
 				className={`${btn} bg-paper text-espresso hover:bg-caramel hover:text-paper`}
 			>
 				<ClipboardList aria-hidden className={icon} />
-				<span className="md:hidden">注文フォーム</span>
-				<span className="hidden md:inline">かんたん注文フォーム</span>
+				注文
+				<span className="sr-only">フォーム</span>
 			</a>
 			<a
-				href="#reserve"
+				href="#reserve-form"
 				className={`${btn} bg-paper text-espresso hover:bg-caramel hover:text-paper`}
 			>
 				<CalendarDays aria-hidden className={icon} />
 				来店予約
+				<span className="sr-only">フォーム</span>
 			</a>
 			<ExternalLink href={LINE_URL} className={`${btn} bg-[#06C755] hover:bg-[#05b14c] text-white`}>
 				<MessageCircle aria-hidden className={icon} />
-				LINEで注文・相談
+				お問い合わせ
+				<span className="sr-only">（LINE）</span>
 			</ExternalLink>
 		</div>
 	);
