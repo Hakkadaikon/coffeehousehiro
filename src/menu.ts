@@ -110,7 +110,7 @@ export const catalog = (): CatalogItem[] =>
 		c.items.map((item) => ({
 			id: `${c.title}/${item.name}/${item.sub}`,
 			kind: c.kind,
-			label: `${c.title === "ドリップバッグ" ? "ドリップバッグ " : `${c.title} `}${item.name}${item.sub ? `（${item.sub}）` : ""}`,
+			label: `${c.title} ${item.name}${item.sub ? `（${item.sub}）` : ""}`,
 			prices: item.prices,
 			sizes: item.sizes ?? c.sizes,
 			roasts: c.kind === "bean" ? (item.roasts ?? [...ROASTS]) : [],
