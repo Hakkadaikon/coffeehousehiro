@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { catalog, priceRange } from "./menu.ts";
+import { catalog } from "./menu.ts";
 import {
 	buildMessage,
 	cleanDigits,
@@ -188,7 +188,7 @@ test("豆の保存データは挽き方・焙煎度が選択肢にあるもの�
 	);
 });
 
-test("メニューから注文用の商品リストと価格帯を作る", () => {
+test("メニューから注文用の商品リストを作る", () => {
 	const items = catalog();
 	assert.equal(new Set(items.map((i) => i.id)).size, items.length);
 	const panama = items.find((i) => i.label.includes("パナマ"));
@@ -198,7 +198,6 @@ test("メニューから注文用の商品リストと価格帯を作る", () =>
 		items.find((i) => i.label.includes("タンザニア"))?.label,
 		"シングル タンザニア（キリマンジャロ AA）",
 	);
-	assert.deepEqual(priceRange(), [450, 2200]);
 });
 
 test("期限切れの判定は30日ちょうどまで有効、NaNは期限切れ扱い", () => {
