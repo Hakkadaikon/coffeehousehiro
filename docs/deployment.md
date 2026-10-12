@@ -8,6 +8,8 @@
 
 main以外のブランチはVercelにデプロイしません(`vercel.json` の `git.deploymentEnabled`)。ブランチの確認はCIで行います。
 
+依存パッケージの更新はRenovateが行います(`renovate.json`)。minorとpatchの更新は、公開から3日たってCIが通れば自動でmainに入り、そのまま本番に出ます。公開直後に乗っ取られた版を取り込まないよう、3日待つ設定にしています。majorの更新はプルリクエストになるので、確かめてからマージしてください。GitHub Actionsの部品(`actions/checkout` など)は、差し替えられても影響を受けないようコミットのIDで指定し、IDの更新もRenovateに任せています。
+
 ## アクセス解析
 
 訪問数とページの表示回数は、Vercel Web Analyticsで見ます。`src/main.tsx` の `inject()` が、同じドメインの `/_vercel/insights/` から計測用のスクリプトを読み込みます。cookieは使わず、注文フォームの入力内容も送りません。数字はVercelのダッシュボードの「Analytics」で見られます。
