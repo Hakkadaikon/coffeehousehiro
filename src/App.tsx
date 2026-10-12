@@ -3,8 +3,8 @@ import { motion } from "motion/react";
 import { categoryNote, categoryUnit, itemSub, MENU, MENU_START_DATE } from "./content/menu.ts";
 import { CONCEPT, HERO, PHOTOS } from "./content/photos.ts";
 import { ADDRESS, INSTAGRAM_URL, LINE_URL, MAP_URL, PAYMENTS, POSTAL } from "./content/shop.ts";
-import OrderBuilder from "./OrderBuilder.tsx";
 import { formatPrices } from "./order/pricing.ts";
+import { OrderForm } from "./order-form/OrderForm.tsx";
 
 /** lucide-react v1 で消えたブランドアイコンを、同じ線画で描く */
 const Instagram = ({ className }: { className?: string }) => (
@@ -422,7 +422,7 @@ export default function App() {
 							))}
 						</div>
 
-						<OrderBuilder />
+						<OrderForm />
 
 						<div className="mt-20 bg-[#241A16] p-6 md:p-16 text-center relative overflow-hidden">
 							<div className="absolute -inset-1 border-[0.5px] border-paper/5 m-4 pointer-events-none"></div>
