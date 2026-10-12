@@ -1,5 +1,5 @@
 // Inline the server-rendered App into dist/index.html so crawlers see the content without JS,
-// and fill the price placeholders from src/menu.ts.
+// and fill the price and image placeholders from src/content.
 import fs from "node:fs";
 import { placeholders, render } from "./dist-ssr/entry-server.js";
 

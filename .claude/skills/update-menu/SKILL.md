@@ -5,7 +5,7 @@ description: コーヒーhouseヒロのメニュー・価格・送料・改定�
 
 # メニュー・価格の更新
 
-メニューの元データは`src/menu.ts`の`MENU`だけにある。サイトのメニュー表示、注文フォームの商品・価格、SEO用の価格帯はすべてここから作るので、書き換えるのはこのファイルだけでよい。
+メニューの元データは`src/content/menu.ts`の`MENU`だけにある。サイトのメニュー表示、注文フォームの商品・価格、SEO用の価格帯はすべてここから作るので、書き換えるのはこのファイルだけでよい。
 
 ## 1. 元資料を読む
 
@@ -15,7 +15,7 @@ description: コーヒーhouseヒロのメニュー・価格・送料・改定�
 
 画像にLINEなどのQRコードがあれば、OpenCVの`wechat_qrcode_WeChatQRCode`でURLを読める。通常の`QRCodeDetector`は、中央にロゴがあるQRコードを読めない。
 
-## 2. `src/menu.ts`を書き換える
+## 2. `src/content/menu.ts`を書き換える
 
 | 定数・項目 | 内容 |
 |---|---|
@@ -32,11 +32,11 @@ description: コーヒーhouseヒロのメニュー・価格・送料・改定�
 
 カテゴリの番号(01〜04)は配列の順番から付く。注文フォームの商品IDは「カテゴリ名/品名/補足」なので、同じカテゴリに同じ品名を並べるときは補足を変える。品名や補足を変えると、お客さんの端末に保存されたカート内のその品目は読み込み時に捨てられる。
 
-送料(`SHIPPING_YEN`)とLINEのアカウントIDは`src/order.ts`にある。
+送料(`SHIPPING_YEN`)は`src/order/pricing.ts`に、LINEのアカウントIDと支払い方法(`PAYMENTS`)は`src/content/shop.ts`にある。
 
 ## 3. SEO用の値
 
-`index.html`の説明文の最安値とJSON-LDの`priceRange`は、ビルド時に`MENU`から自動で入る(`index.html`には`__PRICE_MIN__`・`__PRICE_RANGE__`の目印だけがある)。手で直すのは、支払い方法が変わったときのJSON-LDの`paymentAccepted`だけ。`src/order.ts`の`PAYMENTS`と同じ並びで、`, `区切りにする。
+`index.html`の説明文の最安値とJSON-LDの`priceRange`は、ビルド時に`MENU`から自動で入る(`index.html`には`__PRICE_MIN__`・`__PRICE_RANGE__`の目印だけがある)。手で直すのは、支払い方法が変わったときのJSON-LDの`paymentAccepted`だけ。`src/content/shop.ts`の`PAYMENTS`と同じ並びで、`, `区切りにする。
 
 そのあと`public/sitemap.xml`の`<lastmod>`を今日の日付にする。手順は`seo-files` skillに従う。
 

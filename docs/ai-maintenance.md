@@ -6,7 +6,7 @@ skillsは `.claude/skills/` にあります。リポジトリでClaude Codeを�
 
 | skill | 頼み方の例 | すること |
 |---|---|---|
-| `update-menu` | 「メニュー更新して」(メニュー表の画像を渡す)、「価格変わった」「新しい豆を追加」 | `src/menu.ts` を書き換え、テストとビルドで確かめ、sitemapのlastmodも更新する |
+| `update-menu` | 「メニュー更新して」(メニュー表の画像を渡す)、「価格変わった」「新しい豆を追加」 | `src/content/menu.ts` を書き換え、テストとビルドで確かめ、sitemapのlastmodも更新する |
 | `seo-files` | 「sitemap更新して」「ドメイン変わった」「SEO確認して」 | sitemap.xml・robots.txt・canonical・OGP・JSON-LD・プリレンダーを保守する |
 | `design-review` | 「デザイン見直して」「文字小さくない？」「スクショで確認して」 | PCとスマホのスクショを撮り、デザイナー役のAIのレビューで指摘がなくなるまで直す |
 

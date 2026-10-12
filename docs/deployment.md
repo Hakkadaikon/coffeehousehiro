@@ -4,7 +4,7 @@
 
 本番はVercelで公開しています。GitHubの `main` へのプッシュとプルリクエストでは、GitHub Actionsが型チェック・テスト・ビルドを実行します。
 
-ドメインが変わったときは、`src/shop.ts`・`index.html`・`public/robots.txt`・`public/sitemap.xml` に書いた本番URLも書き換えてください。
+ドメインが変わったときは、`src/content/shop.ts`・`index.html`・`public/robots.txt`・`public/sitemap.xml` に書いた本番URLも書き換えてください。
 
 ## ほかのホスティングサービスで公開するとき
 

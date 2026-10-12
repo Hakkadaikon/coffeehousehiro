@@ -35,24 +35,24 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 
 ドメインが変わったら、次をすべて書き換える。
 
-- `src/shop.ts`の`SITE_URL`
+- `src/content/shop.ts`の`SITE_URL`
 - `index.html`の`<link rel="canonical">`
 - `index.html`の`og:url`
 - `index.html`のJSON-LDの`@id`・`url`・`logo`
 - `public/robots.txt`の`Sitemap:`
 - `public/sitemap.xml`の`<loc>`
 
-`og:image`とJSON-LDの`image`は、ビルド時に`SITE_URL`と`src/photos.ts`から作るので書き換えなくてよい。書き換えたら`npm test`を実行する。`src/site.test.ts`が、`SITE_URL`とほかの場所のURLが食い違っていないかを確かめる。
+`og:image`とJSON-LDの`image`は、ビルド時に`SITE_URL`と`src/content/photos.ts`から作るので書き換えなくてよい。書き換えたら`npm test`を実行する。`src/seo.test.ts`が、`SITE_URL`とほかの場所のURLが食い違っていないかを確かめる。
 
 ## 店舗情報(NAP)をそろえる
 
-店名・住所・連絡先は、ページ本文とJSON-LDで同じ表記にする。本文の住所・LINE・InstagramのURLは`src/shop.ts`にあり、支払い方法は`src/order.ts`の`PAYMENTS`にある。JSON-LDは手で書いているので、これらを変えたら`index.html`も直す。食い違うと`npm test`が失敗する。店名は`コーヒーhouseヒロ`(半角スペースなし)、住所は`〒712-8046 岡山県倉敷市福田町福田2370-6`(番地の前にスペースを入れない)。
+店名・住所・連絡先は、ページ本文とJSON-LDで同じ表記にする。本文の住所・LINE・InstagramのURLと支払い方法(`PAYMENTS`)は`src/content/shop.ts`にある。JSON-LDは手で書いているので、これらを変えたら`index.html`も直す。食い違うと`npm test`が失敗する。店名は`コーヒーhouseヒロ`(半角スペースなし)、住所は`〒712-8046 岡山県倉敷市福田町福田2370-6`(番地の前にスペースを入れない)。
 
 ## プリレンダーを壊さない
 
 `npm run build`は、通常のビルドのあとに`src/entry-server.tsx`でAppをHTMLに書き出す。続いて`prerender.mjs`が、そのHTMLを`dist/index.html`の`<div id="root"></div>`に差し込む。クライアントは`hydrateRoot`でそのHTMLを引き継ぐ。この仕組みを保つため、次の3点を守る。
 
-- ヒーローの`motion.div`は`initial={false}`のままにする。`initial="hidden"`に戻すと、JSの読み込みが終わるまでロゴとh1が`opacity:0`になる。
+- ヒーロー(`src/sections/Hero.tsx`)の`motion.div`は`initial={false}`のままにする。`initial="hidden"`に戻すと、JSの読み込みが終わるまでロゴとh1が`opacity:0`になる。
 - 描画のたびに値が変わる要素(`new Date()`など)には`suppressHydrationWarning`を付ける。
 - `window`や`localStorage`をコンポーネントの描画中に参照しない。参照するとサーバー側のレンダーでエラーになるので、使うときは`useEffect`の中に入れる。
 
@@ -62,10 +62,10 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 
 | 目印 | 中身 | 元の値 |
 |---|---|---|
-| `__PRICE_MIN__` | 説明文の最安値 | `src/menu.ts` |
-| `__PRICE_RANGE__` | JSON-LDの`priceRange` | `src/menu.ts` |
-| `__HERO_IMAGE_URL__` | `og:image`とJSON-LDの`image` | `src/photos.ts`の`HERO` |
-| `__CONCEPT_IMAGE_URL__` | JSON-LDの`image` | `src/photos.ts`の`CONCEPT` |
+| `__PRICE_MIN__` | 説明文の最安値 | `src/content/menu.ts` |
+| `__PRICE_RANGE__` | JSON-LDの`priceRange` | `src/content/menu.ts` |
+| `__HERO_IMAGE_URL__` | `og:image`とJSON-LDの`image` | `src/content/photos.ts`の`HERO` |
+| `__CONCEPT_IMAGE_URL__` | JSON-LDの`image` | `src/content/photos.ts`の`CONCEPT` |
 
 dev serverでは目印がそのまま見えるが、本番のHTMLには残らない。
 
