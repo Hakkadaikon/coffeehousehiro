@@ -1,5 +1,7 @@
 # 公開
 
+このサイトの更新は、Claude Codeにskillsを使って頼むことをある程度前提にしています。ドメインの変更やSEO用ファイルの保守は `seo-files` skillに頼みます(「ドメイン変わった」「SEO確認して」)。手で作業するときは、以下の手順に沿ってください。詳しくは[AIでの更新](ai-maintenance.md)を見てください。
+
 本番はVercelで公開しています。GitHubの `main` へのプッシュとプルリクエストでは、GitHub Actionsが型チェック・テスト・ビルドを実行します。
 
 ドメインが変わったときは、`src/shop.ts`・`index.html`・`public/robots.txt`・`public/sitemap.xml` に書いた本番URLも書き換えてください。
