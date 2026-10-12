@@ -32,11 +32,11 @@ description: コーヒーhouseヒロのメニュー・価格・送料・改定�
 
 カテゴリの番号(01〜04)は配列の順番から付く。注文フォームの商品IDは「カテゴリ名/品名/補足」なので、同じカテゴリに同じ品名を並べるときは補足を変える。品名や補足を変えると、お客さんの端末に保存されたカート内のその品目は読み込み時に捨てられる。
 
-送料(`SHIPPING_YEN`)は`src/order/pricing.ts`に、LINEのアカウントIDと支払い方法(`PAYMENTS`)は`src/content/shop.ts`にある。
+送料(`SHIPPING_YEN`)は`src/order/pricing.ts`に、LINEのアカウントIDと支払い方法は`src/content/business.yaml`の`shop`にある。送料や支払い方法を変えたら、同じファイルの`legalNotice`(特定商取引法に基づく表記)の「商品代金以外の必要料金」「支払方法」も直す。
 
 ## 3. SEO用の値
 
-`index.html`の説明文の最安値とJSON-LDの`priceRange`は、ビルド時に`MENU`から自動で入る(`index.html`には`__PRICE_MIN__`・`__PRICE_RANGE__`の目印だけがある)。手で直すのは、支払い方法が変わったときのJSON-LDの`paymentAccepted`だけ。`src/content/shop.ts`の`PAYMENTS`と同じ並びで、`, `区切りにする。
+`index.html`の説明文の最安値とJSON-LDの`priceRange`は、ビルド時に`MENU`から自動で入る(`index.html`には`__PRICE_MIN__`・`__PRICE_RANGE__`の目印だけがある)。支払い方法のJSON-LD(`paymentAccepted`)も`business.yaml`から自動で入るので、`index.html`は手で直さない。
 
 そのあと`public/sitemap.xml`の`<lastmod>`を今日の日付にする。手順は`seo-files` skillに従う。
 

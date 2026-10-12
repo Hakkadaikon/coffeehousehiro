@@ -10,7 +10,13 @@
 
 ## 店舗情報・送料
 
-送料は `src/order/pricing.ts` に、住所・メールアドレス・SNSのURL・LINE公式アカウントのID・支払い方法は `src/content/shop.ts` にあります。
+店名・住所・メールアドレス・SNSのURL・LINE公式アカウントのID・支払い方法は `src/content/business.yaml` の `shop` にまとめています。ページ本文と、検索エンジン向けの店舗情報(`index.html` のJSON-LD)は、どちらもビルド時にここから入ります。送料は `src/order/pricing.ts` にあります。
+
+## 特定商取引法に基づく表記
+
+`/legal` のページの表は、`src/content/business.yaml` の `legalNotice` に書いた順で並びます。値は1行で書くか、`- ` で始まる行を並べます(1行が1段落)。
+
+販売事業者・所在地・メールアドレス・支払方法は `shop` と、送料は `src/order/pricing.ts` と同じ値にしてください。店舗情報や送料を変えたときは、この表も合わせて直します。食い違っていたり、法律で必要な項目が欠けていたりすると `npm test` が失敗します。
 
 ## 画像
 

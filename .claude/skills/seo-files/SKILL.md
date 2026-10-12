@@ -46,7 +46,7 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 
 ## 店舗情報(NAP)をそろえる
 
-店名・住所・連絡先は、ページ本文とJSON-LDで同じ表記にする。本文の住所・LINE・InstagramのURLと支払い方法(`PAYMENTS`)は`src/content/shop.ts`にある。JSON-LDは手で書いているので、これらを変えたら`index.html`も直す。食い違うと`npm test`が失敗する。店名は`コーヒーhouseヒロ`(半角スペースなし)、住所は`〒712-8046 岡山県倉敷市福田町福田2370-6`(番地の前にスペースを入れない)。
+店名・住所・連絡先・支払い方法は`src/content/business.yaml`の`shop`にだけ書く。ページ本文も、`index.html`のタイトル・OGP・JSON-LDも、ビルド時にここから入るので、`index.html`に店名や住所を直接書かない。直接書くと`npm test`が失敗する。特定商取引法に基づく表記(同じファイルの`legalNotice`)にも店名・所在地・メールアドレス・支払方法があるので、`shop`を変えたらそちらも合わせて直す。
 
 ## プリレンダーを壊さない
 
@@ -56,12 +56,16 @@ description: コーヒーhouseヒロのsitemap.xml・robots.txt・lastmod・cano
 - 描画のたびに値が変わる要素(`new Date()`など)には`suppressHydrationWarning`を付ける。
 - `window`や`localStorage`をコンポーネントの描画中に参照しない。参照するとサーバー側のレンダーでエラーになるので、使うときは`useEffect`の中に入れる。
 
-## 価格と画像の目印
+## 店舗情報・価格・画像の目印
 
-`index.html`の次の目印は、`prerender.mjs`がビルド時に置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。
+`index.html`の次の目印は、`prerender.mjs`がビルド時に`src/placeholders.ts`の値で置き換える。目印を消したり書き換えたりすると、ビルドがエラーで止まる。値に`"`・`<`・`>`・`&`・`\`が入っていてもビルドが止まる(HTMLとJSONにそのまま入るため)。
 
 | 目印 | 中身 | 元の値 |
 |---|---|---|
+| `__SHOP_NAME__` | タイトル・説明文・OGP・JSON-LDの店名 | `business.yaml`の`shop.name` |
+| `__POSTAL__`・`__REGION__`・`__LOCALITY__`・`__STREET__` | JSON-LDの住所 | `business.yaml`の`shop` |
+| `__EMAIL__`・`__INSTAGRAM_URL__`・`__LINE_URL__` | JSON-LDの`email`・`sameAs` | `business.yaml`の`shop` |
+| `__PAYMENTS__` | JSON-LDの`paymentAccepted` | `business.yaml`の`shop.payments` |
 | `__PRICE_MIN__` | 説明文の最安値 | `src/content/menu.ts` |
 | `__PRICE_RANGE__` | JSON-LDの`priceRange` | `src/content/menu.ts` |
 | `__HERO_IMAGE_URL__` | `og:image`とJSON-LDの`image` | `src/content/photos.ts`の`HERO` |

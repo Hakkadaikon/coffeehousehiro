@@ -16,8 +16,11 @@
 src/
   App.tsx              ページ全体。セクションを上から並べるだけ
   main.tsx             ブラウザでの起動(プリレンダーしたHTMLを引き継ぐ)
-  entry-server.tsx     ビルド時のプリレンダーと、index.html の目印に入れる値
+  LegalNotice.tsx      特定商取引法に基づく表記のページ(/legal)。JavaScript は読み込まない
+  entry-server.tsx     ビルド時のプリレンダー
+  placeholders.ts      index.html の目印に入れる値
   content/             お店のデータ。メニュー、写真、店舗情報、ナビと注文手順の文言
+    business.yaml      店舗情報と特定商取引法に基づく表記。shop.ts がこれを読み込んで検査する
   order/               注文の計算と検査。React に依存しない関数だけを置く
     pricing.ts         金額と送料
     form.ts            お届け先の入力の整形と検査
@@ -39,6 +42,7 @@ src/
 - 計算や検査は `order/` に関数として置き、テストを書きます。テストは `node --test` で動かすので、`.tsx` ではなく `.ts` に置きます。
 - 注文フォームの状態は `OrderForm.tsx` に集め、子の部品にはpropsで渡します。状態管理のライブラリやcontextは使っていません。
 - フォント(しっぽり明朝)は `@fontsource/shippori-mincho` からこのサイトで配信しています。外部のサーバーから読み込むものを足すと、`vercel.json` のCSPで止まり、`src/seo.test.ts` も失敗します。
+- `.yaml` は中身をJSONにしたデータとして読み込みます。ビルドでは `vite.config.ts` のプラグインが、テストでは `yaml-loader.mjs` が変換します。
 - 新しいタブで開くリンクは `components/ExternalLink.tsx` を使います。`rel="noopener noreferrer"` の付け忘れを防ぐためです。
 
 ### クラスを書くときの注意
@@ -53,6 +57,8 @@ npm run dev
 ```
 
 開発サーバーは `http://localhost:3000` で起動します。
+
+特定商取引法に基づく表記のページ(`/legal`)は、ビルド時に中身を書き出すだけなので、開発サーバーでは空白になります。確認するときは `npm run build` のあと `npm run preview` で開いてください。
 
 ## テスト
 
