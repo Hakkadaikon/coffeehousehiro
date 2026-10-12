@@ -71,7 +71,7 @@ dev serverでは目印がそのまま見えるが、本番のHTMLには残らな
 
 ## セキュリティヘッダー
 
-`vercel.json`でCSPなどのヘッダーを全ページに付けている。外部のスクリプトや画像を足すときは、CSPの`script-src`・`img-src`などに許可を足さないと読み込めない。motionがSSRで出す`style`属性のために`style-src-attr 'unsafe-inline'`が要る。
+`vercel.json`でCSPなどのヘッダーを全ページに付けている。CSPは同じドメインからの読み込みだけを許可していて、フォントもこのサイトから配信している。外部のスクリプトや画像を足すときは、CSPに許可を足し、`src/seo.test.ts`の外部読み込みのテストと、フッターの「このサイトでの情報の取り扱い」も見直す。motionがSSRで出す`style`属性のために`style-src-attr 'unsafe-inline'`が要る。
 
 ## 確かめる
 

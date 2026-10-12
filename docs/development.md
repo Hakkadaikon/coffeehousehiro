@@ -38,6 +38,7 @@ src/
 - 文言や値を変えるだけなら `content/` を直します。セクションのファイルには、レイアウトとクラスだけを書きます。
 - 計算や検査は `order/` に関数として置き、テストを書きます。テストは `node --test` で動かすので、`.tsx` ではなく `.ts` に置きます。
 - 注文フォームの状態は `OrderForm.tsx` に集め、子の部品にはpropsで渡します。状態管理のライブラリやcontextは使っていません。
+- フォント(しっぽり明朝)は `@fontsource/shippori-mincho` からこのサイトで配信しています。外部のサーバーから読み込むものを足すと、`vercel.json` のCSPで止まり、`src/seo.test.ts` も失敗します。
 - 新しいタブで開くリンクは `components/ExternalLink.tsx` を使います。`rel="noopener noreferrer"` の付け忘れを防ぐためです。
 
 ### クラスを書くときの注意
