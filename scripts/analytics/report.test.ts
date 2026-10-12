@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildReport, lastWeek, recentWeek } from "./report.ts";
+import { buildReport, lastWeek, queryRange, recentWeek } from "./report.ts";
 
 test("集計期間は、実行日の前日までの7日間（日本時間）", () => {
 	// 月曜 9:00 JST に動いたとき、前の週の月曜〜日曜
@@ -78,4 +78,11 @@ test("期間中のアクセスが1件もないときは、そのことを書き�
 	const empty = { ...data, days: [], pages: [], referrers: [], devices: [], countries: [] };
 	assert.match(buildReport(empty), /この期間のアクセスはありません/);
 	assert.doesNotMatch(buildReport(data), /この期間のアクセスはありません/);
+});
+
+test("API には最終日の終わりまでを渡す（日付だけだと最終日の 0:00 で切れる）", () => {
+	assert.deepEqual(queryRange({ since: "2026-10-06", until: "2026-10-12" }), {
+		since: "2026-10-06T00:00:00.000Z",
+		until: "2026-10-12T23:59:59.999Z",
+	});
 });

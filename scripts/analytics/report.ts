@@ -32,6 +32,15 @@ export function recentWeek(now: Date): Range {
 	return { since: isoDate(today - 6 * 86400e3), until: isoDate(today) };
 }
 
+/**
+ * API に渡す期間。since/until は日時として扱われ、日付だけだと最終日の 0:00(UTC)で切れてしまうので、最終日の終わりまでを渡す。
+ * 日別の集計は UTC の日付で区切られる(日本時間の 9:00 が日の変わり目)
+ */
+export const queryRange = ({ since, until }: Range): Range => ({
+	since: `${since}T00:00:00.000Z`,
+	until: `${until}T23:59:59.999Z`,
+});
+
 const md = (date: string) => `${date.slice(5, 7)}/${date.slice(8, 10)}`;
 const sum = (rows: Row[], key: keyof Count) => rows.reduce((n, r) => n + r[key], 0);
 
