@@ -1,5 +1,6 @@
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { LINE_CHAT_URL } from "../content/shop.ts";
+import { ORDER_NOTICE } from "../content/site.ts";
 import { headingCls } from "./controls.tsx";
 import { useCopy } from "./useCopy.ts";
 
@@ -31,6 +32,17 @@ export function MessagePanel({
 					商品をカートに追加し、お名前・郵便番号・ご住所・お支払い方法を入力すると送信できます。
 				</p>
 			)}
+			<p className="text-xs md:text-sm text-roast/70 mt-3 mb-4 text-pretty">
+				{ORDER_NOTICE}
+				詳しくは
+				<a
+					href="/legal"
+					className="underline underline-offset-4 decoration-roast/40 hover:text-espresso transition-colors"
+				>
+					特定商取引法に基づく表記
+				</a>
+				をご覧ください。
+			</p>
 			<ExternalLink
 				href={canSend ? LINE_CHAT_URL : undefined}
 				onClick={canSend ? copy : undefined}
@@ -42,7 +54,7 @@ export function MessagePanel({
 				コピーしてLINEを開く
 			</ExternalLink>
 			<p className="text-xs md:text-sm text-roast/70 mt-2 text-pretty">
-				注文メッセージをコピーして、LINEのトーク画面を開きます。入力欄に貼り付けて送信すると、ご注文がお店に届きます。
+				注文メッセージをコピーして、LINEのトーク画面を開きます。入力欄に貼り付けて送信すると、ご注文の内容がお店に届きます。折り返しお送りするお支払いのご案内をご確認のうえ、お支払いいただいた時点でご注文が確定します。
 			</p>
 			<button
 				type="button"

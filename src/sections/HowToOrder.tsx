@@ -1,7 +1,7 @@
 import { Mail, MessageCircle } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { EMAIL, LINE_URL } from "../content/shop.ts";
-import { ORDER_STEPS } from "../content/site.ts";
+import { ORDER_NOTICE, ORDER_STEPS } from "../content/site.ts";
 import { OrderForm } from "../order-form/OrderForm.tsx";
 
 /** ご注文方法。手順、かんたん注文フォーム、LINE とメールの問い合わせ先 */
@@ -17,6 +17,18 @@ export function HowToOrder() {
 				</div>
 
 				<OrderSteps />
+
+				<p className="-mt-8 mb-20 max-w-3xl md:px-4 text-xs md:text-sm text-paper/70 leading-[1.9] tracking-wide text-pretty">
+					{ORDER_NOTICE}
+					詳しくは
+					<a
+						href="/legal"
+						className="underline underline-offset-4 decoration-paper/30 hover:text-paper hover:decoration-paper/70 transition-colors"
+					>
+						特定商取引法に基づく表記
+					</a>
+					をご覧ください。
+				</p>
 
 				<OrderForm />
 
