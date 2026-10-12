@@ -16,7 +16,13 @@ test("どの品目もサイズと価格の数がそろい、価格は正の整�
 		for (const item of c.items) {
 			const where = `${c.title} ${item.name}`;
 			assert.equal(item.prices.length, (item.sizes ?? c.sizes).length, where);
-			for (const p of item.prices) assert.ok(p === null || (Number.isInteger(p) && p > 0), where);
+			const ok = (n: number) => Number.isInteger(n) && n > 0;
+			for (const p of item.prices) {
+				assert.ok(
+					p === null || (typeof p === "number" ? ok(p) : ok(p.min) && ok(p.max) && p.min < p.max),
+					where,
+				);
+			}
 		}
 	}
 });
@@ -36,8 +42,10 @@ test("商品IDの区切りに使う / を名前に入れない", () => {
 	}
 });
 
-test("価格帯は時価を除いた全価格の最安値と最高値", () => {
-	const all = MENU.flatMap((c) => c.items.flatMap((i) => i.prices)).filter((p) => p !== null);
+test("価格帯は時価を除いた全価格の最安値と最高値（幅のある価格は両端を含める）", () => {
+	const all = MENU.flatMap((c) => c.items.flatMap((i) => i.prices)).flatMap((p) =>
+		p === null ? [] : typeof p === "number" ? [p] : [p.min, p.max],
+	);
 	const [min, max] = priceRange();
 	assert.equal(min, Math.min(...all));
 	assert.equal(max, Math.max(...all));
@@ -93,4 +101,10 @@ test("注文フォームの商品はメニューのカテゴリ順にまとめ�
 		groups.flatMap(([, items]) => items),
 		catalog(),
 	);
+});
+
+test("ドリップバッグのスペシャル 5枚セットは ¥1,000〜¥1,500", () => {
+	const drip = MENU.find((c) => c.title === "ドリップバッグ");
+	const special = drip?.items.find((i) => i.name === "スペシャル 5枚セット");
+	assert.deepEqual(special?.prices, [{ min: 1000, max: 1500 }]);
 });

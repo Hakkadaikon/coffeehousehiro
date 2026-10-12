@@ -1,5 +1,6 @@
 // メニューの唯一の元データ。サイトのメニュー表示・注文フォーム・SEO の価格帯はすべてここから作る。
 import type { CatalogItem } from "../order/cart.ts";
+import type { Price } from "../order/pricing.ts";
 
 export const MENU_START_DATE = "2026年10月1日";
 export const GRINDS = ["豆", "粉"] as const;
@@ -12,8 +13,8 @@ export const DEFAULT_ROAST: Roast = "おまかせ";
 export type MenuItem = {
 	name: string;
 	sub: string;
-	/** サイズごとの価格。null は時価・要相談 */
-	prices: (number | null)[];
+	/** サイズごとの価格。null は時価・要相談、{ min, max } は価格に幅がある */
+	prices: Price[];
 	/** カテゴリと違うサイズのときだけ指定する */
 	sizes?: string[];
 	/** 選べる焙煎度を絞るときだけ指定する */
@@ -85,7 +86,7 @@ export const MENU: MenuCategory[] = [
 		sizes: ["1セット"],
 		items: [
 			{ name: "シングル 5枚セット", sub: "上記シングルから", prices: [570] },
-			{ name: "スペシャル 5枚セット", sub: "", prices: [null] },
+			{ name: "スペシャル 5枚セット", sub: "", prices: [{ min: 1000, max: 1500 }] },
 			{ name: "おまかせ 5枚セット", sub: "", prices: [570] },
 		],
 	},
@@ -123,8 +124,8 @@ export const catalog = (): CatalogItem[] =>
 
 /** SEO 用の価格帯 [最安値, 最高値] */
 export const priceRange = () => {
-	const all = MENU.flatMap((c) => c.items.flatMap((i) => i.prices)).filter(
-		(p): p is number => p !== null,
+	const all = MENU.flatMap((c) => c.items.flatMap((i) => i.prices)).flatMap((p) =>
+		p === null ? [] : typeof p === "number" ? [p] : [p.min, p.max],
 	);
 	return [Math.min(...all), Math.max(...all)] as const;
 };

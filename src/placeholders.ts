@@ -15,7 +15,7 @@ import {
 } from "./content/shop.ts";
 import { yen } from "./order/pricing.ts";
 
-/** JSON-LD のメニュー(Menu → MenuSection → MenuItem → Offer)。時価の品目は価格を載せない */
+/** JSON-LD のメニュー(Menu → MenuSection → MenuItem → Offer)。時価の品目は価格を載せず、幅のある価格は最小〜最大で載せる */
 const menuJsonLd = () => ({
 	"@type": "Menu",
 	name: "コーヒー豆・ドリップバッグ",
@@ -24,8 +24,23 @@ const menuJsonLd = () => ({
 		name: c.title,
 		hasMenuItem: c.items.map((item) => {
 			const sizes = item.sizes ?? c.sizes;
-			const offers = item.prices.flatMap((price, i) =>
-				price === null ? [] : [{ "@type": "Offer", name: sizes[i], price, priceCurrency: "JPY" }],
+			const offers = item.prices.flatMap<object>((price, i) =>
+				price === null
+					? []
+					: typeof price === "number"
+						? [{ "@type": "Offer", name: sizes[i], price, priceCurrency: "JPY" }]
+						: [
+								{
+									"@type": "Offer",
+									name: sizes[i],
+									priceSpecification: {
+										"@type": "PriceSpecification",
+										minPrice: price.min,
+										maxPrice: price.max,
+										priceCurrency: "JPY",
+									},
+								},
+							],
 			);
 			return {
 				"@type": "MenuItem",
