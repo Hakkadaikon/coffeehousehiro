@@ -14,51 +14,52 @@ export function Concept() {
 					viewport={{ once: true, margin: "-100px" }}
 					variants={fadeIn}
 				>
-					<h2 className="font-serif text-2xl sm:text-3xl md:text-[44px] mb-16 md:mb-20 text-center tracking-wider md:tracking-widest leading-loose">
+					<h2 className="font-serif text-2xl sm:text-3xl md:text-[44px] mb-10 md:mb-14 text-center tracking-wider md:tracking-widest leading-loose">
 						<span className="inline-block">こだわりの一杯を、</span>
 						<span className="inline-block">手作りの赤い小屋から。</span>
 					</h2>
-					<div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
-						<div className="relative overflow-hidden group">
-							<div className="absolute inset-0 bg-espresso/5 z-10 group-hover:bg-transparent transition-colors duration-700"></div>
-							<img
-								src={CONCEPT.src}
-								alt="倉敷市福田町にある手作りの赤い小屋の外観"
-								width={CONCEPT.w}
-								height={CONCEPT.h}
-								loading="lazy"
-								decoding="async"
-								className="w-full h-auto object-cover filter grayscale-[40%] contrast-[1.1] group-hover:scale-105 transition-transform duration-1000 ease-out"
-							/>
-						</div>
-						<div className="space-y-7 font-serif leading-[2] text-roast tracking-wide lg:tracking-normal text-pretty pt-2">
-							<p className="text-base md:text-lg lg:text-xl">
-								コーヒーhouseヒロの店主は、月曜日から金曜日はごく普通のサラリーマン。しかし土日・祝日になると、岡山県倉敷市の小さな赤い小屋で、情熱を持ったロースターへと姿を変えます。
+					<div className="-mx-6 sm:mx-0 overflow-hidden group">
+						<img
+							src={CONCEPT.src}
+							alt="倉敷市福田町にある手作りの赤い小屋の外観"
+							width={CONCEPT.w}
+							height={CONCEPT.h}
+							loading="lazy"
+							decoding="async"
+							className="w-full aspect-[4/3] md:aspect-[16/9] object-cover object-[50%_55%] motion-safe:group-hover:scale-105 transition-transform duration-1000 ease-out"
+						/>
+					</div>
+					<div className="max-w-2xl mx-auto mt-12 md:mt-16 space-y-7 font-serif leading-[2] text-roast tracking-wide text-pretty">
+						<p className="text-base md:text-lg lg:text-xl">
+							コーヒーhouseヒロの店主は、月曜日から金曜日はごく普通のサラリーマン。しかし土日・祝日になると、岡山県倉敷市の小さな赤い小屋で、情熱を持ったロースターへと姿を変えます。
+						</p>
+						<p className="text-base md:text-lg lg:text-xl">
+							ブラックコーヒーとアイスコーヒーを専門に扱っており、豆本来の個性を引き出す焙煎を丹念に行っています。
+						</p>
+					</div>
+					<div className="max-w-3xl mx-auto mt-16 md:mt-20 pt-10 md:pt-12 border-t border-espresso/10 grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+						<div className="space-y-3">
+							<p className="text-xs md:text-sm tracking-widest uppercase text-caramel font-sans">
+								Qualification
 							</p>
-							<p className="text-base md:text-lg lg:text-xl">
-								ブラックコーヒーとアイスコーヒーを専門に扱っており、豆本来の個性を引き出す焙煎を丹念に行っています。
+							<p className="font-serif text-base md:text-lg tracking-widest leading-relaxed text-roast">
+								<span className="inline-block">J.C.Q.A.認定</span>
+								<span className="inline-block">コーヒーインストラクター2級</span>
 							</p>
-							<div className="pt-6 border-t border-espresso/10 space-y-3">
-								<p className="text-xs md:text-sm tracking-widest uppercase text-caramel font-sans">
-									Qualification
-								</p>
-								<p className="font-serif text-sm md:text-lg tracking-widest leading-relaxed">
-									J.C.Q.A.認定コーヒーインストラクター2級
-								</p>
-								<p className="font-sans text-xs md:text-base text-roast/75 tracking-wider leading-relaxed">
-									たしかな知識と技術で、最高の一杯をお届けします。
-								</p>
-								<img
-									src={CERTIFICATE.src}
-									alt={CERTIFICATE.alt}
-									width={CERTIFICATE.w}
-									height={CERTIFICATE.h}
-									loading="lazy"
-									decoding="async"
-									className="w-full max-w-md h-auto mt-5 shadow-sm"
-								/>
-							</div>
+							<p className="font-sans text-sm md:text-base text-roast/75 tracking-wider leading-relaxed">
+								<span className="inline-block">たしかな知識と技術で、</span>
+								<span className="inline-block">最高の一杯をお届けします。</span>
+							</p>
 						</div>
+						<img
+							src={CERTIFICATE.src}
+							alt={CERTIFICATE.alt}
+							width={CERTIFICATE.w}
+							height={CERTIFICATE.h}
+							loading="lazy"
+							decoding="async"
+							className="w-full h-auto shadow-sm"
+						/>
 					</div>
 				</motion.div>
 			</div>
