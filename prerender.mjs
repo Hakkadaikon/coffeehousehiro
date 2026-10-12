@@ -18,8 +18,11 @@ for (const { file, render, fill } of pages) {
 	html = html.replace(root, `<div id="root">${render()}</div>`);
 	for (const [key, value] of Object.entries(fill)) {
 		if (!html.includes(key)) throw new Error(`${key} not found in ${file}`);
-		// 値は HTML の属性と JSON の文字列にそのまま入るので、エスケープが要る文字は通さない
-		if (/["<>&\\]/.test(value)) throw new Error(`${key} must not contain " < > & \\: ${value}`);
+		// 値は HTML の属性と JSON の文字列にそのまま入るので、エスケープが要る文字は通さない。
+		// _JSON__ の目印は JSON の値そのもので、placeholders.ts が「<」をエスケープ済み
+		if (key.endsWith("_JSON__") ? value.includes("<") : /["<>&\\]/.test(value)) {
+			throw new Error(`${key} has characters that need escaping: ${value}`);
+		}
 		html = html.replaceAll(key, value);
 	}
 	const leftover = html.match(/__[A-Z_]+__/);

@@ -1,6 +1,6 @@
 // index.html の目印(__X__)に入れる値。ビルド時に prerender.mjs が埋める。
 // 店舗情報は business.yaml、価格は menu.ts、画像は photos.ts の値を使う。
-import { priceRange } from "./content/menu.ts";
+import { MENU, priceRange } from "./content/menu.ts";
 import { CONCEPT, HERO } from "./content/photos.ts";
 import {
 	ADDRESS_PARTS,
@@ -13,6 +13,30 @@ import {
 	SITE_URL,
 } from "./content/shop.ts";
 import { yen } from "./order/pricing.ts";
+
+/** JSON-LD のメニュー(Menu → MenuSection → MenuItem → Offer)。時価の品目は価格を載せない */
+const menuJsonLd = () => ({
+	"@type": "Menu",
+	name: "コーヒー豆・ドリップバッグ",
+	hasMenuSection: MENU.map((c) => ({
+		"@type": "MenuSection",
+		name: c.title,
+		hasMenuItem: c.items.map((item) => {
+			const sizes = item.sizes ?? c.sizes;
+			const offers = item.prices.flatMap((price, i) =>
+				price === null ? [] : [{ "@type": "Offer", name: sizes[i], price, priceCurrency: "JPY" }],
+			);
+			return {
+				"@type": "MenuItem",
+				name: item.sub ? `${item.name}（${item.sub}）` : item.name,
+				...(offers.length > 0 && { offers }),
+			};
+		}),
+	})),
+});
+
+/** script タグの中に置く JSON。「<」を \u003c にして、</script> で閉じられないようにする */
+const json = (value: unknown) => JSON.stringify(value).replaceAll("<", "\\u003c");
 
 export const placeholders = () => {
 	const [min, max] = priceRange();
@@ -29,6 +53,7 @@ export const placeholders = () => {
 		__PAYMENTS__: PAYMENTS.join(", "),
 		__PRICE_MIN__: yen(min),
 		__PRICE_RANGE__: `${yen(min)}〜${yen(max)}`,
+		__MENU_JSON__: json(menuJsonLd()),
 		__HERO_IMAGE_URL__: url(HERO.src),
 		__CONCEPT_IMAGE_URL__: url(CONCEPT.src),
 	};

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { test } from "node:test";
+import { MENU } from "./content/menu.ts";
 import { PHOTOS } from "./content/photos.ts";
 import {
 	ADDRESS,
@@ -106,5 +107,32 @@ test("index.html には店名・住所・連絡先を直接書かず、business.
 	for (const v of [SHOP_NAME, POSTAL, ADDRESS_PARTS.street, EMAIL, INSTAGRAM_URL, LINE_URL]) {
 		assert.ok(!html.includes(v), v);
 		assert.ok(filled.includes(v), v);
+	}
+});
+
+test("検索エンジン向けのメニューは、MENU のカテゴリ・品目・サイズ・価格と同じ（時価の品目は価格を載せない）", () => {
+	const menu = ld.hasMenu;
+	assert.equal(menu["@type"], "Menu");
+	assert.deepEqual(
+		menu.hasMenuSection.map((s: { name: string }) => s.name),
+		MENU.map((c) => c.title),
+	);
+	MENU.forEach((c, i) => {
+		const items = menu.hasMenuSection[i].hasMenuItem;
+		assert.equal(items.length, c.items.length, c.title);
+		c.items.forEach((item, j) => {
+			const sizes = item.sizes ?? c.sizes;
+			const expected = item.prices.flatMap((price, k) =>
+				price === null ? [] : [{ "@type": "Offer", name: sizes[k], price, priceCurrency: "JPY" }],
+			);
+			assert.ok(items[j].name.startsWith(item.name), item.name);
+			assert.deepEqual(items[j].offers ?? [], expected, item.name);
+		});
+	});
+});
+
+test("JSON の目印に入れる値は、HTML の中で script を閉じられない", () => {
+	for (const [key, value] of Object.entries(placeholders())) {
+		if (key.endsWith("_JSON__")) assert.doesNotMatch(value, /</, key);
 	}
 });
