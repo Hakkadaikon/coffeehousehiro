@@ -3,6 +3,15 @@
 type Count = { pageviews: number; visitors: number };
 export type Row = Count & Record<string, unknown>;
 export type Range = { since: string; until: string };
+type Funnel = { opened: number; sent: number };
+/** PostHog から集計した、ページの中での動き */
+export type Behavior = {
+	/** 押されたボタン・リンクの文言と回数(多い順) */
+	buttons: [string, number][];
+	forms: { order: Funnel; reserve: Funnel };
+	/** ページを離れたときのスクロール位置ごとの回数。最後まで(90%以上)・半分まで(50%以上)・最初だけ */
+	scroll: { end: number; half: number; top: number };
+};
 export type ReportData = {
 	range: Range;
 	/** 期間全体の数。訪問者は期間を通した人数 */
@@ -14,6 +23,8 @@ export type ReportData = {
 	referrers: Row[];
 	devices: Row[];
 	countries: Row[];
+	/** PostHog の集計。取れなかったときは null、PostHog を使わないときは undefined */
+	behavior?: Behavior | null;
 };
 
 const DISCORD_LIMIT = 2000;
@@ -77,6 +88,23 @@ const top = (rows: Row[], key: string, unit: (r: Row) => string) =>
 		? "なし"
 		: rows.map((r) => `${String(r[key] || "直接・不明")} ${unit(r)}`).join(" / ");
 
+const funnel = ({ opened, sent }: Funnel) => `開いた ${opened}人 → 送った ${sent}人`;
+
+function behaviorLines(b: Behavior | null) {
+	if (!b) return ["", "（PostHog の集計は取得できませんでした）"];
+	const { end, half, top } = b.scroll;
+	const all = end + half + top;
+	const pct = (n: number) => `${Math.round((n / all) * 100)}%`;
+	return [
+		"",
+		"**ページ内の動き（PostHog）**",
+		`**押されたボタン** ${b.buttons.length === 0 ? "なし" : b.buttons.map(([t, n]) => `${t} ${n}回`).join(" / ")}`,
+		`**注文フォーム** ${funnel(b.forms.order)}`,
+		`**来店予約フォーム** ${funnel(b.forms.reserve)}`,
+		`**どこまで読まれたか** ${all === 0 ? "なし" : `最後まで ${pct(end)} / 半分まで ${pct(half)} / 最初だけ ${pct(top)}`}`,
+	];
+}
+
 export function buildReport({
 	range,
 	total,
@@ -86,6 +114,7 @@ export function buildReport({
 	referrers,
 	devices,
 	countries,
+	behavior,
 }: ReportData) {
 	const people = (r: Row) => `${r.visitors}人`;
 	const oneDay = Date.parse(range.until) - Date.parse(range.since) <= 86400e3;
@@ -110,6 +139,7 @@ export function buildReport({
 		`**リファラー（参照元）** ${top(referrers, "referrerHostname", people)}`,
 		`**端末** ${top(devices, "deviceType", people)}`,
 		`**国・地域** ${top(countries, "country", people)}`,
+		...(behavior === undefined ? [] : behaviorLines(behavior)),
 	];
 	const text = lines.join("\n");
 	return text.length <= DISCORD_LIMIT ? text : `${text.slice(0, DISCORD_LIMIT - 1)}…`;

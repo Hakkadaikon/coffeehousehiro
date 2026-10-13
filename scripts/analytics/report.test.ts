@@ -139,3 +139,34 @@ test("1時間ごとの数は、API の上限（168時間）に収まるよう分
 		}
 	}
 });
+
+const behavior = {
+	buttons: [
+		["注文フォーム", 14],
+		["来店予約フォーム", 6],
+	] as [string, number][],
+	forms: { order: { opened: 9, sent: 2 }, reserve: { opened: 4, sent: 1 } },
+	scroll: { end: 7, half: 6, top: 7 },
+};
+
+test("PostHog の集計があれば、押されたボタン・フォームの進み具合・読まれた深さを書く", () => {
+	const text = buildReport({ ...data, behavior });
+	assert.match(text, /\*\*ページ内の動き（PostHog）\*\*/);
+	assert.match(text, /押されたボタン\*\* 注文フォーム 14回 \/ 来店予約フォーム 6回$/m);
+	assert.match(text, /注文フォーム\*\* 開いた 9人 → 送った 2人$/m);
+	assert.match(text, /来店予約フォーム\*\* 開いた 4人 → 送った 1人$/m);
+	// 割合は四捨五入
+	assert.match(text, /どこまで読まれたか\*\* 最後まで 35% \/ 半分まで 30% \/ 最初だけ 35%$/m);
+});
+
+test("PostHog の集計が空なら「なし」、取れなかったときはそう書き添える", () => {
+	const empty = {
+		buttons: [],
+		forms: { order: { opened: 0, sent: 0 }, reserve: { opened: 0, sent: 0 } },
+		scroll: { end: 0, half: 0, top: 0 },
+	};
+	const text = buildReport({ ...data, behavior: empty });
+	assert.match(text, /押されたボタン\*\* なし$/m);
+	assert.match(text, /どこまで読まれたか\*\* なし$/m);
+	assert.match(buildReport({ ...data, behavior: null }), /PostHog の集計は取得できませんでした/);
+});
