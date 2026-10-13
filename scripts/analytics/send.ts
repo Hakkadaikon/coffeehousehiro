@@ -78,13 +78,17 @@ async function behavior(): Promise<Behavior | null> {
 	const sent = (form: string) =>
 		people(`elements_chain LIKE '%attr__id="${form}"%' AND properties.$el_text LIKE '%コピー%'`);
 	try {
-		const [buttons, [forms], [scroll]] = await Promise.all([
+		// リンク先で数える。LINE は友だち追加の lin.ee だけ(フォームから開く line.me はコピーの数に入っている)
+		const opened = (host: string) =>
+			`countIf(elements_chain LIKE '%${host}%'), ${people(`elements_chain LIKE '%${host}%'`)}`;
+		const [buttons, [forms], [links], [scroll]] = await Promise.all([
 			hogql(
 				`SELECT properties.$el_text AS label, count() AS n ${clicks} AND notEmpty(coalesce(label, '')) GROUP BY label ORDER BY n DESC LIMIT 10`,
 			),
 			hogql(
 				`SELECT ${people("elements_chain LIKE '%order-form%'")}, ${sent("order-form")}, ${people("elements_chain LIKE '%reserve-form%'")}, ${sent("reserve-form")} ${clicks}`,
 			),
+			hogql(`SELECT ${opened("instagram.com")}, ${opened("lin.ee")} ${clicks}`),
 			hogql(
 				`SELECT countIf(s >= 0.9), countIf(s >= 0.5 AND s < 0.9), countIf(s < 0.5) FROM (SELECT toFloat(properties.$prev_pageview_max_scroll_percentage) AS s FROM events WHERE event = '$pageleave' AND ${when})`,
 			),
@@ -99,6 +103,10 @@ async function behavior(): Promise<Behavior | null> {
 			forms: {
 				order: { opened: n(forms, 0), sent: n(forms, 1) },
 				reserve: { opened: n(forms, 2), sent: n(forms, 3) },
+			},
+			links: {
+				instagram: { clicks: n(links, 0), people: n(links, 1) },
+				line: { clicks: n(links, 2), people: n(links, 3) },
 			},
 			scroll: { end: n(scroll, 0), half: n(scroll, 1), top: n(scroll, 2) },
 		};
