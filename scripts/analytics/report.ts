@@ -36,6 +36,19 @@ export function recent(now: Date, days: number): Range {
 	};
 }
 
+/** 1時間ごとの数を取る期間を、API の上限(168時間)に収まるよう6日ずつ正時で分ける */
+export function hourChunks({ since, until }: Range): Range[] {
+	const chunks: Range[] = [];
+	let start = since;
+	for (;;) {
+		const next = Math.floor(Date.parse(start) / 3600e3) * 3600e3 + 6 * 86400e3;
+		if (next >= Date.parse(until)) return [...chunks, { since: start, until }];
+		const end = new Date(next).toISOString();
+		chunks.push({ since: start, until: end });
+		start = end;
+	}
+}
+
 const md = (date: string) => `${date.slice(5, 7)}/${date.slice(8, 10)}`;
 const mdw = (date: string) => `${md(date)}（${WEEKDAYS[new Date(date).getUTCDay()]}）`;
 /** 日時を日本時間の「10/12（月）20:00」に */

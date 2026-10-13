@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildReport, last24Hours, recent } from "./report.ts";
+import { buildReport, hourChunks, last24Hours, recent } from "./report.ts";
 
 test("集計するのは、直近の 20:00（日本時間）までの24時間", () => {
 	// 20:00 JST に動いたとき、前日 20:00 から今まで
@@ -121,4 +121,21 @@ test("期間中のアクセスが1件もないときは、そのことを書き�
 	};
 	assert.match(buildReport(empty), /この期間のアクセスはありません/);
 	assert.doesNotMatch(buildReport(data), /この期間のアクセスはありません/);
+});
+
+test("1時間ごとの数は、API の上限（168時間）に収まるよう分けて取る。区切りは正時で、すき間なくつながる", () => {
+	for (const days of [1, 7, 30]) {
+		const range = recent(new Date("2026-10-13T05:37:00Z"), days);
+		const chunks = hourChunks(range);
+		assert.equal(chunks[0].since, range.since);
+		assert.equal(chunks.at(-1)?.until, range.until);
+		for (const [i, c] of chunks.entries()) {
+			// API は始まりを正時に切り下げるので、その分を見込んでも 168時間以内
+			assert.ok(Date.parse(c.until) - Date.parse(c.since) <= 167 * 3600e3);
+			if (i > 0) {
+				assert.equal(c.since, chunks[i - 1].until);
+				assert.equal(Date.parse(c.since) % 3600e3, 0);
+			}
+		}
+	}
 });
