@@ -16,11 +16,11 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 
 集める情報と注文フォームの入力内容の扱いは、フッターの「このサイトでの情報の取り扱い」(`src/sections/SiteFooter.tsx`)に書いています。解析の設定や、外部に送る情報を変えたときは、ここも直してください。
 
-### 週間アクセスレポート(Discord)
+### 毎日のアクセスレポート(Discord)
 
-毎週月曜の9:00(日本時間)に、先週(月曜〜日曜)のアクセスをDiscordに送ります。GitHubの「Actions」タブで「Weekly analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、今日を含む直近7日間を集計します。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
+毎日9:00(日本時間)に、前日のアクセスをDiscordに送ります。Vercelは日の区切りをUTCで数えるので、「前日」は前日9:00から当日8:59まで(日本時間)です。GitHubの「Actions」タブで「Daily analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、今日を含む直近7日間を集計します。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
 
-送る内容は、訪問者数とページビュー数、日別の数、よく見られたページ、リファラー(参照元)、端末、国・地域です。訪問者は日ごとに数えるので、週の合計は延べ人数になります。
+送る内容は、訪問者数とページビュー数、よく見られたページ、リファラー(参照元)、端末、国・地域です。手動で7日間を送るときは、日別の数も付けます。訪問者は日ごとに数えるので、7日間の合計は延べ人数になります。
 
 動かすには、GitHubのリポジトリの Settings → Secrets and variables → Actions に、次のSecretsを登録します。
 
