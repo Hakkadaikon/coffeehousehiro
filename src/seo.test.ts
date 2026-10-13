@@ -99,6 +99,22 @@ test("ページの表示に外部のサーバーを使わない（フォント�
 	assert.doesNotMatch(csp, /https?:/);
 });
 
+test("PostHog には自分のドメインの /ingest 経由で送り、cookie・画面の録画・入力欄の操作は使わない", () => {
+	const rewrites = JSON.parse(read("vercel.json")).rewrites;
+	assert.deepEqual(rewrites, [
+		{ source: "/ingest/static/:path*", destination: "https://us-assets.i.posthog.com/static/:path*" },
+		{ source: "/ingest/:path*", destination: "https://us.i.posthog.com/:path*" },
+	]);
+	const main = read("src/main.tsx");
+	// 外部からスクリプトを読み込まない版
+	assert.ok(main.includes('import("posthog-js/dist/module.no-external")'));
+	assert.ok(main.includes('api_host: "/ingest"'));
+	assert.ok(main.includes('cookieless_mode: "always"'));
+	assert.ok(main.includes("disable_session_recording: true"));
+	// クリックを記録するのはリンクとボタンだけ。入力欄やプレビューの文は送らない
+	assert.ok(main.includes('element_allowlist: ["a", "button"]'));
+});
+
 test("特定商取引法に基づく表記のページはビルドに含め、フッターからリンクし、検索結果には出さない", () => {
 	assert.match(read("vite.config.ts"), /"legal\.html"/);
 	assert.match(read("legal.html"), /<meta name="robots" content="noindex" \/>/);

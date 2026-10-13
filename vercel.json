@@ -6,6 +6,13 @@
 			"main": true
 		}
 	},
+	"rewrites": [
+		{
+			"source": "/ingest/static/:path*",
+			"destination": "https://us-assets.i.posthog.com/static/:path*"
+		},
+		{ "source": "/ingest/:path*", "destination": "https://us.i.posthog.com/:path*" }
+	],
 	"headers": [
 		{
 			"source": "/(.*)",
@@ -16,7 +23,10 @@
 				},
 				{ "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
 				{ "key": "X-Content-Type-Options", "value": "nosniff" },
-				{ "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()" }
+				{
+					"key": "Permissions-Policy",
+					"value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+				}
 			]
 		},
 		{
