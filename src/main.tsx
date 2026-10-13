@@ -25,7 +25,7 @@ if (!import.meta.env.DEV)
 			ui_host: "https://us.posthog.com",
 			cookieless_mode: "always",
 			disable_session_recording: true,
-			// クリックを記録するのはリンクとボタンだけ。入力欄やメッセージのプレビューは対象にしない
-			autocapture: { element_allowlist: ["a", "button"] },
+			// クリックを記録するのはリンク・ボタンと、フォームを開く見出し(summary)だけ。入力欄やメッセージのプレビューは対象にしない
+			autocapture: { css_selector_allowlist: ["a", "button", "summary"] },
 		}),
 	);

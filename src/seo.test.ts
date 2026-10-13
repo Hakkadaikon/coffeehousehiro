@@ -114,8 +114,8 @@ test("PostHog には自分のドメインの /ingest 経由で送り、cookie・
 	assert.ok(main.includes('api_host: "/ingest"'));
 	assert.ok(main.includes('cookieless_mode: "always"'));
 	assert.ok(main.includes("disable_session_recording: true"));
-	// クリックを記録するのはリンクとボタンだけ。入力欄やプレビューの文は送らない
-	assert.ok(main.includes('element_allowlist: ["a", "button"]'));
+	// クリックを記録するのはリンク・ボタン・フォームを開く見出しだけ。入力欄やプレビューの文は送らない
+	assert.ok(main.includes('css_selector_allowlist: ["a", "button", "summary"]'));
 });
 
 test("特定商取引法に基づく表記のページはビルドに含め、フッターからリンクし、検索結果には出さない", () => {
