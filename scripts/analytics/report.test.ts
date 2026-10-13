@@ -47,44 +47,6 @@ const data = {
 	countries: [{ country: "JP", pageviews: 10, visitors: 7 }],
 };
 
-test("期間の合計と、日別・時間帯・ページ・参照元・端末・国の内訳を書く", () => {
-	const text = buildReport(data);
-	assert.match(text, /10\/05（月）9:00〜10\/12（月）8:59/);
-	assert.match(text, /訪問者 6人・ページビュー 10回/);
-	// 時間帯は日本時間の時刻ごとに足して、多い順に3つ
-	assert.match(text, /時間帯\*\* 20時台 6回 \/ 21時台 3回 \/ 12時台 1回$/m);
-	assert.match(text, /10\/06（火） 5人・7回/);
-	assert.match(text, /\/legal 1回/);
-	assert.match(text, /リファラー（参照元）\*\* l\.instagram\.com 3人/);
-	assert.match(text, /直接・不明 4人/);
-	assert.match(text, /mobile 6人/);
-	assert.match(text, /JP 7人/);
-});
-
-test("アクセスがない期間も、0として送る", () => {
-	const text = buildReport({
-		...data,
-		total: { pageviews: 0, visitors: 0 },
-		hours: [],
-		days: [],
-		pages: [],
-		referrers: [],
-		devices: [],
-		countries: [],
-	});
-	assert.match(text, /訪問者 0人・ページビュー 0回/);
-	assert.match(text, /なし/);
-});
-
-test("Discord の1メッセージの上限（2000文字）を超えない", () => {
-	const many = Array.from({ length: 500 }, (_, i) => ({
-		requestPath: `/page-${i}`,
-		pageviews: 1,
-		visitors: 1,
-	}));
-	assert.ok(buildReport({ ...data, pages: many }).length <= 2000);
-});
-
 test("手動で動かすときは、今から選んだ日数だけさかのぼる", () => {
 	const now = new Date("2026-10-13T05:37:12.345Z");
 	assert.deepEqual(recent(now, 1), {
@@ -95,32 +57,6 @@ test("手動で動かすときは、今から選んだ日数だけさかのぼ�
 		since: "2026-09-13T05:37:00.000Z",
 		until: "2026-10-13T05:37:00.000Z",
 	});
-});
-
-test("24時間分のときは、日別の内訳を省く", () => {
-	const text = buildReport({
-		...data,
-		range: { since: "2026-10-12T11:00:00.000Z", until: "2026-10-13T11:00:00.000Z" },
-		total: { pageviews: 3, visitors: 2 },
-	});
-	assert.match(text, /アクセス（10\/12（月）20:00〜10\/13（火）20:00）/);
-	assert.match(text, /訪問者 2人・ページビュー 3回/);
-	assert.doesNotMatch(text, /日別/);
-});
-
-test("期間中のアクセスが1件もないときは、そのことを書き添える", () => {
-	const empty = {
-		...data,
-		total: { pageviews: 0, visitors: 0 },
-		hours: [],
-		days: [],
-		pages: [],
-		referrers: [],
-		devices: [],
-		countries: [],
-	};
-	assert.match(buildReport(empty), /この期間のアクセスはありません/);
-	assert.doesNotMatch(buildReport(data), /この期間のアクセスはありません/);
 });
 
 test("1時間ごとの数は、API の上限（168時間）に収まるよう分けて取る。区切りは正時で、すき間なくつながる", () => {
@@ -150,16 +86,75 @@ const behavior = {
 	scroll: { end: 7, half: 6, top: 7 },
 };
 
-test("PostHog の集計があれば、押されたボタン・フォームの進み具合・読まれた深さを書く", () => {
-	const text = buildReport({ ...data, behavior });
-	assert.match(text, /\*\*ページ内の動き（PostHog）\*\*/);
-	assert.match(text, /押されたボタン\*\* 注文フォーム 14回 \/ 来店予約フォーム 6回$/m);
-	assert.match(text, /注文フォーム\*\* 開いた 9人 → メッセージをコピー 2人$/m);
-	assert.match(text, /来店予約フォーム\*\* 開いた 4人 → メッセージをコピー 1人$/m);
-	assert.match(text, /Instagramを開いた\*\* 5回（4人）$/m);
-	assert.match(text, /LINEを開いた（お問い合わせ・友だち追加）\*\* 3回（3人）$/m);
+/** 全部の埋め込みの項目を「見出し → 値」で引けるようにする */
+const fields = (report: ReturnType<typeof buildReport>) =>
+	Object.fromEntries(report.embeds.flatMap((e) => e.fields ?? []).map((f) => [f.name, f.value]));
+
+test("期間の合計と、日別・時間帯・ページ・参照元・端末・国の内訳を、項目ごとに並べる", () => {
+	const report = buildReport(data);
+	assert.match(report.embeds[0].title, /10\/05（月）9:00〜10\/12（月）8:59/);
+	const f = fields(report);
+	assert.equal(f.訪問者, "6人");
+	assert.equal(f.ページビュー, "10回");
+	// 時間帯は日本時間の時刻ごとに足して、多い順に3つ
+	assert.equal(f.アクセスの多い時間帯, "20時台 6回\n21時台 3回\n12時台 1回");
+	assert.ok(f.日別.includes("10/06（火） 5人・7回"));
+	assert.ok(f.よく見られたページ.includes("/legal 1回"));
+	assert.equal(f["リファラー（参照元）"], "l.instagram.com 3人\n直接・不明 4人");
+	assert.equal(f.端末, "mobile 6人");
+	assert.equal(f["国・地域"], "JP 7人");
+	assert.equal(report.embeds.length, 1);
+});
+
+test("24時間分のときは、日別の内訳を省く", () => {
+	const report = buildReport({
+		...data,
+		range: { since: "2026-10-12T11:00:00.000Z", until: "2026-10-13T11:00:00.000Z" },
+	});
+	assert.match(report.embeds[0].title, /10\/12（月）20:00〜10\/13（火）20:00/);
+	assert.equal(fields(report).日別, undefined);
+});
+
+test("アクセスがない期間も0として送り、アクセスがないことを書き添える", () => {
+	const empty = {
+		...data,
+		total: { pageviews: 0, visitors: 0 },
+		hours: [],
+		days: [],
+		pages: [],
+		referrers: [],
+		devices: [],
+		countries: [],
+	};
+	const report = buildReport(empty);
+	assert.equal(fields(report).訪問者, "0人");
+	assert.equal(fields(report).端末, "なし");
+	assert.match(report.embeds[0].description ?? "", /この期間のアクセスはありません/);
+	assert.equal(buildReport(data).embeds[0].description, undefined);
+});
+
+test("Discord の埋め込みの上限（項目の値は1024文字、全体で6000文字）を超えない", () => {
+	const many = Array.from({ length: 500 }, (_, i) => ({
+		referrerHostname: `site-${i}.example.com`,
+		pageviews: 1,
+		visitors: 1,
+	}));
+	const report = buildReport({ ...data, referrers: many, behavior });
+	for (const v of Object.values(fields(report))) assert.ok(v.length <= 1024);
+	assert.ok(JSON.stringify(report.embeds).length <= 6000);
+});
+
+test("PostHog の集計があれば、2つ目の埋め込みに押されたボタン・フォームの進み具合・リンク・読まれた深さを並べる", () => {
+	const report = buildReport({ ...data, behavior });
+	assert.equal(report.embeds[1].title, "ページ内の動き（PostHog）");
+	const f = fields(report);
+	assert.equal(f.押されたボタン, "注文フォーム 14回\n来店予約フォーム 6回");
+	assert.equal(f.注文フォーム, "開いた 9人\nメッセージをコピー 2人");
+	assert.equal(f.来店予約フォーム, "開いた 4人\nメッセージをコピー 1人");
+	assert.equal(f.Instagramを開いた, "5回（4人）");
+	assert.equal(f["LINEを開いた（お問い合わせ・友だち追加）"], "3回（3人）");
 	// 割合は四捨五入
-	assert.match(text, /どこまで読まれたか\*\* 最後まで 35% \/ 半分まで 30% \/ 最初だけ 35%$/m);
+	assert.equal(f.どこまで読まれたか, "最後まで 35%\n半分まで 30%\n最初だけ 35%");
 });
 
 test("PostHog の集計が空なら「なし」、取れなかったときはそう書き添える", () => {
@@ -169,8 +164,9 @@ test("PostHog の集計が空なら「なし」、取れなかったときはそ
 		links: { instagram: { clicks: 0, people: 0 }, line: { clicks: 0, people: 0 } },
 		scroll: { end: 0, half: 0, top: 0 },
 	};
-	const text = buildReport({ ...data, behavior: empty });
-	assert.match(text, /押されたボタン\*\* なし$/m);
-	assert.match(text, /どこまで読まれたか\*\* なし$/m);
-	assert.match(buildReport({ ...data, behavior: null }), /PostHog の集計は取得できませんでした/);
+	const f = fields(buildReport({ ...data, behavior: empty }));
+	assert.equal(f.押されたボタン, "なし");
+	assert.equal(f.どこまで読まれたか, "なし");
+	const failed = buildReport({ ...data, behavior: null });
+	assert.match(failed.embeds[1].description ?? "", /PostHog の集計は取得できませんでした/);
 });

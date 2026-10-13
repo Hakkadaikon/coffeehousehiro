@@ -1,4 +1,4 @@
-// アクセスレポートの文面づくり。Vercel Web Analytics API の集計結果から、Discord に送る文を作る。
+// アクセスレポートの文面づくり。Vercel Web Analytics と PostHog の集計結果から、Discord の埋め込み(embed)を作る。
 
 type Count = { pageviews: number; visitors: number };
 export type Row = Count & Record<string, unknown>;
@@ -30,7 +30,10 @@ export type ReportData = {
 	behavior?: Behavior | null;
 };
 
-const DISCORD_LIMIT = 2000;
+/** Discord の埋め込みの項目の値の上限 */
+const FIELD_LIMIT = 1024;
+/** お店の色(caramel) */
+const COLOR = 0x8e5a35;
 const WEEKDAYS = "日月火水木金土";
 const JST = 9 * 3600e3;
 
@@ -71,6 +74,19 @@ const jst = (iso: string) => {
 	return `${mdw(t.slice(0, 10))}${Number(t.slice(11, 13))}:${t.slice(14, 16)}`;
 };
 
+type Field = { name: string; value: string; inline?: boolean };
+type Embed = { title: string; description?: string; color: number; fields?: Field[] };
+
+/** 値が空なら「なし」、長すぎれば上限で切る。inline は横に並べる(1行に3つまで) */
+const field = (name: string, lines: string[], inline = true): Field => {
+	const value = lines.length === 0 ? "なし" : lines.join("\n");
+	return {
+		name,
+		value: value.length <= FIELD_LIMIT ? value : `${value.slice(0, FIELD_LIMIT - 1)}…`,
+		inline,
+	};
+};
+
 /** ページビューの多い時間帯(日本時間)を3つ。日をまたいで同じ時刻どうしを足す */
 const busyHours = (hours: Row[]) => {
 	const views = new Map<number, number>();
@@ -78,38 +94,46 @@ const busyHours = (hours: Row[]) => {
 		const hour = (new Date(String(h.timestamp)).getUTCHours() + 9) % 24;
 		views.set(hour, (views.get(hour) ?? 0) + h.pageviews);
 	}
-	const top3 = [...views]
+	return [...views]
 		.filter(([, n]) => n > 0)
 		.sort((a, b) => b[1] - a[1])
-		.slice(0, 3);
-	return top3.length === 0 ? "なし" : top3.map(([hour, n]) => `${hour}時台 ${n}回`).join(" / ");
+		.slice(0, 3)
+		.map(([hour, n]) => `${hour}時台 ${n}回`);
 };
 
-/** 「名前 n人」を並べた1行。空なら「なし」 */
+/** 「名前 n人」を1行ずつ */
 const top = (rows: Row[], key: string, unit: (r: Row) => string) =>
-	rows.length === 0
-		? "なし"
-		: rows.map((r) => `${String(r[key] || "直接・不明")} ${unit(r)}`).join(" / ");
+	rows.map((r) => `${String(r[key] || "直接・不明")} ${unit(r)}`);
 
-const funnel = ({ opened, sent }: Funnel) => `開いた ${opened}人 → メッセージをコピー ${sent}人`;
+const funnel = ({ opened, sent }: Funnel) => [`開いた ${opened}人`, `メッセージをコピー ${sent}人`];
 
-const opens = ({ clicks, people }: Opens) => `${clicks}回（${people}人）`;
+const opens = ({ clicks, people }: Opens) => [`${clicks}回（${people}人）`];
 
-function behaviorLines(b: Behavior | null) {
-	if (!b) return ["", "（PostHog の集計は取得できませんでした）"];
+function behaviorEmbed(b: Behavior | null): Embed {
+	const title = "ページ内の動き（PostHog）";
+	if (!b) return { title, color: COLOR, description: "PostHog の集計は取得できませんでした。" };
 	const { end, half, top } = b.scroll;
 	const all = end + half + top;
 	const pct = (n: number) => `${Math.round((n / all) * 100)}%`;
-	return [
-		"",
-		"**ページ内の動き（PostHog）**",
-		`**押されたボタン** ${b.buttons.length === 0 ? "なし" : b.buttons.map(([t, n]) => `${t} ${n}回`).join(" / ")}`,
-		`**注文フォーム** ${funnel(b.forms.order)}`,
-		`**来店予約フォーム** ${funnel(b.forms.reserve)}`,
-		`**Instagramを開いた** ${opens(b.links.instagram)}`,
-		`**LINEを開いた（お問い合わせ・友だち追加）** ${opens(b.links.line)}`,
-		`**どこまで読まれたか** ${all === 0 ? "なし" : `最後まで ${pct(end)} / 半分まで ${pct(half)} / 最初だけ ${pct(top)}`}`,
-	];
+	return {
+		title,
+		color: COLOR,
+		fields: [
+			field(
+				"押されたボタン",
+				b.buttons.map(([t, n]) => `${t} ${n}回`),
+				false,
+			),
+			field("注文フォーム", funnel(b.forms.order)),
+			field("来店予約フォーム", funnel(b.forms.reserve)),
+			field(
+				"どこまで読まれたか",
+				all === 0 ? [] : [`最後まで ${pct(end)}`, `半分まで ${pct(half)}`, `最初だけ ${pct(top)}`],
+			),
+			field("Instagramを開いた", opens(b.links.instagram)),
+			field("LINEを開いた（お問い合わせ・友だち追加）", opens(b.links.line)),
+		],
+	};
 }
 
 export function buildReport({
@@ -122,32 +146,37 @@ export function buildReport({
 	devices,
 	countries,
 	behavior,
-}: ReportData) {
+}: ReportData): { embeds: Embed[] } {
 	const people = (r: Row) => `${r.visitors}人`;
 	const oneDay = Date.parse(range.until) - Date.parse(range.since) <= 86400e3;
-	const lines = [
-		`**コーヒーhouseヒロ アクセス（${jst(range.since)}〜${jst(range.until)}）**`,
-		`訪問者 ${total.visitors}人・ページビュー ${total.pageviews}回`,
-		...(total.pageviews === 0 ? ["この期間のアクセスはありません。"] : []),
-		"",
-		...(oneDay
-			? []
-			: [
-					"**日別**",
-					...(days.length === 0
-						? ["なし"]
-						: days.map(
+	const access: Embed = {
+		title: `コーヒーhouseヒロ アクセス（${jst(range.since)}〜${jst(range.until)}）`,
+		...(total.pageviews === 0 ? { description: "この期間のアクセスはありません。" } : {}),
+		color: COLOR,
+		fields: [
+			field("訪問者", [`${total.visitors}人`]),
+			field("ページビュー", [`${total.pageviews}回`]),
+			field("アクセスの多い時間帯", busyHours(hours)),
+			...(oneDay
+				? []
+				: [
+						field(
+							"日別",
+							days.map(
 								(d) => `${mdw(String(d.timestamp).slice(0, 10))} ${d.visitors}人・${d.pageviews}回`,
-							)),
-					"",
-				]),
-		`**アクセスの多い時間帯** ${busyHours(hours)}`,
-		`**よく見られたページ** ${top(pages, "requestPath", (r) => `${r.pageviews}回`)}`,
-		`**リファラー（参照元）** ${top(referrers, "referrerHostname", people)}`,
-		`**端末** ${top(devices, "deviceType", people)}`,
-		`**国・地域** ${top(countries, "country", people)}`,
-		...(behavior === undefined ? [] : behaviorLines(behavior)),
-	];
-	const text = lines.join("\n");
-	return text.length <= DISCORD_LIMIT ? text : `${text.slice(0, DISCORD_LIMIT - 1)}…`;
+							),
+							false,
+						),
+					]),
+			field("リファラー（参照元）", top(referrers, "referrerHostname", people)),
+			field("端末", top(devices, "deviceType", people)),
+			field("国・地域", top(countries, "country", people)),
+			field(
+				"よく見られたページ",
+				top(pages, "requestPath", (r) => `${r.pageviews}回`),
+				false,
+			),
+		],
+	};
+	return { embeds: behavior === undefined ? [access] : [access, behaviorEmbed(behavior)] };
 }
