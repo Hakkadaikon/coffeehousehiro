@@ -1,22 +1,27 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildReport, queryRange, recentWeek, yesterday } from "./report.ts";
+import { buildReport, last24Hours, recentWeek } from "./report.ts";
 
-test("集計するのは、実行日の前日（日本時間）", () => {
-	// 毎朝 9:00 JST に動いたとき
-	assert.deepEqual(yesterday(new Date("2026-10-13T00:00:00Z")), {
-		since: "2026-10-12",
-		until: "2026-10-12",
+test("集計するのは、直近の 20:00（日本時間）までの24時間", () => {
+	// 20:00 JST に動いたとき、前日 20:00 から今まで
+	assert.deepEqual(last24Hours(new Date("2026-10-13T11:00:00Z")), {
+		since: "2026-10-12T11:00:00.000Z",
+		until: "2026-10-13T11:00:00.000Z",
 	});
-	// 日本時間ではもう翌日になっている時刻
-	assert.deepEqual(yesterday(new Date("2026-10-12T16:00:00Z")), {
-		since: "2026-10-12",
-		until: "2026-10-12",
+	// 定期実行が遅れても、区切りは 20:00 のまま（前後の回と重ならない）
+	assert.deepEqual(last24Hours(new Date("2026-10-13T12:30:00Z")), {
+		since: "2026-10-12T11:00:00.000Z",
+		until: "2026-10-13T11:00:00.000Z",
+	});
+	// 20:00 より前に動いたときは、前日の 20:00 まで
+	assert.deepEqual(last24Hours(new Date("2026-10-13T10:59:00Z")), {
+		since: "2026-10-11T11:00:00.000Z",
+		until: "2026-10-12T11:00:00.000Z",
 	});
 });
 
 const data = {
-	range: { since: "2026-10-05", until: "2026-10-11" },
+	range: { since: "2026-10-05T00:00:00.000Z", until: "2026-10-11T23:59:59.999Z" },
 	days: [
 		{ timestamp: "2026-10-05T00:00:00.000Z", pageviews: 3, visitors: 2 },
 		{ timestamp: "2026-10-06T00:00:00.000Z", pageviews: 7, visitors: 5 },
@@ -35,7 +40,7 @@ const data = {
 
 test("期間の合計と、日別・ページ・参照元・端末・国の内訳を書く", () => {
 	const text = buildReport(data);
-	assert.match(text, /10\/05〜10\/11/);
+	assert.match(text, /10\/05（月）9:00〜10\/12（月）8:59/);
 	assert.match(text, /訪問者 7人・ページビュー 10回/);
 	assert.match(text, /10\/06（火） 5人・7回/);
 	assert.match(text, /\/legal 1回/);
@@ -67,20 +72,20 @@ test("Discord の1メッセージの上限（2000文字）を超えない", () =
 	assert.ok(buildReport({ ...data, pages: many }).length <= 2000);
 });
 
-test("手動で動かすときは、今日を含む直近7日間（日本時間）", () => {
+test("手動で動かすときは、今日を含む直近7日間（日本時間）を、最終日の終わりまで", () => {
 	assert.deepEqual(recentWeek(new Date("2026-10-12T07:58:00Z")), {
-		since: "2026-10-06",
-		until: "2026-10-12",
+		since: "2026-10-06T00:00:00.000Z",
+		until: "2026-10-12T23:59:59.999Z",
 	});
 });
 
-test("1日分のときは、日付と曜日を見出しに書き、日別の内訳は省く", () => {
+test("24時間分のときは、日別の内訳を省く", () => {
 	const text = buildReport({
 		...data,
-		range: { since: "2026-10-12", until: "2026-10-12" },
+		range: { since: "2026-10-12T11:00:00.000Z", until: "2026-10-13T11:00:00.000Z" },
 		days: [{ timestamp: "2026-10-12T00:00:00.000Z", pageviews: 3, visitors: 2 }],
 	});
-	assert.match(text, /アクセス（10\/12（月））/);
+	assert.match(text, /アクセス（10\/12（月）20:00〜10\/13（火）20:00）/);
 	assert.match(text, /訪問者 2人・ページビュー 3回/);
 	assert.doesNotMatch(text, /日別/);
 });
@@ -89,11 +94,4 @@ test("期間中のアクセスが1件もないときは、そのことを書き�
 	const empty = { ...data, days: [], pages: [], referrers: [], devices: [], countries: [] };
 	assert.match(buildReport(empty), /この期間のアクセスはありません/);
 	assert.doesNotMatch(buildReport(data), /この期間のアクセスはありません/);
-});
-
-test("API には最終日の終わりまでを渡す（日付だけだと最終日の 0:00 で切れる）", () => {
-	assert.deepEqual(queryRange({ since: "2026-10-06", until: "2026-10-12" }), {
-		since: "2026-10-06T00:00:00.000Z",
-		until: "2026-10-12T23:59:59.999Z",
-	});
 });

@@ -20,29 +20,32 @@ const isoDate = (t: number) => new Date(t).toISOString().slice(0, 10);
 
 const todayJst = (now: Date) => Date.parse(isoDate(now.getTime() + JST));
 
-/** 実行日の前日(日本時間) */
-export function yesterday(now: Date): Range {
-	const date = isoDate(todayJst(now) - 86400e3);
-	return { since: date, until: date };
-}
-
-/** 今日を含む直近7日間(日本時間)。手動で動かして、今の様子を見るときに使う */
-export function recentWeek(now: Date): Range {
-	const today = todayJst(now);
-	return { since: isoDate(today - 6 * 86400e3), until: isoDate(today) };
+/** 直近の 20:00(日本時間)までの24時間。20:00 に動かすと前日 20:00 から今まで。実行が遅れても区切りは 20:00 のまま */
+export function last24Hours(now: Date): Range {
+	const at20 = 20 * 3600e3 - JST;
+	const until = Math.floor((now.getTime() - at20) / 86400e3) * 86400e3 + at20;
+	return { since: new Date(until - 86400e3).toISOString(), until: new Date(until).toISOString() };
 }
 
 /**
- * API に渡す期間。since/until は日時として扱われ、日付だけだと最終日の 0:00(UTC)で切れてしまうので、最終日の終わりまでを渡す。
- * 日別の集計は UTC の日付で区切られる(日本時間の 9:00 が日の変わり目)
+ * 今日を含む直近7日間(日本時間)。手動で動かして、今の様子を見るときに使う。
+ * 日別の集計は UTC の日付で区切られる(日本時間の 9:00 が日の変わり目)ので、UTC の日付で最終日の終わりまでを渡す
  */
-export const queryRange = ({ since, until }: Range): Range => ({
-	since: `${since}T00:00:00.000Z`,
-	until: `${until}T23:59:59.999Z`,
-});
+export function recentWeek(now: Date): Range {
+	const today = todayJst(now);
+	return {
+		since: `${isoDate(today - 6 * 86400e3)}T00:00:00.000Z`,
+		until: `${isoDate(today)}T23:59:59.999Z`,
+	};
+}
 
 const md = (date: string) => `${date.slice(5, 7)}/${date.slice(8, 10)}`;
 const mdw = (date: string) => `${md(date)}（${WEEKDAYS[new Date(date).getUTCDay()]}）`;
+/** 日時を日本時間の「10/12（月）20:00」に */
+const jst = (iso: string) => {
+	const t = new Date(Date.parse(iso) + JST).toISOString();
+	return `${mdw(t.slice(0, 10))}${Number(t.slice(11, 13))}:${t.slice(14, 16)}`;
+};
 const sum = (rows: Row[], key: keyof Count) => rows.reduce((n, r) => n + r[key], 0);
 
 /** 「名前 n人」を並べた1行。空なら「なし」 */
@@ -53,9 +56,9 @@ const top = (rows: Row[], key: string, unit: (r: Row) => string) =>
 
 export function buildReport({ range, days, pages, referrers, devices, countries }: ReportData) {
 	const people = (r: Row) => `${r.visitors}人`;
-	const oneDay = range.since === range.until;
+	const oneDay = Date.parse(range.until) - Date.parse(range.since) <= 86400e3;
 	const lines = [
-		`**コーヒーhouseヒロ アクセス（${oneDay ? mdw(range.since) : `${md(range.since)}〜${md(range.until)}`}）**`,
+		`**コーヒーhouseヒロ アクセス（${jst(range.since)}〜${jst(range.until)}）**`,
 		// 訪問者は日ごとに数えるので、複数日の合計は延べ人数
 		`訪問者 ${sum(days, "visitors")}人・ページビュー ${sum(days, "pageviews")}回`,
 		...(days.length === 0 ? ["この期間のアクセスはありません。"] : []),
