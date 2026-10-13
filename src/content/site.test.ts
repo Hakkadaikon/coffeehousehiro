@@ -29,7 +29,20 @@ test("このサイトでの情報の取り扱いは、注文フォーム・来�
 		SITE_DATA_POLICY.map((p) => p.label),
 		["かんたん注文フォーム", "かんたん来店予約フォーム", "アクセス解析"],
 	);
-	assert.ok(SITE_DATA_POLICY[0].text.includes(`${SAVE_DAYS}日`));
+	assert.ok(SITE_DATA_POLICY[0].lines.some((l) => l.includes(`${SAVE_DAYS}日`)));
+});
+
+test("アクセス解析は、使っている2つのサービスと、どちらにも共通することに分けて書く", () => {
+	const analytics = SITE_DATA_POLICY[2];
+	assert.deepEqual(
+		analytics.sections?.map((s) => s.title),
+		[
+			"Vercel Web Analytics（Vercel Inc.・米国）",
+			"PostHog（PostHog Inc.・米国）",
+			"どちらにも共通",
+		],
+	);
+	for (const s of analytics.sections ?? []) assert.ok(s.lines.length > 0);
 });
 
 test("注文の近くに、お預かりする情報の利用目的を出す", () => {
