@@ -1,10 +1,16 @@
 name: Daily analytics report
 
-# 毎日 20:00(日本時間)に前日 20:00 からのアクセスを、手動実行では今日を含む直近7日間のアクセスを Discord に送る
+# 毎日 20:00(日本時間)に前日 20:00 からのアクセスを、手動実行では選んだ期間(24時間・1週間・1か月)のアクセスを Discord に送る
 on:
   schedule:
     - cron: "0 11 * * *"
   workflow_dispatch:
+    inputs:
+      period:
+        description: 集計する期間(今からさかのぼる)
+        type: choice
+        options: [24時間, 1週間, 1か月]
+        default: 24時間
 
 permissions:
   contents: read
@@ -26,5 +32,5 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          # 手動実行のときは、今日を含む直近7日間を送る
-          REPORT_RECENT: ${{ github.event_name == 'workflow_dispatch' }}
+          # 手動実行のときだけ入る。定期実行では空
+          REPORT_PERIOD: ${{ inputs.period }}
