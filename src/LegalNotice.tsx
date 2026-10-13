@@ -1,13 +1,15 @@
 import { ExternalLink } from "./components/ExternalLink.tsx";
+import { PolicyLines, PolicySections } from "./components/PolicyLines.tsx";
 import { LEGAL_NOTICE, PRIVACY_POLICY, SHOP_NAME } from "./content/shop.ts";
-import { SITE_DATA_POLICY } from "./content/site.ts";
+import { type PolicyItem, SITE_DATA_POLICY } from "./content/site.ts";
 
-type Row = (typeof LEGAL_NOTICE)[number];
+type Row = (typeof LEGAL_NOTICE)[number] & { sections?: PolicyItem["sections"] };
 
 // プライバシーポリシーには、フッターと同じ「このサイトでの情報の取り扱い」を制定日の前に入れる
 const SITE_ROWS: Row[] = SITE_DATA_POLICY.map((p) => ({
 	label: p.label,
-	lines: [{ text: p.text, strong: false }],
+	lines: p.lines.map((text) => ({ text, strong: false })),
+	sections: p.sections,
 }));
 const isDate = (r: Row) => r.label === "制定日";
 const PRIVACY_ROWS = [
@@ -56,7 +58,7 @@ export default function LegalNotice() {
 	);
 }
 
-/** 項目名と本文の表。「strong:」の段落は強調し、URL だけの段落はリンクにする */
+/** 項目名と本文の表。2行以上は箇条書きにし、「strong:」の行は強調し、URL だけの行はリンクにする */
 function Table({ rows }: { rows: Row[] }) {
 	return (
 		<dl className="border-t border-white/10 text-sm md:text-base lg:text-[17px] leading-[1.9] tracking-wide">
@@ -67,24 +69,24 @@ function Table({ rows }: { rows: Row[] }) {
 				>
 					<dt className="font-medium text-paper/50">{r.label}</dt>
 					<dd className="text-pretty">
-						{r.lines.map(({ text, strong }) =>
-							strong ? (
-								<p key={text} className="my-2 border-l-2 border-caramel pl-3">
+						<PolicyLines
+							lines={r.lines.map((l) => l.text)}
+							render={(text, i) =>
+								r.lines[i].strong ? (
 									<strong className="font-medium text-paper">{text}</strong>
-								</p>
-							) : /^https?:\/\//.test(text) ? (
-								<p key={text}>
+								) : /^https?:\/\//.test(text) ? (
 									<ExternalLink
 										href={text}
 										className="underline underline-offset-4 decoration-paper/30 hover:text-paper hover:decoration-paper/70 transition-colors break-all"
 									>
 										{text}
 									</ExternalLink>
-								</p>
-							) : (
-								<p key={text}>{text}</p>
-							),
-						)}
+								) : (
+									text
+								)
+							}
+						/>
+						<PolicySections sections={r.sections} />
 					</dd>
 				</div>
 			))}

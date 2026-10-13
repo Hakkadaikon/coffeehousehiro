@@ -2,6 +2,7 @@ import { ChevronDown, MapPin, MessageCircle } from "lucide-react";
 import { ExternalLink } from "../components/ExternalLink.tsx";
 import { GitHubIcon } from "../components/GitHubIcon.tsx";
 import { InstagramIcon } from "../components/InstagramIcon.tsx";
+import { PolicyLines, PolicySections } from "../components/PolicyLines.tsx";
 import {
 	ADDRESS,
 	INSTAGRAM_HANDLE,
@@ -155,10 +156,11 @@ function DataPolicy() {
 			</summary>
 			<div className="mt-6 grid gap-5 lg:grid-cols-2 lg:gap-12 text-[13px] md:text-[17px] text-paper/80 leading-[1.9] tracking-wide text-pretty">
 				{SITE_DATA_POLICY.map((p) => (
-					<p key={p.label}>
+					<div key={p.label}>
 						<span className={label}>{p.label}</span>
-						{p.text}
-					</p>
+						<PolicyLines lines={p.lines} />
+						<PolicySections sections={p.sections} />
+					</div>
 				))}
 			</div>
 		</details>
