@@ -14,6 +14,13 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 
 訪問数とページの表示回数は、Vercel Web Analyticsで見ます。`src/main.tsx` の `inject()` が、同じドメインの `/_vercel/insights/` から計測用のスクリプトを読み込みます。cookieは使わず、注文フォームの入力内容も送りません。数字はVercelのダッシュボードの「Analytics」で見られます。
 
+どのリンクやボタンが押されたか、ページをどこまで読んだかは、PostHog(US)で見ます。`src/main.tsx` の `posthog.init()` が、同じドメインの `/ingest/` に送り、`vercel.json` の `rewrites` がPostHogへ中継します。外部からスクリプトを読み込まない版(`posthog-js/dist/module.no-external`)を使い、cookieもブラウザへの保存も使いません。クリックを記録するのはリンクとボタンだけで、入力欄や注文メッセージのプレビューは対象にしません。画面の録画はしません。開発中(`npm run dev`)は送りません。
+
+PostHogのプロジェクト設定(Settings → Project)では、次の2つをオンにしておきます。
+
+- 「Discard client IP data」: IPアドレスを保存しない
+- 「Cookieless server hash mode」: cookieを使わずに訪問者を数える。オフのままだと訪問者を数えられない
+
 集める情報と注文フォームの入力内容の扱いは、フッターの「このサイトでの情報の取り扱い」(`src/sections/SiteFooter.tsx`)に書いています。解析の設定や、外部に送る情報を変えたときは、ここも直してください。
 
 ### 毎日のアクセスレポート(Discord)
