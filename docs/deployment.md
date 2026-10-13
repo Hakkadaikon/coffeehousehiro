@@ -10,16 +10,41 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 
 依存パッケージの更新はRenovateが行います(`renovate.json`)。minorとpatchの更新は、公開から3日たってCIが通れば自動でmainに入り、そのまま本番に出ます。公開直後に乗っ取られた版を取り込まないよう、3日待つ設定にしています。majorの更新はプルリクエストになるので、確かめてからマージしてください。GitHub Actionsの部品(`actions/checkout` など)は、差し替えられても影響を受けないようコミットのIDで指定し、IDの更新もRenovateに任せています。
 
+## Vercelで公開する手順
+
+初めて公開するときや、Vercelのプロジェクトを作り直すときは、次の手順で設定します。
+
+1. VercelにGitHubのアカウントでログインし、「Add New」→「Project」からこのリポジトリを選んで取り込みます。
+2. 次のとおりに設定します。Root Directoryはリポジトリの直下のままにします。直下にある `vercel.json` を読ませるためです。
+   - Framework Preset: `Vite`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+3. 「Deploy」を押すと、最初の公開が始まります。
+4. プロジェクトの「Analytics」タブで、Web Analyticsを有効にします。有効にしたあとに公開した版から、訪問数の計測が動きます。
+
+それ以降は、`main` にプッシュするたびにVercelが本番に公開します。公開の結果は、Vercelの「Deployments」タブか、GitHubのリポジトリの「Deployments」で確かめられます。公開した版に問題があったときは、Vercelの「Deployments」で前の版を選び、本番に戻せます。
+
+CSPなどのセキュリティヘッダーと、PostHogへの中継(`/ingest`)は `vercel.json` に書いています。Vercelの画面で設定する必要はありません。
+
 ## アクセス解析
 
 訪問数とページの表示回数は、Vercel Web Analyticsで見ます。`src/main.tsx` の `inject()` が、同じドメインの `/_vercel/insights/` から計測用のスクリプトを読み込みます。cookieは使わず、注文フォームの入力内容も送りません。数字はVercelのダッシュボードの「Analytics」で見られます。
 
-どのリンクやボタンが押されたか、ページをどこまで読んだかは、PostHog(US)で見ます。`src/main.tsx` の `posthog.init()` が、同じドメインの `/ingest/` に送り、`vercel.json` の `rewrites` がPostHogへ中継します。外部からスクリプトを読み込まない版(`posthog-js/dist/module.no-external`)を使い、cookieもブラウザへの保存も使いません。クリックを記録するのはリンクとボタンだけで、入力欄や注文メッセージのプレビューは対象にしません。画面の録画はしません。開発中(`npm run dev`)は送りません。
+どのリンクやボタンが押されたか、ページをどこまで読んだかは、PostHog(US)で見ます。`src/main.tsx` の `posthog.init()` が、同じドメインの `/ingest/` に送り、`vercel.json` の `rewrites` がPostHogへ中継します。外部からスクリプトを読み込まない版(`posthog-js/dist/module.no-external`)を使い、cookieもブラウザへの保存も使いません。クリックを記録するのは、リンクとボタンと、フォームを開く見出しだけです。入力欄や注文メッセージのプレビューは対象にしません。画面の録画はしません。開発中(`npm run dev`)は送りません。
 
-PostHogのプロジェクト設定(Settings → Project)では、次の2つをオンにしておきます。
+### PostHogの設定
 
-- 「Discard client IP data」: IPアドレスを保存しない
-- 「Cookieless server hash mode」: cookieを使わずに訪問者を数える。オフのままだと訪問者を数えられない
+PostHogを初めて設定するときや、プロジェクトを作り直すときは、次の手順で進めます。
+
+1. PostHogでアカウントを作り、データの保存先(リージョン)にUSを選んでプロジェクトを作ります。EUを選ぶときは、`vercel.json` の中継先、`src/main.tsx` の `ui_host`、`scripts/analytics/send.ts` の問い合わせ先も、`us` を `eu` に変えます。
+2. Settings → Project の「Project API key」(`phc_` で始まる値)を、`src/main.tsx` の `posthog.init()` に書きます。このキーはブラウザに配られる前提の公開用なので、コードに書いて構いません。
+3. 同じ画面で、次の2つをオンにします。
+   - 「Discard client IP data」: IPアドレスを保存しない
+   - 「Cookieless server hash mode」: cookieを使わずに訪問者を数える。オフのままだと訪問者を数えられない
+4. 本番に公開したら、サイトを開いてボタンをいくつか押します。PostHogの「Activity」の「Live」に、`$pageview` や `$autocapture` が出れば届いています。広告ブロッカーやトラッキング防止を使っているブラウザからは届きません。Playwrightなどの自動操作のブラウザはbotとして捨てられるので、確かめるときはふだんのブラウザを使います。
+5. Discordのアクセスレポートに集計を載せるときは、Personal API keyを作ります。Settings → User → Personal API keys で「Create personal API key」を押し、対象をこのプロジェクトだけに絞り、権限(Scopes)は「Query」の読み取りだけにします。表示された `phx_` で始まる値を、GitHubのSecretsに `POSTHOG_API_KEY` として登録します。このキーはPostHogのデータを読めるので、コードやチャットには書きません。
+
+`/ingest` に送っても404になるときは、`vercel.json` の `rewrites` が本番に反映されているかを確かめます。`/ingest/flags/` のように末尾が `/` で終わるパスもそのまま中継できるよう、`:path(.*)` の形で書いています。
 
 集める情報と注文フォームの入力内容の扱いは、フッターの「このサイトでの情報の取り扱い」(`src/sections/SiteFooter.tsx`)に書いています。解析の設定や、外部に送る情報を変えたときは、ここも直してください。
 
@@ -29,7 +54,7 @@ PostHogのプロジェクト設定(Settings → Project)では、次の2つを�
 
 Discordには埋め込み(embed)で送り、項目ごとに見出しを付けて並べます。送る内容は、訪問者数とページビュー数、アクセスの多い時間帯(上位3つ)、よく見られたページ、リファラー(参照元)、端末、国・地域です。訪問者数は期間を通した人数です。時間帯は、ページビューを日本時間の時刻ごとに足して比べます。1週間を選んだときは日別の数を、1か月を選んだときは7日ずつの週別の数を付け、ページビューがいちばん多かった日も添えます。日別の区切りはVercelに合わせてUTCなので、1日は日本時間の9:00から翌日の8:59までです。
 
-`POSTHOG_API_KEY` を登録していれば、PostHogの集計も「ページ内の動き」として付けます。押されたボタンの上位5つ、注文フォームと来店予約フォームを開いた人と、メッセージをコピーした人の数、InstagramとLINE(お問い合わせ・友だち追加)へのリンクを押した回数と人数、ページを離れたときにどこまで読んでいたか(最後まで・半分まで・最初だけ)です。フォームは、要素の id(`order-form`・`reserve-form`)とリンク先で見分け、「メッセージをコピー」はフォームの中の「コピー」を含むボタン(「コピーしてLINEを開く」など)を押した人です。LINEで実際に送ったかまでは分かりません。ボタンの文言や id を変えるときは、`scripts/analytics/send.ts` の集計も合わせて直してください。PostHogから取れなかったときも、Vercelの集計は送ります。
+`POSTHOG_API_KEY` を登録していれば、PostHogの集計も「ページ内の動き」として付けます。押されたボタンの上位5つ、注文フォームと来店予約フォームを開いた人と、メッセージをコピーした人の数、InstagramとLINE(お問い合わせ・友だち追加)へのリンクを押した回数と人数、ページを離れたときにどこまで読んでいたか(最後まで・半分まで・最初だけ)です。フォームは、要素のid(`order-form`・`reserve-form`)とリンク先で見分け、「メッセージをコピー」はフォームの中の「コピー」を含むボタン(「コピーしてLINEを開く」など)を押した人です。LINEで実際に送ったかまでは分かりません。ボタンの文言やidを変えるときは、`scripts/analytics/send.ts` の集計も合わせて直してください。PostHogから取れなかったときも、Vercelの集計は送ります。
 
 動かすには、GitHubのリポジトリの Settings → Secrets and variables → Actions に、次のSecretsを登録します。
 
@@ -45,7 +70,7 @@ Discordには埋め込み(embed)で送り、項目ごとに見出しを付けて
 
 ## ほかのホスティングサービスで公開するとき
 
-静的なWebサイトとして動作するため、Netlify、Cloudflare Pagesなどのホスティングサービスや、一般的なレンタルサーバーでも公開できます。ただし、CSPなどのセキュリティヘッダーとキャッシュの設定は `vercel.json` に書いているので、Vercel以外ではそのサービスの方法で同じ設定をしてください。
+静的なWebサイトとして動作するため、Netlify、Cloudflare Pagesなどのホスティングサービスや、一般的なレンタルサーバーでも公開できます。ただし、CSPなどのセキュリティヘッダー、キャッシュの設定、PostHogへの中継(`/ingest`)は `vercel.json` に書いているので、Vercel以外ではそのサービスの方法で同じ設定をしてください。中継がないと、PostHogに解析のデータが届きません。
 
 ### Vercel / Netlify / Cloudflare Pages
 
