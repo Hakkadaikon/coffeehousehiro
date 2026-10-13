@@ -1,7 +1,7 @@
 // 前日 20:00 から今日 20:00 までのアクセスを Vercel Web Analytics API から集計し、Discord に送る。GitHub Actions(analytics-report.yml)から動かす。
 // 環境変数: VERCEL_TOKEN, VERCEL_PROJECT_ID, DISCORD_WEBHOOK_URL(必須)、VERCEL_TEAM_ID(チームのプロジェクトのときだけ)
 // --dry-run を付けると、Discord に送らずに文面を表示する。REPORT_PERIOD=24時間|1週間|1か月 で、今からさかのぼった期間を集計する。
-import { buildReport, last24Hours, type Row, recent } from "./report.ts";
+import { buildReport, hourChunks, last24Hours, type Row, recent } from "./report.ts";
 
 const dryRun = process.argv.includes("--dry-run");
 const env = (name: string) => {
@@ -24,11 +24,12 @@ if (period && !PERIODS[period])
 const range = period ? recent(new Date(), PERIODS[period]) : last24Hours(new Date());
 
 /** visits/aggregate を by で分けて取る(by は必須) */
-async function visits(by: string, limit?: number): Promise<Row[]> {
+async function visits(by: string, limit?: number, { since, until } = range): Promise<Row[]> {
 	const url = new URL("https://api.vercel.com/v1/query/web-analytics/visits/aggregate");
 	const params = {
 		projectId,
-		...range,
+		since,
+		until,
 		by,
 		limit: limit?.toString(),
 	};
@@ -39,8 +40,19 @@ async function visits(by: string, limit?: number): Promise<Row[]> {
 	return (await res.json()).data;
 }
 
+/** 1時間ごとの数。分けて取り、区切りの時間が両方に出たら多いほうを残す */
+async function hourly(): Promise<Row[]> {
+	const byTime = new Map<string, Row>();
+	for (const part of await Promise.all(hourChunks(range).map((c) => visits("hour", undefined, c))))
+		for (const r of part) {
+			const key = String(r.timestamp);
+			if (r.pageviews >= (byTime.get(key)?.pageviews ?? -1)) byTime.set(key, r);
+		}
+	return [...byTime.values()];
+}
+
 const [hours, days, pages, referrers, devices, countries] = await Promise.all([
-	visits("hour"),
+	hourly(),
 	visits("day"),
 	visits("requestPath", 5),
 	visits("referrerHostname", 10),
