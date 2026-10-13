@@ -1,9 +1,9 @@
 name: Daily analytics report
 
-# 毎日 9:00(日本時間)に前日のアクセスを、手動実行では今日を含む直近7日間のアクセスを Discord に送る
+# 毎日 20:00(日本時間)に前日 20:00 からのアクセスを、手動実行では今日を含む直近7日間のアクセスを Discord に送る
 on:
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 11 * * *"
   workflow_dispatch:
 
 permissions:
