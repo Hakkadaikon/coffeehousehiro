@@ -18,7 +18,7 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 
 ### 毎日のアクセスレポート(Discord)
 
-毎日9:00(日本時間)に、前日のアクセスをDiscordに送ります。Vercelは日の区切りをUTCで数えるので、「前日」は前日9:00から当日8:59まで(日本時間)です。GitHubの「Actions」タブで「Daily analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、今日を含む直近7日間を集計します。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
+毎日20:00(日本時間)に、前日20:00からその日の20:00までのアクセスをDiscordに送ります。GitHub Actionsの定期実行は数分〜数十分遅れることがありますが、集計の区切りは20:00のままなので、前後の回と重なったり抜けたりはしません。GitHubの「Actions」タブで「Daily analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、今日を含む直近7日間を集計します。Vercelは日の区切りをUTCで数えるので、この7日間は6日前の9:00から明日の8:59まで(日本時間)です。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
 
 送る内容は、訪問者数とページビュー数、よく見られたページ、リファラー(参照元)、端末、国・地域です。手動で7日間を送るときは、日別の数も付けます。訪問者は日ごとに数えるので、7日間の合計は延べ人数になります。
 
