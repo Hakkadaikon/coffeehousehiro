@@ -1,17 +1,17 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildReport, lastWeek, queryRange, recentWeek } from "./report.ts";
+import { buildReport, queryRange, recentWeek, yesterday } from "./report.ts";
 
-test("集計期間は、実行日の前日までの7日間（日本時間）", () => {
-	// 月曜 9:00 JST に動いたとき、前の週の月曜〜日曜
-	assert.deepEqual(lastWeek(new Date("2026-10-12T00:00:00Z")), {
-		since: "2026-10-05",
-		until: "2026-10-11",
+test("集計するのは、実行日の前日（日本時間）", () => {
+	// 毎朝 9:00 JST に動いたとき
+	assert.deepEqual(yesterday(new Date("2026-10-13T00:00:00Z")), {
+		since: "2026-10-12",
+		until: "2026-10-12",
 	});
 	// 日本時間ではもう翌日になっている時刻
-	assert.deepEqual(lastWeek(new Date("2026-10-11T16:00:00Z")), {
-		since: "2026-10-05",
-		until: "2026-10-11",
+	assert.deepEqual(yesterday(new Date("2026-10-12T16:00:00Z")), {
+		since: "2026-10-12",
+		until: "2026-10-12",
 	});
 });
 
@@ -33,7 +33,7 @@ const data = {
 	countries: [{ country: "JP", pageviews: 10, visitors: 7 }],
 };
 
-test("週の合計と、日別・ページ・参照元・端末・国の内訳を書く", () => {
+test("期間の合計と、日別・ページ・参照元・端末・国の内訳を書く", () => {
 	const text = buildReport(data);
 	assert.match(text, /10\/05〜10\/11/);
 	assert.match(text, /訪問者 7人・ページビュー 10回/);
@@ -45,7 +45,7 @@ test("週の合計と、日別・ページ・参照元・端末・国の内訳�
 	assert.match(text, /JP 7人/);
 });
 
-test("アクセスがない週も、0として送る", () => {
+test("アクセスがない期間も、0として送る", () => {
 	const text = buildReport({
 		...data,
 		days: [],
@@ -72,6 +72,17 @@ test("手動で動かすときは、今日を含む直近7日間（日本時間�
 		since: "2026-10-06",
 		until: "2026-10-12",
 	});
+});
+
+test("1日分のときは、日付と曜日を見出しに書き、日別の内訳は省く", () => {
+	const text = buildReport({
+		...data,
+		range: { since: "2026-10-12", until: "2026-10-12" },
+		days: [{ timestamp: "2026-10-12T00:00:00.000Z", pageviews: 3, visitors: 2 }],
+	});
+	assert.match(text, /アクセス（10\/12（月））/);
+	assert.match(text, /訪問者 2人・ページビュー 3回/);
+	assert.doesNotMatch(text, /日別/);
 });
 
 test("期間中のアクセスが1件もないときは、そのことを書き添える", () => {
