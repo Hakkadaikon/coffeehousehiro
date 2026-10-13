@@ -68,7 +68,7 @@ async function hogql(query: string): Promise<unknown[][]> {
 
 /**
  * ページの中での動きを PostHog から集計する。フォームは、クリックした要素かその親の id(details#order-form)か、
- * リンク先(href="#order-form")で見分ける。「送った」は、フォームの中のコピーのボタン(「コピーしてLINEを開く」など)
+ * リンク先(href="#order-form")で見分ける。「メッセージをコピー」は、フォームの中のコピーのボタン(「コピーしてLINEを開く」など)
  */
 async function behavior(): Promise<Behavior | null> {
 	const utc = (iso: string) => `toDateTime('${iso.slice(0, 19).replace("T", " ")}', 'UTC')`;

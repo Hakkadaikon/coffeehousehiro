@@ -88,7 +88,7 @@ const top = (rows: Row[], key: string, unit: (r: Row) => string) =>
 		? "なし"
 		: rows.map((r) => `${String(r[key] || "直接・不明")} ${unit(r)}`).join(" / ");
 
-const funnel = ({ opened, sent }: Funnel) => `開いた ${opened}人 → 送った ${sent}人`;
+const funnel = ({ opened, sent }: Funnel) => `開いた ${opened}人 → メッセージをコピー ${sent}人`;
 
 function behaviorLines(b: Behavior | null) {
 	if (!b) return ["", "（PostHog の集計は取得できませんでした）"];

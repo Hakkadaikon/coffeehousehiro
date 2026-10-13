@@ -153,8 +153,8 @@ test("PostHog の集計があれば、押されたボタン・フォームの進
 	const text = buildReport({ ...data, behavior });
 	assert.match(text, /\*\*ページ内の動き（PostHog）\*\*/);
 	assert.match(text, /押されたボタン\*\* 注文フォーム 14回 \/ 来店予約フォーム 6回$/m);
-	assert.match(text, /注文フォーム\*\* 開いた 9人 → 送った 2人$/m);
-	assert.match(text, /来店予約フォーム\*\* 開いた 4人 → 送った 1人$/m);
+	assert.match(text, /注文フォーム\*\* 開いた 9人 → メッセージをコピー 2人$/m);
+	assert.match(text, /来店予約フォーム\*\* 開いた 4人 → メッセージをコピー 1人$/m);
 	// 割合は四捨五入
 	assert.match(text, /どこまで読まれたか\*\* 最後まで 35% \/ 半分まで 30% \/ 最初だけ 35%$/m);
 });
