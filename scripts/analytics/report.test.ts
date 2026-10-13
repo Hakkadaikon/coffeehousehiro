@@ -146,6 +146,7 @@ const behavior = {
 		["来店予約フォーム", 6],
 	] as [string, number][],
 	forms: { order: { opened: 9, sent: 2 }, reserve: { opened: 4, sent: 1 } },
+	links: { instagram: { clicks: 5, people: 4 }, line: { clicks: 3, people: 3 } },
 	scroll: { end: 7, half: 6, top: 7 },
 };
 
@@ -155,6 +156,8 @@ test("PostHog の集計があれば、押されたボタン・フォームの進
 	assert.match(text, /押されたボタン\*\* 注文フォーム 14回 \/ 来店予約フォーム 6回$/m);
 	assert.match(text, /注文フォーム\*\* 開いた 9人 → メッセージをコピー 2人$/m);
 	assert.match(text, /来店予約フォーム\*\* 開いた 4人 → メッセージをコピー 1人$/m);
+	assert.match(text, /Instagramを開いた\*\* 5回（4人）$/m);
+	assert.match(text, /LINEを開いた（お問い合わせ・友だち追加）\*\* 3回（3人）$/m);
 	// 割合は四捨五入
 	assert.match(text, /どこまで読まれたか\*\* 最後まで 35% \/ 半分まで 30% \/ 最初だけ 35%$/m);
 });
@@ -163,6 +166,7 @@ test("PostHog の集計が空なら「なし」、取れなかったときはそ
 	const empty = {
 		buttons: [],
 		forms: { order: { opened: 0, sent: 0 }, reserve: { opened: 0, sent: 0 } },
+		links: { instagram: { clicks: 0, people: 0 }, line: { clicks: 0, people: 0 } },
 		scroll: { end: 0, half: 0, top: 0 },
 	};
 	const text = buildReport({ ...data, behavior: empty });

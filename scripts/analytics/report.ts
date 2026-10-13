@@ -4,11 +4,14 @@ type Count = { pageviews: number; visitors: number };
 export type Row = Count & Record<string, unknown>;
 export type Range = { since: string; until: string };
 type Funnel = { opened: number; sent: number };
+type Opens = { clicks: number; people: number };
 /** PostHog から集計した、ページの中での動き */
 export type Behavior = {
 	/** 押されたボタン・リンクの文言と回数(多い順) */
 	buttons: [string, number][];
 	forms: { order: Funnel; reserve: Funnel };
+	/** Instagram と LINE(お問い合わせ・友だち追加)へのリンクを押した回数と人数 */
+	links: { instagram: Opens; line: Opens };
 	/** ページを離れたときのスクロール位置ごとの回数。最後まで(90%以上)・半分まで(50%以上)・最初だけ */
 	scroll: { end: number; half: number; top: number };
 };
@@ -90,6 +93,8 @@ const top = (rows: Row[], key: string, unit: (r: Row) => string) =>
 
 const funnel = ({ opened, sent }: Funnel) => `開いた ${opened}人 → メッセージをコピー ${sent}人`;
 
+const opens = ({ clicks, people }: Opens) => `${clicks}回（${people}人）`;
+
 function behaviorLines(b: Behavior | null) {
 	if (!b) return ["", "（PostHog の集計は取得できませんでした）"];
 	const { end, half, top } = b.scroll;
@@ -101,6 +106,8 @@ function behaviorLines(b: Behavior | null) {
 		`**押されたボタン** ${b.buttons.length === 0 ? "なし" : b.buttons.map(([t, n]) => `${t} ${n}回`).join(" / ")}`,
 		`**注文フォーム** ${funnel(b.forms.order)}`,
 		`**来店予約フォーム** ${funnel(b.forms.reserve)}`,
+		`**Instagramを開いた** ${opens(b.links.instagram)}`,
+		`**LINEを開いた（お問い合わせ・友だち追加）** ${opens(b.links.line)}`,
 		`**どこまで読まれたか** ${all === 0 ? "なし" : `最後まで ${pct(end)} / 半分まで ${pct(half)} / 最初だけ ${pct(top)}`}`,
 	];
 }
