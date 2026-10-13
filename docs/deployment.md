@@ -29,6 +29,8 @@ PostHogのプロジェクト設定(Settings → Project)では、次の2つを�
 
 送る内容は、訪問者数とページビュー数、アクセスの多い時間帯(上位3つ)、よく見られたページ、リファラー(参照元)、端末、国・地域です。訪問者数は期間を通した人数です。時間帯は、ページビューを日本時間の時刻ごとに足して比べます。1週間・1か月を選んだときは、日別の数も付けます。日別の区切りはVercelに合わせてUTCなので、1日は日本時間の9:00から翌日の8:59までです。
 
+`POSTHOG_API_KEY` を登録していれば、PostHogの集計も「ページ内の動き」として付けます。押されたボタンの上位5つ、注文フォームと来店予約フォームを開いた人と送った人の数、ページを離れたときにどこまで読んでいたか(最後まで・半分まで・最初だけ)です。フォームは、要素の id(`order-form`・`reserve-form`)とリンク先で見分け、「送った」はフォームの中の「コピー」を含むボタンを押した人です。ボタンの文言や id を変えるときは、`scripts/analytics/send.ts` の集計も合わせて直してください。PostHogから取れなかったときも、Vercelの集計は送ります。
+
 動かすには、GitHubのリポジトリの Settings → Secrets and variables → Actions に、次のSecretsを登録します。
 
 | 名前 | 中身 |
@@ -36,6 +38,7 @@ PostHogのプロジェクト設定(Settings → Project)では、次の2つを�
 | `VERCEL_TOKEN` | Vercelのアクセストークン(Account Settings → Tokens で作る) |
 | `VERCEL_PROJECT_ID` | VercelのプロジェクトID(プロジェクトの Settings → General にある `prj_` で始まる値) |
 | `DISCORD_WEBHOOK_URL` | 送り先チャンネルのWebhook URL(チャンネルの設定 → 連携サービス → ウェブフック) |
+| `POSTHOG_API_KEY` | PostHogのPersonal API key(`phx_` で始まる値)。Settings → User → Personal API keys で、権限は「Query」の読み取りだけにして作る。無ければPostHogの段落を省く |
 | `VERCEL_TEAM_ID` | チームのプロジェクトのときだけ。個人アカウントなら登録しない |
 
 手元で文面だけ確かめるときは、`VERCEL_TOKEN` と `VERCEL_PROJECT_ID` を環境変数に入れて `node scripts/analytics/send.ts --dry-run` を実行します。`REPORT_PERIOD=1週間` のように期間を付けると、手動実行と同じ期間で集計します。Discordには送らずに文面を表示します。
