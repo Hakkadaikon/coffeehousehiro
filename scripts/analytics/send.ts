@@ -23,7 +23,7 @@ if (period && !PERIODS[period])
 	throw new Error(`REPORT_PERIOD は ${Object.keys(PERIODS).join("・")} のどれか`);
 const range = period ? recent(new Date(), PERIODS[period]) : last24Hours(new Date());
 
-/** visits/aggregate を by で分けて取る。by が空なら期間全体の1行 */
+/** visits/aggregate を by で分けて取る(by は必須) */
 async function visits(by: string, limit?: number): Promise<Row[]> {
 	const url = new URL("https://api.vercel.com/v1/query/web-analytics/visits/aggregate");
 	const params = {
@@ -39,16 +39,19 @@ async function visits(by: string, limit?: number): Promise<Row[]> {
 	return (await res.json()).data;
 }
 
-const [[total = { pageviews: 0, visitors: 0 }], hours, days, pages, referrers, devices, countries] =
-	await Promise.all([
-		visits(""),
-		visits("hour"),
-		visits("day"),
-		visits("requestPath", 5),
-		visits("referrerHostname", 10),
-		visits("deviceType"),
-		visits("country", 5),
-	]);
+const [hours, days, pages, referrers, devices, countries] = await Promise.all([
+	visits("hour"),
+	visits("day"),
+	visits("requestPath", 5),
+	visits("referrerHostname", 10),
+	visits("deviceType"),
+	visits("country", 5),
+]);
+// by なしでは取れないので、期間全体の数は端末の種類ごとの数を足す
+const total = {
+	pageviews: devices.reduce((n, r) => n + r.pageviews, 0),
+	visitors: devices.reduce((n, r) => n + r.visitors, 0),
+};
 // Actions のログで、API から何件返ったかを確かめられるようにする
 console.log(
 	`${range.since}〜${range.until}: total=${JSON.stringify(total)} hours=${hours.length} days=${days.length} pages=${pages.length} referrers=${referrers.length} devices=${devices.length} countries=${countries.length}`,
