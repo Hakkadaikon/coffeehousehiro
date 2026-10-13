@@ -16,6 +16,8 @@ export type Behavior = {
 	scroll: { end: number; half: number; top: number };
 };
 export type ReportData = {
+	/** 見出しに書く名前。毎日は「アクセス」、ほかに「週間アクセス」「月間アクセス」 */
+	name?: string;
 	range: Range;
 	/** 期間全体の数。訪問者は期間を通した人数 */
 	total: Count;
@@ -42,6 +44,37 @@ export function last24Hours(now: Date): Range {
 	const at20 = 20 * 3600e3 - JST;
 	const until = Math.floor((now.getTime() - at20) / 86400e3) * 86400e3 + at20;
 	return { since: new Date(until - 86400e3).toISOString(), until: new Date(until).toISOString() };
+}
+
+/**
+ * 定期実行で送るレポート。毎日の24時間に加えて、金曜は前の金曜 20:00 からの週間、月末日は前月末日 20:00 からの月間。
+ * 曜日と日付は、集計の区切り(20:00 日本時間)の日で決める
+ */
+export function scheduled(now: Date): { name: string; range: Range }[] {
+	const day = last24Hours(now);
+	const until = Date.parse(day.until);
+	const today = new Date(until + JST);
+	const iso = (t: number) => new Date(t).toISOString();
+	return [
+		{ name: "アクセス", range: day },
+		...(today.getUTCDay() === 5
+			? [{ name: "週間アクセス", range: { since: iso(until - 7 * 86400e3), until: day.until } }]
+			: []),
+		...(new Date(until + JST + 86400e3).getUTCDate() === 1
+			? [
+					{
+						name: "月間アクセス",
+						range: {
+							// 前月の末日 20:00(日本時間)
+							since: iso(
+								Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 0) + 20 * 3600e3 - JST,
+							),
+							until: day.until,
+						},
+					},
+				]
+			: []),
+	];
 }
 
 /** 今から days 日さかのぼった期間(分単位)。手動で動かして、今の様子を見るときに使う */
@@ -131,7 +164,7 @@ function behaviorEmbed(b: Behavior | null): Embed {
 				all === 0 ? [] : [`最後まで ${pct(end)}`, `半分まで ${pct(half)}`, `最初だけ ${pct(top)}`],
 			),
 			field("Instagramを開いた", opens(b.links.instagram)),
-			field("LINEを開いた（お問い合わせ・友だち追加）", opens(b.links.line)),
+			field("LINEを開いた", opens(b.links.line)),
 		],
 	};
 }
@@ -171,6 +204,7 @@ function dailyFields(days: Row[]): Field[] {
 }
 
 export function buildReport({
+	name = "アクセス",
 	range,
 	total,
 	hours,
@@ -184,7 +218,7 @@ export function buildReport({
 	const people = (r: Row) => `${r.visitors}人`;
 	const oneDay = Date.parse(range.until) - Date.parse(range.since) <= 86400e3;
 	const access: Embed = {
-		title: `コーヒーhouseヒロ アクセス（${jst(range.since)}〜${jst(range.until)}）`,
+		title: `コーヒーhouseヒロ ${name}（${jst(range.since)}〜${jst(range.until)}）`,
 		...(total.pageviews === 0 ? { description: "この期間のアクセスはありません。" } : {}),
 		color: COLOR,
 		fields: [

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildReport, hourChunks, last24Hours, recent } from "./report.ts";
+import { buildReport, hourChunks, last24Hours, recent, scheduled } from "./report.ts";
 
 test("集計するのは、直近の 20:00（日本時間）までの24時間", () => {
 	// 20:00 JST に動いたとき、前日 20:00 から今まで
@@ -154,7 +154,7 @@ test("PostHog の集計があれば、2つ目の埋め込みに押されたボ�
 	assert.equal(f.注文フォーム, "開いた 9人\nメッセージをコピー 2人");
 	assert.equal(f.来店予約フォーム, "開いた 4人\nメッセージをコピー 1人");
 	assert.equal(f.Instagramを開いた, "5回（4人）");
-	assert.equal(f["LINEを開いた（お問い合わせ・友だち追加）"], "3回（3人）");
+	assert.equal(f.LINEを開いた, "3回（3人）");
 	// 割合は四捨五入
 	assert.equal(f.どこまで読まれたか, "最後まで 35%\n半分まで 30%\n最初だけ 35%");
 });
@@ -198,4 +198,38 @@ test("1か月のときは、日別ではなく7日ずつの週別にまとめる
 		].join("\n"),
 	);
 	assert.equal(f.いちばん多かった日, "10/03（土） 50回");
+});
+
+test("定期実行は毎日の24時間に加えて、金曜は週間、月末日は月間も送る。どれも 20:00 区切り", () => {
+	const names = (now: string) => scheduled(new Date(now)).map((r) => r.name);
+	// 木曜
+	assert.deepEqual(names("2026-10-15T11:00:00Z"), ["アクセス"]);
+	// 金曜は、前の金曜 20:00 からの7日間
+	assert.deepEqual(scheduled(new Date("2026-10-16T11:05:00Z"))[1], {
+		name: "週間アクセス",
+		range: { since: "2026-10-09T11:00:00.000Z", until: "2026-10-16T11:00:00.000Z" },
+	});
+	// 月末日(土曜)は、前月末日 20:00 からの1か月
+	assert.deepEqual(scheduled(new Date("2026-10-31T11:00:00Z")), [
+		{
+			name: "アクセス",
+			range: { since: "2026-10-30T11:00:00.000Z", until: "2026-10-31T11:00:00.000Z" },
+		},
+		{
+			name: "月間アクセス",
+			range: { since: "2026-09-30T11:00:00.000Z", until: "2026-10-31T11:00:00.000Z" },
+		},
+	]);
+	// 2月の末日
+	assert.deepEqual(names("2027-02-28T11:00:00Z"), ["アクセス", "月間アクセス"]);
+	// 金曜で月末日なら3つ
+	assert.deepEqual(names("2027-04-30T11:00:00Z"), ["アクセス", "週間アクセス", "月間アクセス"]);
+});
+
+test("見出しに、毎日・週間・月間のどれかを書く", () => {
+	assert.match(buildReport(data).embeds[0].title, /^コーヒーhouseヒロ アクセス（/);
+	assert.match(
+		buildReport({ ...data, name: "週間アクセス" }).embeds[0].title,
+		/^コーヒーhouseヒロ 週間アクセス（/,
+	);
 });
