@@ -80,7 +80,7 @@ async function behavior(): Promise<Behavior | null> {
 	try {
 		const [buttons, [forms], [scroll]] = await Promise.all([
 			hogql(
-				`SELECT properties.$el_text AS label, count() AS n ${clicks} AND notEmpty(coalesce(label, '')) GROUP BY label ORDER BY n DESC LIMIT 5`,
+				`SELECT properties.$el_text AS label, count() AS n ${clicks} AND notEmpty(coalesce(label, '')) GROUP BY label ORDER BY n DESC LIMIT 10`,
 			),
 			hogql(
 				`SELECT ${people("elements_chain LIKE '%order-form%'")}, ${sent("order-form")}, ${people("elements_chain LIKE '%reserve-form%'")}, ${sent("reserve-form")} ${clicks}`,
@@ -91,7 +91,11 @@ async function behavior(): Promise<Behavior | null> {
 		]);
 		const n = (rows: unknown[], i: number) => Number(rows[i]);
 		return {
-			buttons: buttons.map(([label, count]) => [String(label), Number(count)]),
+			// 来店予約のカレンダーの日付(数字だけのボタン)は除く
+			buttons: buttons
+				.map(([label, count]): [string, number] => [String(label), Number(count)])
+				.filter(([label]) => !/^\d+$/.test(label))
+				.slice(0, 5),
 			forms: {
 				order: { opened: n(forms, 0), sent: n(forms, 1) },
 				reserve: { opened: n(forms, 2), sent: n(forms, 3) },
