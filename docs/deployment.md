@@ -18,9 +18,9 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 
 ### 毎日のアクセスレポート(Discord)
 
-毎日20:00(日本時間)に、前日20:00からその日の20:00までのアクセスをDiscordに送ります。GitHub Actionsの定期実行は数分〜数十分遅れることがありますが、集計の区切りは20:00のままなので、前後の回と重なったり抜けたりはしません。GitHubの「Actions」タブで「Daily analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、今日を含む直近7日間を集計します。Vercelは日の区切りをUTCで数えるので、この7日間は6日前の9:00から明日の8:59まで(日本時間)です。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
+毎日20:00(日本時間)に、前日20:00からその日の20:00までのアクセスをDiscordに送ります。GitHub Actionsの定期実行は数分〜数十分遅れることがありますが、集計の区切りは20:00のままなので、前後の回と重なったり抜けたりはしません。GitHubの「Actions」タブで「Daily analytics report」を選び、「Run workflow」を押すと、すぐに送ることもできます。手動で送るときは、「24時間」「1週間」「1か月(30日)」から期間を選び、今からさかのぼって集計します。中身は `.github/workflows/analytics-report.yml` と `scripts/analytics/` にあります。
 
-送る内容は、訪問者数とページビュー数、よく見られたページ、リファラー(参照元)、端末、国・地域です。手動で7日間を送るときは、日別の数も付けます。訪問者は日ごとに数えるので、7日間の合計は延べ人数になります。
+送る内容は、訪問者数とページビュー数、アクセスの多い時間帯(上位3つ)、よく見られたページ、リファラー(参照元)、端末、国・地域です。訪問者数は期間を通した人数です。時間帯は、ページビューを日本時間の時刻ごとに足して比べます。1週間・1か月を選んだときは、日別の数も付けます。日別の区切りはVercelに合わせてUTCなので、1日は日本時間の9:00から翌日の8:59までです。
 
 動かすには、GitHubのリポジトリの Settings → Secrets and variables → Actions に、次のSecretsを登録します。
 
@@ -31,7 +31,7 @@ main以外のブランチはVercelにデプロイしません(`vercel.json` の 
 | `DISCORD_WEBHOOK_URL` | 送り先チャンネルのWebhook URL(チャンネルの設定 → 連携サービス → ウェブフック) |
 | `VERCEL_TEAM_ID` | チームのプロジェクトのときだけ。個人アカウントなら登録しない |
 
-手元で文面だけ確かめるときは、`VERCEL_TOKEN` と `VERCEL_PROJECT_ID` を環境変数に入れて `node scripts/analytics/send.ts --dry-run` を実行します。Discordには送らずに文面を表示します。
+手元で文面だけ確かめるときは、`VERCEL_TOKEN` と `VERCEL_PROJECT_ID` を環境変数に入れて `node scripts/analytics/send.ts --dry-run` を実行します。`REPORT_PERIOD=1週間` のように期間を付けると、手動実行と同じ期間で集計します。Discordには送らずに文面を表示します。
 
 ## ほかのホスティングサービスで公開するとき
 
