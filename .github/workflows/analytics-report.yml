@@ -32,5 +32,6 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
           # 手動実行のときだけ入る。定期実行では空
           REPORT_PERIOD: ${{ inputs.period }}
