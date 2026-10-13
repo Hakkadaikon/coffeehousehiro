@@ -99,6 +99,7 @@ test("期間の合計と、日別・時間帯・ページ・参照元・端末�
 	// 時間帯は日本時間の時刻ごとに足して、多い順に3つ
 	assert.equal(f.アクセスの多い時間帯, "20時台 6回\n21時台 3回\n12時台 1回");
 	assert.ok(f.日別.includes("10/06（火） 5人・7回"));
+	assert.equal(f.いちばん多かった日, "10/06（火） 7回");
 	assert.ok(f.よく見られたページ.includes("/legal 1回"));
 	assert.equal(f["リファラー（参照元）"], "l.instagram.com 3人\n直接・不明 4人");
 	assert.equal(f.端末, "mobile 6人");
@@ -113,6 +114,7 @@ test("24時間分のときは、日別の内訳を省く", () => {
 	});
 	assert.match(report.embeds[0].title, /10\/12（月）20:00〜10\/13（火）20:00/);
 	assert.equal(fields(report).日別, undefined);
+	assert.equal(fields(report).いちばん多かった日, undefined);
 });
 
 test("アクセスがない期間も0として送り、アクセスがないことを書き添える", () => {
@@ -169,4 +171,31 @@ test("PostHog の集計が空なら「なし」、取れなかったときはそ
 	assert.equal(f.どこまで読まれたか, "なし");
 	const failed = buildReport({ ...data, behavior: null });
 	assert.match(failed.embeds[1].description ?? "", /PostHog の集計は取得できませんでした/);
+});
+
+test("1か月のときは、日別ではなく7日ずつの週別にまとめる", () => {
+	const days = Array.from({ length: 31 }, (_, i) => ({
+		timestamp: new Date(Date.parse("2026-09-13T00:00:00.000Z") + i * 86400e3).toISOString(),
+		pageviews: i === 20 ? 50 : 2,
+		visitors: 1,
+	}));
+	const f = fields(
+		buildReport({
+			...data,
+			range: { since: "2026-09-13T00:41:00.000Z", until: "2026-10-13T00:41:00.000Z" },
+			days,
+		}),
+	);
+	assert.equal(f.日別, undefined);
+	assert.equal(
+		f.週別,
+		[
+			"09/13〜09/19 7人・14回",
+			"09/20〜09/26 7人・14回",
+			"09/27〜10/03 7人・62回",
+			"10/04〜10/10 7人・14回",
+			"10/11〜10/13 3人・6回",
+		].join("\n"),
+	);
+	assert.equal(f.いちばん多かった日, "10/03（土） 50回");
 });

@@ -136,6 +136,40 @@ function behaviorEmbed(b: Behavior | null): Embed {
 	};
 }
 
+const date = (d: Row) => String(d.timestamp).slice(0, 10);
+const sum = (rows: Row[], key: keyof Count) => rows.reduce((n, r) => n + r[key], 0);
+
+/** 日ごとの数。9日以上(1週間を選ぶと、期間の始まりの日を含めて8日分返る)は7日ずつの週別にまとめる。どちらも、ページビューがいちばん多かった日を添える */
+function dailyFields(days: Row[]): Field[] {
+	const weeks = Array.from({ length: Math.ceil(days.length / 7) }, (_, i) =>
+		days.slice(i * 7, i * 7 + 7),
+	);
+	const best = days.reduce<Row | undefined>(
+		(a, d) => (a && a.pageviews >= d.pageviews ? a : d),
+		undefined,
+	);
+	return [
+		days.length <= 8
+			? field(
+					"日別",
+					days.map((d) => `${mdw(date(d))} ${d.visitors}人・${d.pageviews}回`),
+					false,
+				)
+			: field(
+					"週別",
+					weeks.map(
+						(w) =>
+							`${md(date(w[0]))}〜${md(date(w[w.length - 1]))} ${sum(w, "visitors")}人・${sum(w, "pageviews")}回`,
+					),
+					false,
+				),
+		field(
+			"いちばん多かった日",
+			best && best.pageviews > 0 ? [`${mdw(date(best))} ${best.pageviews}回`] : [],
+		),
+	];
+}
+
 export function buildReport({
 	range,
 	total,
@@ -157,17 +191,7 @@ export function buildReport({
 			field("訪問者", [`${total.visitors}人`]),
 			field("ページビュー", [`${total.pageviews}回`]),
 			field("アクセスの多い時間帯", busyHours(hours)),
-			...(oneDay
-				? []
-				: [
-						field(
-							"日別",
-							days.map(
-								(d) => `${mdw(String(d.timestamp).slice(0, 10))} ${d.visitors}人・${d.pageviews}回`,
-							),
-							false,
-						),
-					]),
+			...(oneDay ? [] : dailyFields(days)),
 			field("リファラー（参照元）", top(referrers, "referrerHostname", people)),
 			field("端末", top(devices, "deviceType", people)),
 			field("国・地域", top(countries, "country", people)),
