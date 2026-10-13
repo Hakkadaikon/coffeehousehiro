@@ -102,8 +102,11 @@ test("ページの表示に外部のサーバーを使わない（フォント�
 test("PostHog には自分のドメインの /ingest 経由で送り、cookie・画面の録画・入力欄の操作は使わない", () => {
 	const rewrites = JSON.parse(read("vercel.json")).rewrites;
 	assert.deepEqual(rewrites, [
-		{ source: "/ingest/static/:path*", destination: "https://us-assets.i.posthog.com/static/:path*" },
-		{ source: "/ingest/:path*", destination: "https://us.i.posthog.com/:path*" },
+		{
+			source: "/ingest/static/:path(.*)",
+			destination: "https://us-assets.i.posthog.com/static/:path",
+		},
+		{ source: "/ingest/:path(.*)", destination: "https://us.i.posthog.com/:path" },
 	]);
 	const main = read("src/main.tsx");
 	// 外部からスクリプトを読み込まない版
