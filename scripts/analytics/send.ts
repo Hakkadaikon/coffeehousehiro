@@ -135,7 +135,7 @@ const total = {
 console.log(
 	`${range.since}〜${range.until}: posthog=${JSON.stringify(ph)} total=${JSON.stringify(total)} hours=${hours.length} days=${days.length} pages=${pages.length} referrers=${referrers.length} devices=${devices.length} countries=${countries.length}`,
 );
-const content = buildReport({
+const report = buildReport({
 	range,
 	total,
 	hours,
@@ -148,12 +148,12 @@ const content = buildReport({
 });
 
 if (dryRun) {
-	console.log(content);
+	console.log(JSON.stringify(report, null, 2));
 } else {
 	const res = await fetch(webhook, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ content, allowed_mentions: { parse: [] } }),
+		body: JSON.stringify({ ...report, allowed_mentions: { parse: [] } }),
 	});
 	if (!res.ok) throw new Error(`Discord: ${res.status} ${await res.text()}`);
 	console.log(`送信しました（${range.since}〜${range.until}）`);
