@@ -169,5 +169,5 @@ async function send(name: string, range: Range) {
 	console.log(`送信しました（${name} ${range.since}〜${range.until}）`);
 }
 
-// 毎日 → 週間 → 月間の順に届くよう、1つずつ送る
+// 週間 → 月間の順に届くよう、1つずつ送る
 for (const { name, range } of reports) await send(name, range);

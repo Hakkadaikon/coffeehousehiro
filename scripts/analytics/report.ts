@@ -47,7 +47,7 @@ export function last24Hours(now: Date): Range {
 }
 
 /**
- * 定期実行で送るレポート。毎日の24時間に加えて、金曜は前の金曜 20:00 からの週間、月末日は前月末日 20:00 からの月間。
+ * 定期実行で送るレポート。金曜は前の金曜 20:00 からの週間、月末日は前月末日 20:00 からの月間。ほかの日は送らない。
  * 曜日と日付は、集計の区切り(20:00 日本時間)の日で決める
  */
 export function scheduled(now: Date): { name: string; range: Range }[] {
@@ -56,7 +56,6 @@ export function scheduled(now: Date): { name: string; range: Range }[] {
 	const today = new Date(until + JST);
 	const iso = (t: number) => new Date(t).toISOString();
 	return [
-		{ name: "アクセス", range: day },
 		...(today.getUTCDay() === 5
 			? [{ name: "週間アクセス", range: { since: iso(until - 7 * 86400e3), until: day.until } }]
 			: []),

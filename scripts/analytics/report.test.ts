@@ -200,30 +200,26 @@ test("1か月のときは、日別ではなく7日ずつの週別にまとめる
 	assert.equal(f.いちばん多かった日, "10/03（土） 50回");
 });
 
-test("定期実行は毎日の24時間に加えて、金曜は週間、月末日は月間も送る。どれも 20:00 区切り", () => {
+test("定期実行は金曜に週間、月末日に月間を送る。ほかの日は送らない。どれも 20:00 区切り", () => {
 	const names = (now: string) => scheduled(new Date(now)).map((r) => r.name);
 	// 木曜
-	assert.deepEqual(names("2026-10-15T11:00:00Z"), ["アクセス"]);
+	assert.deepEqual(names("2026-10-15T11:00:00Z"), []);
 	// 金曜は、前の金曜 20:00 からの7日間
-	assert.deepEqual(scheduled(new Date("2026-10-16T11:05:00Z"))[1], {
+	assert.deepEqual(scheduled(new Date("2026-10-16T11:05:00Z"))[0], {
 		name: "週間アクセス",
 		range: { since: "2026-10-09T11:00:00.000Z", until: "2026-10-16T11:00:00.000Z" },
 	});
 	// 月末日(土曜)は、前月末日 20:00 からの1か月
 	assert.deepEqual(scheduled(new Date("2026-10-31T11:00:00Z")), [
 		{
-			name: "アクセス",
-			range: { since: "2026-10-30T11:00:00.000Z", until: "2026-10-31T11:00:00.000Z" },
-		},
-		{
 			name: "月間アクセス",
 			range: { since: "2026-09-30T11:00:00.000Z", until: "2026-10-31T11:00:00.000Z" },
 		},
 	]);
 	// 2月の末日
-	assert.deepEqual(names("2027-02-28T11:00:00Z"), ["アクセス", "月間アクセス"]);
-	// 金曜で月末日なら3つ
-	assert.deepEqual(names("2027-04-30T11:00:00Z"), ["アクセス", "週間アクセス", "月間アクセス"]);
+	assert.deepEqual(names("2027-02-28T11:00:00Z"), ["月間アクセス"]);
+	// 金曜で月末日なら2つ
+	assert.deepEqual(names("2027-04-30T11:00:00Z"), ["週間アクセス", "月間アクセス"]);
 });
 
 test("見出しに、毎日・週間・月間のどれかを書く", () => {
