@@ -23,14 +23,14 @@ export function RoastSlider() {
 				whileInView="visible"
 				viewport={{ once: true }}
 				variants={fadeIn}
-				className="max-w-3xl md:max-w-4xl mx-auto"
+				className="max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto"
 			>
 				<div className="text-center mb-16 md:mb-20">
 					<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">
 						焙煎度で変わる味
 					</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/60 uppercase">Roast</p>
-					<p className="text-xs md:text-base tracking-widest text-roast/75 mt-4 text-pretty">
+					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">Roast</p>
+					<p className="text-sm md:text-lg tracking-wider text-roast/75 mt-4 text-pretty">
 						<span className="inline-block">つまみを動かすと、</span>
 						<span className="inline-block">焙煎度による豆の色と味わいの違いを</span>
 						<span className="inline-block">ご覧いただけます。</span>
@@ -79,16 +79,16 @@ export function RoastSlider() {
 									<h3 className="font-serif text-2xl md:text-[32px] tracking-widest">
 										{level.name}
 									</h3>
-									<p className="text-sm md:text-base text-roast leading-[1.9] tracking-wide mt-4 text-pretty">
+									<p className="text-sm md:text-lg text-roast leading-[1.9] tracking-wide mt-4 text-pretty">
 										{level.about}
 									</p>
-									<dl className="text-sm md:text-base text-roast/85 tracking-wide mt-4 space-y-1">
+									<dl className="text-sm md:text-lg text-roast/85 tracking-wide mt-4 space-y-1 text-pretty">
 										<div className="flex gap-3">
-											<dt className="shrink-0 text-roast/60">香り</dt>
+											<dt className="shrink-0 text-roast/70">香り</dt>
 											<dd>{level.aroma}</dd>
 										</div>
 										<div className="flex gap-3">
-											<dt className="shrink-0 text-roast/60">飲み方</dt>
+											<dt className="shrink-0 text-roast/70">飲み方</dt>
 											<dd>{level.drink}</dd>
 										</div>
 									</dl>
@@ -109,7 +109,7 @@ export function RoastSlider() {
 									</dd>
 								</div>
 							))}
-							<div className="grid grid-cols-[3rem_1fr] gap-3 text-[10px] md:text-xs text-roast/50 tracking-wider">
+							<div className="grid grid-cols-[3rem_1fr] gap-3 text-xs md:text-sm text-roast/70 tracking-wider">
 								<span />
 								<span className="flex justify-between">
 									<span>控えめ</span>
@@ -120,13 +120,13 @@ export function RoastSlider() {
 					</div>
 				</div>
 
-				<p className="text-center mt-12 text-xs md:text-sm text-roast/70 tracking-wider text-pretty">
+				<p className="text-center mt-12 text-xs md:text-base text-roast/70 tracking-wider text-pretty">
 					焙煎度は、かんたん注文フォームで豆ごとに選べます。迷ったら「おまかせ」で。
 				</p>
 				<p className="text-center mt-4">
 					<a
 						href="#order-form"
-						className="text-sm md:text-base text-caramel underline underline-offset-4 tracking-wider"
+						className="text-sm md:text-base text-caramel hover:text-espresso transition-colors underline underline-offset-4 tracking-wider"
 					>
 						焙煎度を選んで注文メッセージを作る →
 					</a>
