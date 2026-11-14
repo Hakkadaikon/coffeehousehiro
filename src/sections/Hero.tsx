@@ -38,9 +38,9 @@ export function Hero() {
 						</p>
 						<ExternalLink
 							href={LINE_URL}
-							className="mt-10 inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:text-xl md:px-10 md:py-5 bg-[#06C755] hover:bg-[#05b14c] text-white font-medium tracking-wider shadow-lg shadow-black/30 transition-colors"
+							className="mt-10 inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:text-xl md:px-10 md:py-5 bg-[#06C755] hover:bg-[#05b14c] text-white font-bold tracking-wider shadow-lg shadow-black/30 transition-colors"
 						>
-							<MessageCircle className="w-5 h-5" />
+							<MessageCircle className="w-5 h-5 shrink-0" />
 							<span className="text-center">
 								LINEで<span className="inline-block">注文・お問い合わせ</span>
 							</span>
@@ -53,7 +53,7 @@ export function Hero() {
 								alt="コーヒーhouseヒロ｜倉敷市の週末ロースター"
 								width={800}
 								height={633}
-								className="w-full max-w-[420px] md:max-w-[min(680px,78vh)] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+								className="w-full max-w-[420px] md:max-w-[min(560px,66vh)] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
 							/>
 						</h1>
 					</div>
