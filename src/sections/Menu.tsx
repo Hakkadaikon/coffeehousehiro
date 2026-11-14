@@ -18,11 +18,13 @@ export function Menu() {
 			<div className="max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto relative">
 				<div className="text-center mb-16 md:mb-20">
 					<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">商品一覧</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/60 uppercase">Menu</p>
-					<p className="text-xs md:text-base tracking-widest text-roast/75 mt-4">
-						コーヒー豆・ドリップバッグを全国へ通販でお届けします。
+					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">Menu</p>
+					<p className="text-sm md:text-lg tracking-wider text-roast/75 mt-4">
+						<span className="inline-block">コーヒー豆・ドリップバッグを</span>
+						<span className="inline-block">全国へ通販でお届けします。</span>
 						<br />
-						{MENU_START_DATE}より価格・メニューを改定しました。
+						<span className="inline-block">{MENU_START_DATE}より</span>
+						<span className="inline-block">価格・メニューを改定しました。</span>
 					</p>
 				</div>
 
@@ -55,7 +57,7 @@ export function Menu() {
 					<p className="text-center mt-6">
 						<a
 							href="#order-form"
-							className="text-sm md:text-base text-caramel underline underline-offset-4 tracking-wider"
+							className="text-sm md:text-base text-caramel hover:text-espresso transition-colors underline underline-offset-4 tracking-wider"
 						>
 							このメニューから注文メッセージを作る →
 						</a>
@@ -86,7 +88,7 @@ function MenuCategoryBlock({ category: cat, number }: { category: MenuCategory; 
 						</span>
 					)}
 				</h3>
-				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4">
+				<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2 gap-1 sm:gap-4 lg:pr-6">
 					{note && (
 						<p className="text-xs md:text-base text-roast/70 font-sans tracking-wider">{note}</p>
 					)}
@@ -117,7 +119,16 @@ function MenuItemRow({ item }: { item: MenuItem }) {
 					{formatPrices(item.prices)}
 				</span>
 			</div>
-			{sub && <p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">{sub}</p>}
+			{sub && (
+				<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
+					{/* 語の途中で折れないよう、区切り(「、」と全角スペース)ごとにまとめる */}
+					{sub.split(/(?<=[、　])/).map((part) => (
+						<span key={part} className="inline-block">
+							{part}
+						</span>
+					))}
+				</p>
+			)}
 			{item.groundPrices && (
 				<p className="text-[13px] md:text-[17px] text-roast/80 tracking-wider mt-1">
 					{`粉（手挽き）は ${formatPrices(item.groundPrices)}`}
