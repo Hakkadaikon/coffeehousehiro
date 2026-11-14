@@ -50,7 +50,7 @@ export function SiteFooter() {
 				</p>
 				<div
 					suppressHydrationWarning
-					className="text-center font-sans tracking-[0.3em] text-[11px] md:text-[13px] text-paper/40 border-t border-white/5 pt-10"
+					className="text-center font-sans tracking-[0.3em] text-[11px] md:text-[13px] text-paper/60 border-t border-white/5 pt-10"
 				>
 					&copy; {new Date().getFullYear()} {SHOP_NAME}
 				</div>
@@ -109,7 +109,7 @@ function ShopHours() {
 	return (
 		<div className="font-serif leading-loose space-y-10 pr-4">
 			<div>
-				<h3 className="text-xs md:text-sm font-sans tracking-[0.3em] text-caramel mb-4 uppercase">
+				<h3 className="text-xs md:text-sm font-sans tracking-[0.3em] text-caramel-light mb-4 uppercase">
 					Business Hours
 				</h3>
 				<p className="tracking-wider text-[14px] md:text-[17px] text-paper/80">
@@ -125,7 +125,7 @@ function ShopHours() {
 			</div>
 
 			<div>
-				<h3 className="text-xs md:text-sm font-sans tracking-[0.3em] text-caramel mb-4 uppercase">
+				<h3 className="text-xs md:text-sm font-sans tracking-[0.3em] text-caramel-light mb-4 uppercase">
 					Visit Details
 				</h3>
 				<p className="text-[13px] md:text-[17px] tracking-wide text-paper/80 leading-[1.9] text-pretty">
@@ -150,7 +150,7 @@ function DataPolicy() {
 	const label = "block mb-1 font-sans text-xs md:text-sm tracking-[0.2em] text-paper/60";
 	return (
 		<details className="group mb-16 border-t border-white/5 pt-10">
-			<summary className="flex w-fit cursor-pointer list-none items-center gap-3 py-3 -my-3 font-sans text-xs md:text-sm tracking-[0.2em] text-caramel hover:text-paper transition-colors [&::-webkit-details-marker]:hidden">
+			<summary className="flex w-fit cursor-pointer list-none items-center gap-3 py-3 -my-3 font-sans text-xs md:text-sm tracking-[0.2em] text-caramel-light hover:text-paper transition-colors [&::-webkit-details-marker]:hidden">
 				このサイトでの情報の取り扱い
 				<ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
 			</summary>
