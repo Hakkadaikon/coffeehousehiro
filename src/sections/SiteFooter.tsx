@@ -3,6 +3,7 @@ import { ExternalLink } from "../components/ExternalLink.tsx";
 import { GitHubIcon } from "../components/GitHubIcon.tsx";
 import { InstagramIcon } from "../components/InstagramIcon.tsx";
 import { PolicyLines, PolicySections } from "../components/PolicyLines.tsx";
+import { CONCEPT } from "../content/photos.ts";
 import {
 	ADDRESS,
 	INSTAGRAM_HANDLE,
@@ -59,7 +60,7 @@ export function SiteFooter() {
 	);
 }
 
-/** 店名・住所と地図、SNS、このサイトのソースコード */
+/** 店名・住所と地図、目印になる外観の写真 */
 function ShopContact() {
 	return (
 		<div>
@@ -73,38 +74,30 @@ function ShopContact() {
 			<ExternalLink
 				href={MAP_URL}
 				aria-label={`${ADDRESS} をGoogleマップで開く（新しいタブ）`}
-				className="flex w-fit items-center gap-3 mb-10 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base underline underline-offset-4 decoration-paper/30 hover:decoration-paper/70"
+				className="flex w-fit items-center gap-3 mb-6 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base underline underline-offset-4 decoration-paper/30 hover:decoration-paper/70"
 			>
 				<MapPin className="w-4 h-4" />
 				<span>Googleマップで開く</span>
 			</ExternalLink>
-
-			<ExternalLink
-				href={INSTAGRAM_URL}
-				className="inline-flex items-center gap-3 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base"
-			>
-				<InstagramIcon className="w-4 h-4" />
-				<span>{INSTAGRAM_HANDLE}</span>
-			</ExternalLink>
-			<ExternalLink
-				href={LINE_URL}
-				className="flex items-center gap-3 mt-3 text-[#06C755]/80 hover:text-[#06C755] transition-colors tracking-widest text-[13px] md:text-base"
-			>
-				<MessageCircle className="w-4 h-4" />
-				<span>LINE公式アカウント</span>
-			</ExternalLink>
-			<ExternalLink
-				href={SOURCE_CODE_URL}
-				className="flex items-center gap-3 mt-3 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base"
-			>
-				<GitHubIcon className="w-4 h-4" />
-				<span>このサイトのソースコード（GitHub）</span>
-			</ExternalLink>
+			<figure className="max-w-sm">
+				<img
+					src={CONCEPT.src}
+					alt="目印になる赤い小屋の外観"
+					width={CONCEPT.w}
+					height={CONCEPT.h}
+					loading="lazy"
+					decoding="async"
+					className="w-full aspect-[3/2] object-cover object-[50%_25%]"
+				/>
+				<figcaption className="mt-2 text-xs md:text-sm text-paper/60 tracking-wider">
+					この赤い小屋が目印です。
+				</figcaption>
+			</figure>
 		</div>
 	);
 }
 
-/** 営業時間と来店の案内 */
+/** 営業時間と来店の案内、SNS とこのサイトのソースコード */
 function ShopHours() {
 	return (
 		<div className="font-serif leading-loose space-y-10 pr-4">
@@ -139,6 +132,30 @@ function ShopHours() {
 					</a>
 					から、事前にLINEでご連絡ください。赤い小屋で、実際にコーヒーをお召し上がりいただけます。
 				</p>
+			</div>
+
+			<div className="font-sans leading-normal">
+				<ExternalLink
+					href={INSTAGRAM_URL}
+					className="inline-flex items-center gap-3 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base"
+				>
+					<InstagramIcon className="w-4 h-4" />
+					<span>{INSTAGRAM_HANDLE}</span>
+				</ExternalLink>
+				<ExternalLink
+					href={LINE_URL}
+					className="flex items-center gap-3 mt-3 text-[#06C755]/80 hover:text-[#06C755] transition-colors tracking-widest text-[13px] md:text-base"
+				>
+					<MessageCircle className="w-4 h-4" />
+					<span>LINE公式アカウント</span>
+				</ExternalLink>
+				<ExternalLink
+					href={SOURCE_CODE_URL}
+					className="flex items-center gap-3 mt-3 text-paper/75 hover:text-paper transition-colors tracking-widest text-[13px] md:text-base"
+				>
+					<GitHubIcon className="w-4 h-4" />
+					<span>このサイトのソースコード（GitHub）</span>
+				</ExternalLink>
 			</div>
 		</div>
 	);
