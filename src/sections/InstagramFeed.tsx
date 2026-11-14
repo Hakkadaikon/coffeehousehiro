@@ -17,14 +17,12 @@ export function InstagramFeed() {
 				className="max-w-5xl lg:max-w-6xl mx-auto"
 			>
 				<div className="text-center mb-12 md:mb-16">
-					<p className="text-xs md:text-sm tracking-[0.3em] text-caramel uppercase mb-4">
-						Instagram
-					</p>
-					<h2 className="font-serif text-3xl md:text-[44px] tracking-widest leading-snug mb-6">
+					<h2 className="font-serif text-3xl md:text-[44px] tracking-widest leading-snug mb-3">
 						<span className="inline-block">営業日とお知らせは、</span>
 						<span className="inline-block">Instagramで</span>
 					</h2>
-					<p className="text-sm md:text-lg text-paper/75 tracking-wide leading-[1.9] text-pretty">
+					<p className="text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase">Instagram</p>
+					<p className="text-sm md:text-lg text-paper/75 tracking-wide leading-[1.9] mt-4 text-pretty">
 						<span className="inline-block">営業日カレンダー、新しく入った豆、</span>
 						<span className="inline-block">限定コーヒーのお知らせを発信しています。</span>
 					</p>
