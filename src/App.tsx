@@ -18,10 +18,10 @@ export default function App() {
 				<main>
 					<Hero />
 					<Concept />
-					<InstagramFeed />
 					<Menu />
 					<RoastSlider />
 					<HowToOrder />
+					<InstagramFeed />
 				</main>
 				<SiteFooter />
 				<OrderBar />

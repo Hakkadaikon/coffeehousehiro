@@ -8,7 +8,7 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL, LINE_URL } from "../content/shop.ts";
 /** 営業日とお知らせは Instagram で。写真を並べてアカウントへ誘導する */
 export function InstagramFeed() {
 	return (
-		<section id="instagram" className="py-24 md:py-32 px-6 md:px-12 bg-espresso text-paper">
+		<section id="instagram" className="py-24 md:py-32 px-6 md:px-12 bg-paper text-espresso">
 			<motion.div
 				initial="hidden"
 				whileInView="visible"
@@ -21,10 +21,10 @@ export function InstagramFeed() {
 						<span className="inline-block">営業日とお知らせは、</span>
 						<span className="inline-block">Instagramで</span>
 					</h2>
-					<p className="font-serif text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase">
+					<p className="font-serif text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">
 						Instagram
 					</p>
-					<p className="text-sm md:text-lg text-paper/75 tracking-wide leading-[1.9] mt-4 text-pretty">
+					<p className="text-sm md:text-lg text-roast/75 tracking-wide leading-[1.9] mt-4 text-pretty">
 						<span className="inline-block">営業日カレンダー、新しく入った豆、</span>
 						<span className="inline-block">限定コーヒーのお知らせを発信しています。</span>
 					</p>
@@ -33,7 +33,7 @@ export function InstagramFeed() {
 				<ExternalLink
 					href={INSTAGRAM_URL}
 					aria-label={`Instagramで${INSTAGRAM_HANDLE}の投稿を見る（新しいタブで開きます）`}
-					className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 focus-visible:outline-2 focus-visible:outline-paper focus-visible:outline-offset-4"
+					className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 focus-visible:outline-2 focus-visible:outline-espresso focus-visible:outline-offset-4"
 				>
 					{INSTAGRAM_TILES.map((img, i) => (
 						<InstagramTile key={img.src} photo={img} index={i} />
@@ -43,14 +43,17 @@ export function InstagramFeed() {
 				<div className="mt-12 md:mt-16 text-center">
 					<ExternalLink
 						href={INSTAGRAM_URL}
-						className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:px-10 md:py-5 border border-paper/40 hover:border-paper hover:bg-paper hover:text-espresso text-paper tracking-wider md:text-lg transition-colors"
+						className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-8 py-4 md:px-10 md:py-5 border border-espresso/40 hover:border-espresso hover:bg-espresso hover:text-paper text-espresso tracking-wider md:text-lg transition-colors"
 					>
 						<InstagramIcon className="w-5 h-5" />
 						Instagramをフォローする
 					</ExternalLink>
-					<p className="mt-5 text-xs md:text-sm text-paper/60 tracking-wider">
+					<p className="mt-5 text-xs md:text-sm text-roast/75 tracking-wider">
 						ご注文・お問い合わせは
-						<ExternalLink href={LINE_URL} className="text-[#06C755] underline underline-offset-4">
+						<ExternalLink
+							href={LINE_URL}
+							className="text-espresso underline underline-offset-4 decoration-2 decoration-[#06C755]"
+						>
 							LINE
 						</ExternalLink>
 						から
@@ -82,7 +85,7 @@ function InstagramTile({ photo, index }: { photo: Photo; index: number }) {
 				<InstagramIcon className="w-7 h-7 text-paper opacity-0 group-hover/tile:opacity-100 transition-opacity duration-500" />
 			</div>
 			{index === 0 && (
-				<div className="absolute inset-x-0 bottom-0 p-4 md:p-6 bg-gradient-to-t from-espresso/85 to-transparent flex items-center gap-3">
+				<div className="absolute inset-x-0 bottom-0 p-4 md:p-6 bg-gradient-to-t from-espresso/85 to-transparent text-paper flex items-center gap-3">
 					<InstagramIcon className="w-5 h-5 md:w-6 md:h-6" />
 					<span className="tracking-widest text-sm md:text-lg">{INSTAGRAM_HANDLE}</span>
 				</div>
