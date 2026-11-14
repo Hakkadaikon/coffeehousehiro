@@ -21,7 +21,9 @@ export function InstagramFeed() {
 						<span className="inline-block">営業日とお知らせは、</span>
 						<span className="inline-block">Instagramで</span>
 					</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase">Instagram</p>
+					<p className="font-serif text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase">
+						Instagram
+					</p>
 					<p className="text-sm md:text-lg text-paper/75 tracking-wide leading-[1.9] mt-4 text-pretty">
 						<span className="inline-block">営業日カレンダー、新しく入った豆、</span>
 						<span className="inline-block">限定コーヒーのお知らせを発信しています。</span>

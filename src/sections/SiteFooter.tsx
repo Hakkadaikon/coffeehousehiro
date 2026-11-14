@@ -32,7 +32,7 @@ export function SiteFooter() {
 
 				<nav
 					aria-label="ページ内リンク"
-					className="flex justify-center gap-6 md:gap-10 mb-8 text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase"
+					className="flex justify-center gap-6 md:gap-10 mb-8 font-serif text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase"
 				>
 					{NAV_LINKS.map((l) => (
 						<a key={l.href} href={l.href} className="hover:text-paper transition-colors">
@@ -50,7 +50,7 @@ export function SiteFooter() {
 				</p>
 				<div
 					suppressHydrationWarning
-					className="text-center font-sans tracking-[0.3em] text-[11px] md:text-[13px] text-paper/60 border-t border-white/5 pt-10"
+					className="text-center font-serif tracking-[0.3em] text-[11px] md:text-[13px] text-paper/60 border-t border-white/5 pt-10"
 				>
 					&copy; {new Date().getFullYear()} {SHOP_NAME}
 				</div>
@@ -109,14 +109,13 @@ function ShopHours() {
 	return (
 		<div className="font-serif leading-loose space-y-10 pr-4">
 			<div>
-				<h3 className="text-xs md:text-sm font-sans tracking-[0.3em] text-caramel-light mb-4 uppercase">
+				<h3 className="text-xs md:text-sm tracking-[0.3em] text-caramel-light mb-4 uppercase">
 					Business Hours
 				</h3>
 				<p className="tracking-wider text-[14px] md:text-[17px] text-paper/80">
-					<span className="text-paper/60 text-xs md:text-sm mr-3 font-sans">MON-FRI</span>{" "}
-					サラリーマン
+					<span className="text-paper/60 text-xs md:text-sm mr-3">MON-FRI</span> サラリーマン
 					<br />
-					<span className="text-paper/60 text-xs md:text-sm mr-3 font-sans">SAT-SUN</span>{" "}
+					<span className="text-paper/60 text-xs md:text-sm mr-3">SAT-SUN</span>{" "}
 					ロースター・バリスタ
 				</p>
 				<p className="text-[11px] md:text-sm text-paper/60 mt-2 tracking-widest font-sans">
@@ -125,10 +124,10 @@ function ShopHours() {
 			</div>
 
 			<div>
-				<h3 className="text-xs md:text-sm font-sans tracking-[0.3em] text-caramel-light mb-4 uppercase">
+				<h3 className="text-xs md:text-sm tracking-[0.3em] text-caramel-light mb-4 uppercase">
 					Visit Details
 				</h3>
-				<p className="text-[13px] md:text-[17px] tracking-wide text-paper/80 leading-[1.9] text-pretty">
+				<p className="font-sans text-[13px] md:text-[17px] tracking-wide text-paper/80 leading-[1.9] text-pretty">
 					ご来店は1組4名様までの完全予約制です。
 					<br />
 					ご来店を希望される場合は、

@@ -38,7 +38,7 @@ export function Concept() {
 					</div>
 					<div className="mt-16 md:mt-20 pt-10 md:pt-12 border-t border-espresso/10 grid lg:grid-cols-2 gap-6 lg:gap-16 items-center">
 						<div className="space-y-3 lg:space-y-5">
-							<p className="text-xs md:text-sm lg:text-base tracking-widest uppercase text-caramel font-sans">
+							<p className="text-xs md:text-sm lg:text-base tracking-widest uppercase text-caramel font-serif">
 								Qualification
 							</p>
 							<p className="font-serif text-base md:text-lg lg:text-[28px] tracking-widest lg:tracking-wider leading-relaxed text-roast">

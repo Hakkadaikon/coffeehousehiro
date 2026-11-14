@@ -29,7 +29,9 @@ export function RoastSlider() {
 					<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">
 						焙煎度で変わる味
 					</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">Roast</p>
+					<p className="font-serif text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">
+						Roast
+					</p>
 					<p className="text-sm md:text-lg tracking-wider text-roast/75 mt-4 text-pretty">
 						<span className="inline-block">つまみを動かすと、</span>
 						<span className="inline-block">焙煎度による豆の色と味わいの違いを</span>

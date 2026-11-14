@@ -18,7 +18,9 @@ export function Menu() {
 			<div className="max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto relative">
 				<div className="text-center mb-16 md:mb-20">
 					<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">商品一覧</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">Menu</p>
+					<p className="font-serif text-xs md:text-sm tracking-[0.2em] text-espresso/70 uppercase">
+						Menu
+					</p>
 					<p className="text-sm md:text-lg tracking-wider text-roast/75 mt-4">
 						<span className="inline-block">コーヒー豆・ドリップバッグを</span>
 						<span className="inline-block">全国へ通販でお届けします。</span>

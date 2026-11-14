@@ -12,7 +12,7 @@ export function HowToOrder() {
 			<div className="max-w-4xl lg:max-w-5xl mx-auto">
 				<div className="text-center mb-20">
 					<h2 className="font-serif text-4xl md:text-[44px] tracking-widest mb-3">ご注文方法</h2>
-					<p className="text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase">
+					<p className="font-serif text-xs md:text-sm tracking-[0.2em] text-paper/60 uppercase">
 						How to order
 					</p>
 				</div>
@@ -59,7 +59,7 @@ function OrderSteps() {
 						{step.num}
 					</div>
 					<h3 className="text-base md:text-xl tracking-widest mb-4 text-paper/90">{step.title}</h3>
-					<p className="text-sm md:text-[17px] text-paper/80 leading-[1.9] text-left tracking-wide text-pretty">
+					<p className="font-sans text-sm md:text-[17px] text-paper/80 leading-[1.9] text-left tracking-wide text-pretty">
 						{step.desc}
 					</p>
 				</div>
