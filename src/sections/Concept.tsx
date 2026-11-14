@@ -6,7 +6,6 @@ import { CERTIFICATE, CONCEPT } from "../content/photos.ts";
 export function Concept() {
 	return (
 		<section id="about" className="py-24 md:py-32 px-6 md:px-12 bg-paper relative">
-			<div className="absolute top-0 left-12 w-px h-24 bg-espresso/10 hidden md:block"></div>
 			<div className="max-w-5xl mx-auto">
 				<motion.div
 					initial="hidden"
@@ -26,7 +25,7 @@ export function Concept() {
 							height={CONCEPT.h}
 							loading="lazy"
 							decoding="async"
-							className="w-full aspect-[4/3] md:aspect-[16/9] object-cover object-[50%_55%] motion-safe:group-hover:scale-105 transition-transform duration-1000 ease-out"
+							className="w-full aspect-[4/3] object-cover object-[50%_55%] md:object-[50%_25%] motion-safe:group-hover:scale-105 transition-transform duration-1000 ease-out"
 						/>
 					</div>
 					<div className="mt-12 md:mt-16 space-y-7 font-serif leading-[2] text-roast tracking-wide text-pretty">
