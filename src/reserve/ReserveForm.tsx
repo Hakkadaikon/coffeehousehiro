@@ -72,18 +72,19 @@ export function ReserveForm() {
 			onToggle={(e) => setOpen(e.currentTarget.open)}
 			className="group mt-10 bg-paper text-espresso shadow-2xl shadow-black/40 scroll-mt-8"
 		>
-			<summary className="flex items-center justify-between gap-4 p-5 md:p-10 lg:p-12 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+			<summary className="group/sum flex items-center justify-between gap-3 md:gap-4 p-5 md:p-10 lg:p-12 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
 				<div>
-					<h3 className="font-serif text-2xl md:text-[32px] tracking-wider md:tracking-widest mb-3">
+					<h3 className="font-serif text-[22px] md:text-[32px] tracking-wider md:tracking-widest mb-3">
 						<span className="inline-block">かんたん</span>
 						<span className="inline-block">来店予約フォーム</span>
 					</h3>
 					<p className="text-sm md:text-base text-roast/80 text-pretty">
 						<span className="inline-block">日付と時刻を選ぶだけで、</span>
-						<span className="inline-block">LINEで送る来店予約のメッセージができあがります。</span>
+						<span className="inline-block">LINEで送る来店予約の</span>
+						<span className="inline-block">メッセージができあがります。</span>
 					</p>
 				</div>
-				<span className="shrink-0 flex items-center gap-1 text-sm md:text-base text-caramel">
+				<span className="shrink-0 flex items-center gap-1 border border-caramel/60 px-2 py-2 md:px-4 text-sm md:text-base text-caramel group-hover/sum:bg-caramel group-hover/sum:text-paper transition-colors">
 					<span className="group-open:hidden">開く</span>
 					<span className="hidden group-open:inline">閉じる</span>
 					<ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
@@ -344,7 +345,7 @@ function Calendar({
 						key={w}
 						aria-hidden
 						className={`text-[11px] sm:text-xs font-bold tracking-wider pb-1 ${
-							i === 0 ? "text-[#D2453F]" : i === 6 ? "text-[#3D74C9]" : ""
+							i === 0 ? "text-[#A8201A]" : i === 6 ? "text-[#1F55B0]" : ""
 						}`}
 					>
 						{w}
@@ -355,7 +356,7 @@ function Calendar({
 					const rest = isRestDay(c);
 					const wd = new Date(c.y, c.m - 1, c.d).getDay();
 					const color =
-						wd === 0 || isHoliday(c) ? "text-[#D2453F]" : wd === 6 ? "text-[#3D74C9]" : "";
+						wd === 0 || isHoliday(c) ? "text-[#A8201A]" : wd === 6 ? "text-[#1F55B0]" : "";
 					if (!c.inMonth) {
 						return (
 							<span

@@ -57,9 +57,9 @@ export function OrderForm() {
 			onToggle={(e) => setOpen(e.currentTarget.open)}
 			className="group mt-20 bg-paper text-espresso shadow-2xl shadow-black/40 scroll-mt-8"
 		>
-			<summary className="flex items-center justify-between gap-4 p-5 md:p-10 lg:p-12 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+			<summary className="group/sum flex items-center justify-between gap-3 md:gap-4 p-5 md:p-10 lg:p-12 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
 				<div>
-					<h3 className="font-serif text-2xl md:text-[32px] tracking-wider md:tracking-widest mb-3">
+					<h3 className="font-serif text-[22px] md:text-[32px] tracking-wider md:tracking-widest mb-3">
 						<span className="inline-block">かんたん</span>
 						<span className="inline-block">注文フォーム</span>
 					</h3>
@@ -67,7 +67,7 @@ export function OrderForm() {
 						メニューから選ぶだけで、LINEで送る注文メッセージができあがります。
 					</p>
 				</div>
-				<span className="shrink-0 flex items-center gap-1 text-sm md:text-base text-caramel">
+				<span className="shrink-0 flex items-center gap-1 border border-caramel/60 px-2 py-2 md:px-4 text-sm md:text-base text-caramel group-hover/sum:bg-caramel group-hover/sum:text-paper transition-colors">
 					<span className="group-open:hidden">開く</span>
 					<span className="hidden group-open:inline">閉じる</span>
 					<ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />

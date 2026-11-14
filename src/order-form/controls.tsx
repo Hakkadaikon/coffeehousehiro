@@ -3,7 +3,7 @@ import type { InputHTMLAttributes } from "react";
 import { MAX_QTY } from "../order/cart.ts";
 
 export const inputCls =
-	"w-full h-12 px-3 bg-white/70 border border-espresso/20 focus:border-caramel focus:outline-none text-base";
+	"w-full h-12 px-3 bg-white/70 border border-espresso/20 focus:border-caramel focus:outline-none focus-visible:ring-2 focus-visible:ring-caramel text-base";
 export const headingCls = "font-serif text-lg md:text-xl tracking-widest mb-4";
 
 /** ボタン風のラジオボタンの組。cols には grid-cols-* のクラスをそのまま渡す */
