@@ -42,7 +42,7 @@ src/
 - 文言や値を変えるだけなら `content/` を直します。セクションのファイルには、レイアウトとクラスだけを書きます。
 - 計算や検査は `order/` に関数として置き、テストを書きます。テストは `node --test` で動かすので、`.tsx` ではなく `.ts` に置きます。
 - 注文フォームの状態は `OrderForm.tsx` に集め、子の部品にはpropsで渡します。状態管理のライブラリやcontextは使っていません。
-- フォント(しっぽり明朝)は `@fontsource/shippori-mincho` からこのサイトで配信しています。外部のサーバーから読み込むものを足すと、`vercel.json` のCSPで止まり、`src/seo.test.ts` も失敗します。
+- フォント(しっぽり明朝とZen Kaku Gothic New)は `@fontsource/shippori-mincho` と `@fontsource/zen-kaku-gothic-new` からこのサイトで配信しています。外部のサーバーから読み込むものを足すと、`vercel.json` のCSPで止まり、`src/seo.test.ts` も失敗します。
 - `.yaml` は中身をJSONにしたデータとして読み込みます。ビルドでは `vite.config.ts` のプラグインが、テストでは `yaml-loader.mjs` が変換します。
 - 新しいタブで開くリンクは `components/ExternalLink.tsx` を使います。`rel="noopener noreferrer"` の付け忘れを防ぐためです。
 
