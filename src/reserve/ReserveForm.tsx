@@ -318,12 +318,14 @@ function Calendar({
 					<ChevronLeft className="w-5 h-5" />
 				</button>
 				<p className="flex items-end gap-3" aria-live="polite">
-					<span className="text-5xl md:text-6xl font-bold leading-none tabular-nums">{m}</span>
+					<span className="font-serif text-5xl md:text-6xl font-medium leading-none tabular-nums">
+						{m}
+					</span>
 					<span className="flex flex-col items-start gap-1">
 						<span className="px-2.5 py-0.5 rounded-full bg-espresso text-paper text-xs font-bold tabular-nums">
 							{y}
 						</span>
-						<span className="text-lg md:text-xl font-bold tracking-wider leading-none">
+						<span className="font-serif text-lg md:text-xl font-medium tracking-wider leading-none">
 							{MONTH_NAMES[m - 1]}
 						</span>
 					</span>
