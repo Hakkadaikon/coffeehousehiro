@@ -79,9 +79,9 @@ function ContactCard() {
 			</p>
 			<ExternalLink
 				href={LINE_URL}
-				className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-6 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-xl font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
+				className="inline-flex w-full sm:w-auto justify-center items-center gap-3 px-4 md:px-12 py-4 md:py-5 whitespace-nowrap tracking-wider md:tracking-widest text-base md:text-xl font-bold bg-[#06C755] hover:bg-[#05b14c] text-white shadow-lg shadow-[#06C755]/20 transition-colors"
 			>
-				<MessageCircle className="w-5 h-5" />
+				<MessageCircle className="w-5 h-5 shrink-0" />
 				LINEでご相談・お問い合わせ
 			</ExternalLink>
 			<div className="mt-12 pt-8 border-t border-paper/10">
@@ -90,7 +90,7 @@ function ContactCard() {
 				</p>
 				<a
 					href={`mailto:${EMAIL}`}
-					className="inline-flex items-center gap-2 font-serif text-sm md:text-lg text-paper/75 hover:text-caramel transition-colors tracking-widest break-all"
+					className="inline-flex items-center gap-2 font-serif text-sm md:text-lg text-paper/75 hover:text-caramel-light transition-colors tracking-widest break-all"
 				>
 					<Mail className="w-4 h-4" />
 					{EMAIL}
