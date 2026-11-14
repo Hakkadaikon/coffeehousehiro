@@ -2,6 +2,7 @@
 @import "@fontsource/shippori-mincho/400.css";
 @import "@fontsource/shippori-mincho/500.css";
 @import "@fontsource/zen-kaku-gothic-new/400.css";
+@import "@fontsource/zen-kaku-gothic-new/500.css";
 @import "@fontsource/zen-kaku-gothic-new/700.css";
 @import "tailwindcss";
 /* ドキュメントに書いたクラス名を拾って CSS が増えないよう、説明文は検出の対象から外す */
@@ -10,10 +11,17 @@
 @source not "../README.md";
 @source not "../scripts";
 
+/* Zen Kaku Gothic New の円記号は幅が広く、数字との間が空いて見える。円記号だけ端末のフォントで出す */
+@font-face {
+	font-family: "Yen Narrow";
+	src: local("Helvetica Neue"), local("Arial"), local("Roboto");
+	unicode-range: U+00A5;
+}
+
 @theme {
 	--font-sans:
-		"Zen Kaku Gothic New", "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans",
-		Meiryo, sans-serif;
+		"Yen Narrow", "Zen Kaku Gothic New", "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
+		"Hiragino Sans", Meiryo, sans-serif;
 	--font-serif: "Shippori Mincho", serif;
 
 	--color-espresso: #1a1412;
@@ -23,6 +31,10 @@
 	--color-caramel-light: #c08a5e;
 	--color-paper: #f4f1eb;
 	--color-paper-dim: #eae6df;
+
+	/* 字間は Tailwind の既定(0.05em / 0.1em)より少し詰める。かしこまりすぎないように */
+	--tracking-wider: 0.04em;
+	--tracking-widest: 0.075em;
 }
 
 @layer base {
