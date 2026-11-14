@@ -4,7 +4,7 @@ import { LINE_URL } from "../content/shop.ts";
 
 // スマホは3つ並べるので、アイコンの下に文字。PC は横に並べる。文言はどちらも同じ
 const btn =
-	"flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 h-14 md:h-12 px-1 md:px-5 text-[11px] md:text-base font-medium md:tracking-wider whitespace-nowrap transition-colors shadow-lg";
+	"flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 h-14 md:h-12 px-1 md:px-5 text-xs md:text-base font-medium md:tracking-wider whitespace-nowrap transition-colors shadow-lg";
 const icon = "w-5 h-5 md:w-4 md:h-4 shrink-0";
 
 /** 画面の下に常に出す注文・予約のボタン。スマホは横いっぱいの帯、PC は右下に浮かせる */
@@ -27,7 +27,10 @@ export function OrderBar() {
 				来店予約
 				<span className="sr-only">フォーム</span>
 			</a>
-			<ExternalLink href={LINE_URL} className={`${btn} bg-[#06C755] hover:bg-[#05b14c] text-white`}>
+			<ExternalLink
+				href={LINE_URL}
+				className={`${btn} font-bold bg-[#06C755] hover:bg-[#05b14c] text-white`}
+			>
 				<MessageCircle aria-hidden className={icon} />
 				お問い合わせ
 				<span className="sr-only">（LINE）</span>
