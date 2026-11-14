@@ -31,7 +31,7 @@ export function InstagramFeed() {
 				<ExternalLink
 					href={INSTAGRAM_URL}
 					aria-label={`Instagramで${INSTAGRAM_HANDLE}の投稿を見る（新しいタブで開きます）`}
-					className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2"
+					className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 focus-visible:outline-2 focus-visible:outline-paper focus-visible:outline-offset-4"
 				>
 					{INSTAGRAM_TILES.map((img, i) => (
 						<InstagramTile key={img.src} photo={img} index={i} />
