@@ -1,6 +1,8 @@
-/* 明朝体はこのサイトから配信する。使う文字の範囲のファイルだけをブラウザが読み込む */
+/* 明朝体とゴシック体はこのサイトから配信する。使う文字の範囲のファイルだけをブラウザが読み込む */
 @import "@fontsource/shippori-mincho/400.css";
 @import "@fontsource/shippori-mincho/500.css";
+@import "@fontsource/zen-kaku-gothic-new/400.css";
+@import "@fontsource/zen-kaku-gothic-new/700.css";
 @import "tailwindcss";
 /* ドキュメントに書いたクラス名を拾って CSS が増えないよう、説明文は検出の対象から外す */
 @source not "../docs";
@@ -10,7 +12,8 @@
 
 @theme {
 	--font-sans:
-		"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+		"Zen Kaku Gothic New", "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+		Meiryo, sans-serif;
 	--font-serif: "Shippori Mincho", serif;
 
 	--color-espresso: #1a1412;
