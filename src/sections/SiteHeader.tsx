@@ -13,7 +13,7 @@ export function SiteHeader() {
 				</div>
 				<div className="hidden md:flex gap-10 md:text-base lg:text-lg font-medium tracking-[0.15em] uppercase">
 					{NAV_LINKS.map((l) => (
-						<a key={l.href} href={l.href} className="hover:text-caramel transition-colors">
+						<a key={l.href} href={l.href} className="hover:text-caramel-light transition-colors">
 							{l.label}
 						</a>
 					))}
