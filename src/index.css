@@ -16,6 +16,8 @@
 	--color-espresso: #1a1412;
 	--color-roast: #3d2b1f;
 	--color-caramel: #8e5a35;
+	/* 暗い背景の上に置く文字用。caramel のままだと小さい文字が沈む */
+	--color-caramel-light: #c08a5e;
 	--color-paper: #f4f1eb;
 	--color-paper-dim: #eae6df;
 }
