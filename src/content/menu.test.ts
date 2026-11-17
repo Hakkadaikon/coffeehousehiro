@@ -80,6 +80,23 @@ test("品目の補足行に、違うサイズと焙煎度の制限を足す", ()
 	assert.equal(itemSub({ name: "ブラジル", sub: "", prices: [1, 2] }), "");
 });
 
+test("売り切れの品目は、補足行に再入荷の案内を出し、注文用の商品リストから外す", () => {
+	assert.equal(
+		itemSub({ name: "ブルンジ", sub: "", prices: [1, 2], soldOut: "2027年夏頃入荷" }),
+		"2027年夏頃入荷",
+	);
+	const soldOut = MENU.flatMap((c) => c.items.filter((i) => i.soldOut !== undefined));
+	assert.ok(soldOut.some((i) => i.name === "ブルンジ"));
+	const labels = catalog().map((i) => i.label);
+	for (const item of soldOut) assert.ok(!labels.some((l) => l.includes(item.name)), item.name);
+});
+
+test("スペシャルの東ティモールは ¥550 / ¥1,100、中煎りのみ", () => {
+	const item = catalog().find((i) => i.id === "スペシャル/東ティモール/");
+	assert.deepEqual(item?.prices, [550, 1100]);
+	assert.deepEqual(item?.roasts, ["中煎り"]);
+});
+
 test("メニューから注文用の商品リストを作る", () => {
 	const items = catalog();
 	assert.equal(new Set(items.map((i) => i.id)).size, items.length);

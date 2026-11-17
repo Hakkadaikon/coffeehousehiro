@@ -21,6 +21,8 @@ export type MenuItem = {
 	sizes?: string[];
 	/** 選べる焙煎度を絞るときだけ指定する */
 	roasts?: string[];
+	/** 売り切れのときだけ指定する、再入荷の案内。メニューには SOLD OUT と出し、注文フォームからは外す */
+	soldOut?: string;
 };
 
 export type MenuCategory = {
@@ -46,7 +48,7 @@ export const MENU: MenuCategory[] = [
 			{ name: "インドネシア", sub: "マンデリン", prices: [450, 850] },
 			{ name: "ケニア", sub: "", prices: [500, 1000] },
 			{ name: "コロンビア", sub: "", prices: [450, 850] },
-			{ name: "ブルンジ", sub: "", prices: [450, 850] },
+			{ name: "ブルンジ", sub: "", prices: [450, 850], soldOut: "2027年夏頃入荷" },
 		],
 	},
 	{
@@ -81,6 +83,7 @@ export const MENU: MenuCategory[] = [
 				sizes: ["20g", "100g"],
 				roasts: ["浅煎り"],
 			},
+			{ name: "東ティモール", sub: "", prices: [550, 1100], roasts: ["中煎り"] },
 		],
 	},
 	{
@@ -107,23 +110,30 @@ export const categoryNote = (c: MenuCategory) =>
 export const categoryUnit = (c: MenuCategory) =>
 	c.kind === "drip" ? "0.5アイテム分" : c.sizes.join(" / ");
 
-/** 品目の補足行。カテゴリと違うサイズや焙煎度の制限もここに出す */
+/** 品目の補足行。カテゴリと違うサイズや焙煎度の制限、再入荷の案内もここに出す */
 export const itemSub = (item: MenuItem) =>
-	[item.sub, item.sizes?.join(" / "), item.roasts?.length === 1 ? `${item.roasts[0]}のみ` : ""]
+	[
+		item.sub,
+		item.sizes?.join(" / "),
+		item.roasts?.length === 1 ? `${item.roasts[0]}のみ` : "",
+		item.soldOut,
+	]
 		.filter(Boolean)
 		.join("　");
 
 export const catalog = (): CatalogItem[] =>
 	MENU.flatMap((c) =>
-		c.items.map((item) => ({
-			id: `${c.title}/${item.name}/${item.sub}`,
-			kind: c.kind,
-			label: `${c.title} ${item.name}${item.sub ? `（${item.sub}）` : ""}`,
-			prices: item.prices,
-			groundPrices: item.groundPrices,
-			sizes: item.sizes ?? c.sizes,
-			roasts: c.kind === "bean" ? (item.roasts ?? [...ROASTS]) : [],
-		})),
+		c.items
+			.filter((item) => item.soldOut === undefined)
+			.map((item) => ({
+				id: `${c.title}/${item.name}/${item.sub}`,
+				kind: c.kind,
+				label: `${c.title} ${item.name}${item.sub ? `（${item.sub}）` : ""}`,
+				prices: item.prices,
+				groundPrices: item.groundPrices,
+				sizes: item.sizes ?? c.sizes,
+				roasts: c.kind === "bean" ? (item.roasts ?? [...ROASTS]) : [],
+			})),
 	);
 
 /** SEO 用の価格帯 [最安値, 最高値]。粉の価格も含める */

@@ -118,7 +118,7 @@ function MenuItemRow({ item }: { item: MenuItem }) {
 				<span className="shrink-0 tracking-wider md:tracking-widest">{item.name}</span>
 				<div className="flex-grow min-w-4 border-b border-dotted border-espresso/25 mx-2 md:mx-10"></div>
 				<span className="tracking-wide md:tracking-widest text-base md:text-2xl font-medium tabular-nums whitespace-nowrap">
-					{formatPrices(item.prices)}
+					{item.soldOut === undefined ? formatPrices(item.prices) : "SOLD OUT"}
 				</span>
 			</div>
 			{sub && (
